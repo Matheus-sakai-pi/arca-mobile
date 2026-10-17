@@ -6,6 +6,7 @@ import { useLearning } from './LearningProvider';
 import { journeyUnits } from '@/data/lessons';
 import { createMotionLedger, recentCompletion, type NumberTransition } from '@/lib/motionEvents';
 import { createAchievementStore, type AchievementId, type AchievementState } from '@/lib/achievements';
+import { syncUserSettings } from '@/services/userSettings';
 
 type ContextValue={ledger:ReturnType<typeof createMotionLedger>;coins:Record<string,string>;achievements:AchievementState|null;achievementError:string|null;dismissAchievement:(id:AchievementId)=>Promise<void>;retryAchievements:()=>void};
 const Context=createContext<ContextValue|null>(null);
@@ -24,6 +25,9 @@ function ScopedRewardMotion({children,scope}:PropsWithChildren<{scope:string}>) 
   const [achievementError,setError]=useState<string|null>(null);
   const [retry,setRetry]=useState(0);
   const initialized=useRef(false);
+  const remoteLoaded=useRef(false);
+  const remoteOk=useRef(false);
+  const remoteIds=useRef<Set<AchievementId>>(new Set());
   const mounted=useRef(true);
   useEffect(()=>{mounted.current=true;return()=>{mounted.current=false;};},[]);
   useEffect(()=>{
@@ -46,9 +50,17 @@ function ScopedRewardMotion({children,scope}:PropsWithChildren<{scope:string}>) 
     void (async()=>{
       try {
         await store.load();
+        if(scope !== 'guest' && !remoteLoaded.current) {
+          // Traz conquistas salvas na conta (ex.: de outro aparelho). Falha de rede não bloqueia nada.
+          remoteLoaded.current=true;
+          try { const remote=await syncUserSettings(scope); if(remote) {remoteOk.current=true;remoteIds.current=new Set(remote.achievements);await store.merge(remote.achievements);} } catch { /* sem conexão ou servidor sem a atualização: tenta na próxima abertura */ }
+        }
         const next=await store.evaluate({progress,units:journeyUnits(unit),longestStreak:profile?.longest_streak ?? 0},initialized.current);
         initialized.current=true;
         if(active) {setAchievements(next);setError(null);}
+        if(scope !== 'guest' && remoteOk.current && next.unlocked.some(id=>!remoteIds.current.has(id))) {
+          void syncUserSettings(scope,{achievements:next.unlocked}).then(saved=>{if(saved) remoteIds.current=new Set(saved.achievements);}).catch(()=>undefined);
+        }
       } catch {if(active) setError('Não foi possível ler ou salvar suas conquistas. Seu progresso permanece guardado.');}
     })();
     return()=>{active=false;};

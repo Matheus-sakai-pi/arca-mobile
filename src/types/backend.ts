@@ -40,6 +40,7 @@ export type Database = { public: { Tables: {
   learning_challenge_play: { Args: {p_id:string}; Returns: Json };
   learning_challenge_submit: { Args: {p_id:string;p_answers:Json}; Returns: Json };
   record_study_session: { Args: {p_lesson:string;p_attempt:string}; Returns: undefined };
+  learning_user_settings: { Args: {p_achievements?:string[]|null;p_preferences?:Json|null}; Returns: Json };
   search_learning_people: { Args: { p_query: string }; Returns: Json };
   learning_friend_action: { Args: { p_person: string; p_action: 'request' | 'accept' | 'decline' | 'cancel' | 'remove' }; Returns: Json };
   start_learning_lesson: { Args: { p_lesson_id: string }; Returns: undefined };

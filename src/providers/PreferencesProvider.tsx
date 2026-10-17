@@ -4,6 +4,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { accountStorage } from '@/lib/accountStorage';
 import { defaultPreferences, parsePreferences, preferencesKey, type Preferences } from '@/lib/preferencesStore';
 import { setRewardHapticsEnabled } from '@/lib/rewardHaptics';
+import { syncUserSettings } from '@/services/userSettings';
 
 const SOUND_KEY = '@arca/sound-effects-enabled';
 const Context = createContext<(Preferences & { setSoundEnabled:(enabled:boolean)=>Promise<void>; updatePreferences:(values:Partial<Preferences>)=>Promise<void>; ready:boolean; error:string|null }) | null>(null);
@@ -26,7 +27,19 @@ function ScopedPreferences({children,scope}:PropsWithChildren<{scope:string}>) {
         const raw=await accountStorage.getItem(preferencesKey(scope));
         const value=raw ? parsePreferences(raw) : {...defaultPreferences,soundEnabled:await AsyncStorage.getItem(SOUND_KEY) !== 'false'};
         current.current=value;
-        if(mounted.current) setPreferences(value);
+        if(mounted.current) {setPreferences(value);setReady(true);}
+        // Mudanças feitas agora esperam na fila e são aplicadas depois da leitura da conta.
+        if(scope !== 'guest') {
+          // A conta guarda a última escolha feita em qualquer aparelho; sem conexão, vale a local.
+          try {
+            const remote=await syncUserSettings(scope);
+            if(remote?.preferences) {
+              await accountStorage.setItem(preferencesKey(scope),JSON.stringify(remote.preferences));
+              current.current=remote.preferences;
+              if(mounted.current) setPreferences(remote.preferences);
+            } else if(remote && raw) void syncUserSettings(scope,{preferences:value}).catch(()=>undefined);
+          } catch { /* mantém as preferências deste aparelho */ }
+        }
       } catch { if(mounted.current) setError('Não foi possível ler suas preferências.'); }
       finally { if(mounted.current) setReady(true); }
     })();
@@ -39,6 +52,7 @@ function ScopedPreferences({children,scope}:PropsWithChildren<{scope:string}>) {
       await accountStorage.setItem(preferencesKey(scope),JSON.stringify(value));
       current.current=value;
       if(mounted.current) {setPreferences(value);setError(null);}
+      if(scope !== 'guest') void syncUserSettings(scope,{preferences:value}).catch(()=>undefined);
     });
     queue.current=task.catch(()=>undefined);
     return task;

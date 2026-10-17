@@ -53,6 +53,12 @@ export function createAchievementStore(storage:{getItem:(key:string)=>Promise<st
       const next=unlockAchievements(current,eligibleAchievements(facts),announce);
       return next.unlocked.length === current.unlocked.length ? current : commit(next);
     }),
+    // Conquistas vindas de outro aparelho entram sem comemoração repetida.
+    merge:(remote:readonly AchievementId[])=>serial(async()=>{
+      if(!current) throw new Error('Conquistas ainda não carregadas.');
+      const next=unlockAchievements(current,remote,false);
+      return next.unlocked.length === current.unlocked.length ? current : commit(next);
+    }),
     acknowledge:(id:AchievementId)=>serial(async()=>{
       if(!current) throw new Error('Conquistas ainda não carregadas.');
       if(current.pending[0] !== id) return current;
