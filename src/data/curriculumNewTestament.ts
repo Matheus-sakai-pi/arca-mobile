@@ -217,7 +217,7 @@ export const newTestamentUnits = [
       gap: ['Os destinatários da carta vivem em ____.', 'Filipos', 'Nínive', 'Sarepta', 'A saudação identifica os cristãos de Filipos.'],
       pairs: [['Filipos', 'Cidade dos destinatários'], ['Timóteo', 'Colaborador mencionado'], ['Epafrodito', 'Enviado da comunidade']],
       steps: ['Saudação em Filipenses 1', 'Notícias de colaboradores em Filipenses 2', 'Orientações finais em Filipenses 4'],
-      check: ['Filipenses 4 inclui orientações sobre oração e gratidão.', true, 'A passagem trata de apresentar pedidos com ações de graças.'] },
+      check: ['Filipenses 4 inclui orientações sobre oração e gratidão.', true, 'A passagem trata de apresentar pedidos com ação de graças.'] },
     { id: 'cartas-colossenses', title: 'Colossenses e as boas palavras', reference: 'Colossenses 1:1–8; 3:12–17; 4:2–6',
       quiz: ['Qual qualidade Colossenses 3 recomenda?', 'Compaixão', 'Crueldade', 'Calúnia', 'A passagem reúne compaixão, bondade, humildade e paciência.'],
       gap: ['Colossenses 4 orienta que a conversa seja agradável, temperada com ____.', 'sal', 'areia', 'barro', 'O sal é a imagem usada para falar sobre a maneira de responder.'],

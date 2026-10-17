@@ -22,7 +22,7 @@ export function practiceExercises(topic: PracticeTopic, position: number): reado
   const steps = rotate(topic.steps, position + 1);
   const validPair = position % 2 === 0;
   return [
-    { id: id(6), type: 'multiple_choice', prompt: `Qual elemento corresponde a esta descrição: ${topic.pairs[0][1]}?`, options: options(labels), correctAnswer: String(labels.indexOf(topic.pairs[0][0]) + 1), explanation: explanation(`${topic.pairs[0][0]}: ${topic.pairs[0][1]}.`) },
+    { id: id(6), type: 'multiple_choice', prompt: `Qual destas opções corresponde a “${topic.pairs[0][1]}”?`, options: options(labels), correctAnswer: String(labels.indexOf(topic.pairs[0][0]) + 1), explanation: explanation(`${topic.pairs[0][0]}: ${topic.pairs[0][1]}.`) },
     { id: id(7), type: 'fill_blank', prompt: 'Complete a associação.', sentence: `${topic.pairs[1][0]}: {{blank}}.`, options: options(descriptions), correctAnswer: String(descriptions.indexOf(topic.pairs[1][1]) + 1), explanation: explanation(`${topic.pairs[1][0]}: ${topic.pairs[1][1]}.`) },
     { id: id(8), type: 'multi_select', prompt: 'Quais associações estão corretas?', options: options(associations.map(pair => pair.label)), correctAnswer: associations.flatMap((pair, index) => pair.correct ? [String(index + 1)] : []), explanation: explanation(topic.pairs.map(pair => `${pair[0]}: ${pair[1]}`).join('; ') + '.') },
     { id: id(9), type: 'sequence', prompt: 'Complete a sequência estudada.', sequence: topic.steps.map((step, index) => index === missing ? null : step), options: options(steps), correctAnswer: String(steps.indexOf(topic.steps[missing]!) + 1), explanation: explanation(`A sequência é: ${topic.steps.join(' → ')}.`) },
