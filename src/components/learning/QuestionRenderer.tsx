@@ -21,7 +21,9 @@ import { QuoteCharacterQuestion } from './questions/QuoteCharacterQuestion';
 import { SpotTheErrorQuestion } from './questions/SpotTheErrorQuestion';
 import { StorySummaryQuestion } from './questions/StorySummaryQuestion';
 
-const renderers: { [Type in Question['type']]: ComponentType<ExerciseProps<Extract<Question, { type: Type }>>> } = {
+const renderers: {
+  [Type in Question['type']]: ComponentType<ExerciseProps<Extract<Question, { type: Type }>>>;
+} = {
   content_card: ContentCardQuestion,
   multiple_choice: MultipleChoiceQuestion,
   fill_blank: FillBlankQuestion,
@@ -42,12 +44,33 @@ const renderers: { [Type in Question['type']]: ComponentType<ExerciseProps<Extra
 };
 export const questionInstructions: Record<Question['type'], string> = {
   content_card: 'Leia com calma',
-  odd_one_out: 'Encontre o intruso', fix_sentence: 'Corrija a frase', before_after: 'O que veio primeiro?', sequence: 'Complete a sequência', classify: 'Separe os grupos', cause_effect: 'Ligue causa e consequência', quote_character: 'De quem é esta história?', spot_the_error: 'Encontre o erro', story_summary: 'Reúna a ideia principal',
-  multiple_choice: 'Escolha a resposta', fill_blank: 'Complete a frase', matching: 'Encontre os pares', ordering: 'Monte a sequência', true_false: 'Verdadeiro ou falso?', multi_select: 'Selecione todas as corretas', who_am_i: 'Descubra o personagem',
+  odd_one_out: 'Encontre o intruso',
+  fix_sentence: 'Corrija a frase',
+  before_after: 'O que veio primeiro?',
+  sequence: 'Complete a sequência',
+  classify: 'Separe os grupos',
+  cause_effect: 'Ligue causa e consequência',
+  quote_character: 'De quem é esta história?',
+  spot_the_error: 'Encontre o erro',
+  story_summary: 'Reúna a ideia principal',
+  multiple_choice: 'Escolha a resposta',
+  fill_blank: 'Complete a frase',
+  matching: 'Encontre os pares',
+  ordering: 'Monte a sequência',
+  true_false: 'Verdadeiro ou falso?',
+  multi_select: 'Selecione todas as corretas',
+  who_am_i: 'Descubra o personagem',
 };
 export function QuestionRenderer(props: ExerciseProps) {
-  const reduced=useMotionPreference();
+  const reduced = useMotionPreference();
   // Registration is discriminant-checked; the indexed lookup erases that correlation.
   const Renderer = renderers[props.question.type] as ComponentType<ExerciseProps>;
-  return <Animated.View key={props.question.id} entering={FadeInDown.duration(180).reduceMotion(reduced ? ReduceMotion.Always : ReduceMotion.System)}><Renderer {...props} /></Animated.View>;
+  return (
+    <Animated.View
+      key={props.question.id}
+      entering={FadeInDown.duration(180).reduceMotion(reduced ? ReduceMotion.Always : ReduceMotion.System)}
+    >
+      <Renderer {...props} />
+    </Animated.View>
+  );
 }

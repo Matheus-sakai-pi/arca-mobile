@@ -8,6 +8,16 @@ import { SyncNotice } from './SyncNotice';
 export function LearningGate({ children }: PropsWithChildren) {
   const { progress, loading, error, retry } = useLearning();
   if (loading) return <LoadingState message="Carregando sua jornada…" />;
-  if (error || !progress) return <Screen><ErrorState message={error ?? 'Seu progresso ainda não está disponível.'} onRetry={retry} /></Screen>;
-  return <View style={{flex:1}}><SyncNotice />{children}</View>;
+  if (error || !progress)
+    return (
+      <Screen>
+        <ErrorState message={error ?? 'Seu progresso ainda não está disponível.'} onRetry={retry} />
+      </Screen>
+    );
+  return (
+    <View style={{ flex: 1 }}>
+      <SyncNotice />
+      {children}
+    </View>
+  );
 }

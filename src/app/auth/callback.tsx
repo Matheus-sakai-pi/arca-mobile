@@ -19,7 +19,8 @@ export default function AuthCallback() {
   useEffect(() => {
     let active = true;
     async function handle() {
-      const url = Platform.OS === 'web' ? window.location.href : incomingUrl ?? await Linking.getInitialURL();
+      const url =
+        Platform.OS === 'web' ? window.location.href : (incomingUrl ?? (await Linking.getInitialURL()));
       if (!active) return;
       try {
         if (!url) throw new Error('auth_link_invalid');
@@ -34,11 +35,23 @@ export default function AuthCallback() {
         // Remove credentials from browser history after consuming the email link.
         if (Platform.OS === 'web') window.history.replaceState(null, '', window.location.pathname);
         router.replace(result.recovery ? '/auth/reset-password' : '/(tabs)/home');
-      } catch (caught) { if (active) { setRecovery(false); setError(authErrorMessage(caught)); } }
+      } catch (caught) {
+        if (active) {
+          setRecovery(false);
+          setError(authErrorMessage(caught));
+        }
+      }
     }
     void handle();
-    return () => { active = false; };
+    return () => {
+      active = false;
+    };
   }, [incomingUrl, setRecovery, complete]);
-  if (error) return <Screen><ErrorState message={error} onRetry={() => router.replace('/(auth)/forgot-password')} /></Screen>;
+  if (error)
+    return (
+      <Screen>
+        <ErrorState message={error} onRetry={() => router.replace('/(auth)/forgot-password')} />
+      </Screen>
+    );
   return <LoadingState message="Confirmando seu acesso…" />;
 }

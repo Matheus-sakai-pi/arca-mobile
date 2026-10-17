@@ -3,53 +3,173 @@ import type { Profile } from './profile.ts';
 
 export type Json = string | number | boolean | null | { [key: string]: Json | undefined } | Json[];
 type Table<Row> = { Row: Row; Insert: Partial<Row>; Update: Partial<Row>; Relationships: [] };
-export type Database = { public: { Tables: {
-  profiles: Table<Profile>;
-  courses: Table<{ id: string; title: string; description: string; published: boolean; order_index: number }>;
-  units: Table<{ id: string; course_id: string; title: string; published: boolean; order_index: number }>;
-  lessons: Table<{ id: string; unit_id: string; title: string; description: string; published: boolean; order_index: number }>;
-  questions: Table<{ id: string; lesson_id: string; type: string; prompt: string; content: Json; explanation: string; order_index: number }>;
-  user_lesson_progress: Table<{ id: string; user_id: string; lesson_id: string; status: 'available' | 'in_progress' | 'completed' | 'mastered'; score: number | null; accuracy: number | null; attempts: number; xp_earned: number; completed_at: string | null; updated_at: string }>;
-  xp_events: Table<{ id: string; user_id: string; lesson_id: string; amount: number; reason: string; created_at: string }>;
-  user_daily_activity: Table<{ id: string; user_id: string; activity_date: string; lessons_completed: number; xp_earned: number }>;
-  lesson_attempts: Table<{ id: string; user_id: string; lesson_id: string; attempt_key: string; answers: Json; result: Json; created_at: string }>;
-  guest_progress_imports: Table<{ user_id: string; source_id: string; snapshot: Json; created_at: string }>;
-}; Views: Record<string, never>; Enums: Record<string, never>; CompositeTypes: Record<string, never>; Functions: {
-  learning_battery: { Args: { p_action?: string; p_lesson?: string; p_attempt?: string; p_question?: string; p_answer?: Json; p_turn?: number; p_guest?: string; p_resume?: Json }; Returns: Json };
-  learning_push_preferences: { Args: { p_energy?: boolean; p_comeback?: boolean; p_timezone?: string }; Returns: Json };
-  learning_push_register: { Args: { p_token: string; p_timezone?: string; p_previous?: string }; Returns: undefined };
-  learning_push_unregister: { Args: { p_token: string }; Returns: undefined };
-  learning_push_touch: { Args: Record<string, never>; Returns: undefined };
-  learning_energy_status: { Args: { p_lesson?: string; p_guest_source?: string; p_guest_balance?: number; p_guest_wait?: number }; Returns: Json };
-  learning_energy_public: { Args: Record<string, never>; Returns: boolean };
-  learning_energy_begin: { Args: { p_lesson: string }; Returns: Json };
-  learning_snapshot: { Args: { p_unit?: string }; Returns: Json };
-  learning_leaderboard: { Args: Record<string, never>; Returns: Json };
-  learning_username_available: { Args: { p_username: string }; Returns: boolean };
-  submit_question_report: { Args: { p_lesson: string; p_question: string; p_reason: string; p_comment: string; p_version: string; p_platform: string; p_request_key: string }; Returns: Json };
-  arca_admin_access: { Args: Record<string, never>; Returns: boolean };
-  arca_admin_overview: { Args: Record<string, never>; Returns: Json };
-  arca_admin_reports: { Args: { p_status: string; p_search: string; p_offset: number }; Returns: Json };
-  arca_admin_report_status: { Args: { p_id: string; p_status: string; p_expected: string }; Returns: Json };
-  learning_leaderboard_scope: { Args: { p_scope: 'weekly' | 'friends' }; Returns: Json };
-  learning_friends: { Args: Record<string, never>; Returns: Json };
-  learning_challenges: { Args: Record<string, never>; Returns: Json };
-  learning_challenge_create: { Args: {p_friend:string;p_key:string}; Returns: string };
-  learning_challenge_create_ten: { Args: {p_friend:string;p_key:string}; Returns: string };
-  learning_challenge_action: { Args: {p_id:string;p_action:string}; Returns: Json };
-  learning_challenge_play: { Args: {p_id:string}; Returns: Json };
-  learning_challenge_submit: { Args: {p_id:string;p_answers:Json}; Returns: Json };
-  record_study_session: { Args: {p_lesson:string;p_attempt:string}; Returns: undefined };
-  learning_user_settings: { Args: {p_achievements?:string[]|null;p_preferences?:Json|null}; Returns: Json };
-  search_learning_people: { Args: { p_query: string }; Returns: Json };
-  learning_friend_action: { Args: { p_person: string; p_action: 'request' | 'accept' | 'decline' | 'cancel' | 'remove' }; Returns: Json };
-  start_learning_lesson: { Args: { p_lesson_id: string }; Returns: undefined };
-  complete_learning_lesson: { Args: { p_lesson_id: string; p_answers: Json; p_attempt_id: string }; Returns: Json };
-  import_guest_progress: { Args: { p_source_id: string; p_completed_ids: Json; p_xp: number }; Returns: Json };
-} } };
+export type Database = {
+  public: {
+    Tables: {
+      profiles: Table<Profile>;
+      courses: Table<{
+        id: string;
+        title: string;
+        description: string;
+        published: boolean;
+        order_index: number;
+      }>;
+      units: Table<{ id: string; course_id: string; title: string; published: boolean; order_index: number }>;
+      lessons: Table<{
+        id: string;
+        unit_id: string;
+        title: string;
+        description: string;
+        published: boolean;
+        order_index: number;
+      }>;
+      questions: Table<{
+        id: string;
+        lesson_id: string;
+        type: string;
+        prompt: string;
+        content: Json;
+        explanation: string;
+        order_index: number;
+      }>;
+      user_lesson_progress: Table<{
+        id: string;
+        user_id: string;
+        lesson_id: string;
+        status: 'available' | 'in_progress' | 'completed' | 'mastered';
+        score: number | null;
+        accuracy: number | null;
+        attempts: number;
+        xp_earned: number;
+        completed_at: string | null;
+        updated_at: string;
+      }>;
+      xp_events: Table<{
+        id: string;
+        user_id: string;
+        lesson_id: string;
+        amount: number;
+        reason: string;
+        created_at: string;
+      }>;
+      user_daily_activity: Table<{
+        id: string;
+        user_id: string;
+        activity_date: string;
+        lessons_completed: number;
+        xp_earned: number;
+      }>;
+      lesson_attempts: Table<{
+        id: string;
+        user_id: string;
+        lesson_id: string;
+        attempt_key: string;
+        answers: Json;
+        result: Json;
+        created_at: string;
+      }>;
+      guest_progress_imports: Table<{
+        user_id: string;
+        source_id: string;
+        snapshot: Json;
+        created_at: string;
+      }>;
+    };
+    Views: Record<string, never>;
+    Enums: Record<string, never>;
+    CompositeTypes: Record<string, never>;
+    Functions: {
+      learning_battery: {
+        Args: {
+          p_action?: string;
+          p_lesson?: string;
+          p_attempt?: string;
+          p_question?: string;
+          p_answer?: Json;
+          p_turn?: number;
+          p_guest?: string;
+          p_resume?: Json;
+        };
+        Returns: Json;
+      };
+      learning_push_preferences: {
+        Args: { p_energy?: boolean; p_comeback?: boolean; p_timezone?: string };
+        Returns: Json;
+      };
+      learning_push_register: {
+        Args: { p_token: string; p_timezone?: string; p_previous?: string };
+        Returns: undefined;
+      };
+      learning_push_unregister: { Args: { p_token: string }; Returns: undefined };
+      learning_push_touch: { Args: Record<string, never>; Returns: undefined };
+      learning_energy_status: {
+        Args: { p_lesson?: string; p_guest_source?: string; p_guest_balance?: number; p_guest_wait?: number };
+        Returns: Json;
+      };
+      learning_energy_public: { Args: Record<string, never>; Returns: boolean };
+      learning_energy_begin: { Args: { p_lesson: string }; Returns: Json };
+      learning_snapshot: { Args: { p_unit?: string }; Returns: Json };
+      learning_leaderboard: { Args: Record<string, never>; Returns: Json };
+      learning_username_available: { Args: { p_username: string }; Returns: boolean };
+      submit_question_report: {
+        Args: {
+          p_lesson: string;
+          p_question: string;
+          p_reason: string;
+          p_comment: string;
+          p_version: string;
+          p_platform: string;
+          p_request_key: string;
+        };
+        Returns: Json;
+      };
+      arca_admin_access: { Args: Record<string, never>; Returns: boolean };
+      arca_admin_overview: { Args: Record<string, never>; Returns: Json };
+      arca_admin_reports: { Args: { p_status: string; p_search: string; p_offset: number }; Returns: Json };
+      arca_admin_report_status: {
+        Args: { p_id: string; p_status: string; p_expected: string };
+        Returns: Json;
+      };
+      learning_leaderboard_scope: { Args: { p_scope: 'weekly' | 'friends' }; Returns: Json };
+      learning_friends: { Args: Record<string, never>; Returns: Json };
+      learning_challenges: { Args: Record<string, never>; Returns: Json };
+      learning_challenge_create: { Args: { p_friend: string; p_key: string }; Returns: string };
+      learning_challenge_create_ten: { Args: { p_friend: string; p_key: string }; Returns: string };
+      learning_challenge_action: { Args: { p_id: string; p_action: string }; Returns: Json };
+      learning_challenge_play: { Args: { p_id: string }; Returns: Json };
+      learning_challenge_submit: { Args: { p_id: string; p_answers: Json }; Returns: Json };
+      record_study_session: { Args: { p_lesson: string; p_attempt: string }; Returns: undefined };
+      learning_user_settings: {
+        Args: { p_achievements?: string[] | null; p_preferences?: Json | null };
+        Returns: Json;
+      };
+      search_learning_people: { Args: { p_query: string }; Returns: Json };
+      learning_friend_action: {
+        Args: { p_person: string; p_action: 'request' | 'accept' | 'decline' | 'cancel' | 'remove' };
+        Returns: Json;
+      };
+      start_learning_lesson: { Args: { p_lesson_id: string }; Returns: undefined };
+      complete_learning_lesson: {
+        Args: { p_lesson_id: string; p_answers: Json; p_attempt_id: string };
+        Returns: Json;
+      };
+      import_guest_progress: {
+        Args: { p_source_id: string; p_completed_ids: Json; p_xp: number };
+        Returns: Json;
+      };
+    };
+  };
+};
 export type AccountSnapshot = { progress: LearningProgress; profile: Profile; guestImported: boolean };
 export type PendingAttempt = { id: string; lessonId: string; answers: LessonAnswers; createdAt: string };
-export type AccountCache = { version: 1; userId: string; unit: Unit; snapshot: AccountSnapshot; pending: PendingAttempt[]; rejected: PendingAttempt[] };
+export type AccountCache = {
+  version: 1;
+  userId: string;
+  unit: Unit;
+  snapshot: AccountSnapshot;
+  pending: PendingAttempt[];
+  rejected: PendingAttempt[];
+};
 export interface LearningRepository {
   loadUnit: () => Promise<Unit>;
   loadSnapshot: () => Promise<AccountSnapshot>;

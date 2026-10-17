@@ -1,4 +1,21 @@
-export type QuestionType = 'multiple_choice' | 'true_false' | 'ordering' | 'matching' | 'fill_blank' | 'multi_select' | 'who_am_i' | 'content_card' | 'odd_one_out' | 'fix_sentence' | 'before_after' | 'sequence' | 'classify' | 'cause_effect' | 'quote_character' | 'spot_the_error' | 'story_summary';
+export type QuestionType =
+  | 'multiple_choice'
+  | 'true_false'
+  | 'ordering'
+  | 'matching'
+  | 'fill_blank'
+  | 'multi_select'
+  | 'who_am_i'
+  | 'content_card'
+  | 'odd_one_out'
+  | 'fix_sentence'
+  | 'before_after'
+  | 'sequence'
+  | 'classify'
+  | 'cause_effect'
+  | 'quote_character'
+  | 'spot_the_error'
+  | 'story_summary';
 export type QuestionOption = { id: string; label: string };
 export type QuestionBase<T extends QuestionType, Answer> = {
   id: string;
@@ -11,25 +28,62 @@ export type QuestionBase<T extends QuestionType, Answer> = {
 export type MultipleChoiceQuestion = QuestionBase<'multiple_choice', string>;
 export type TrueFalseQuestion = QuestionBase<'true_false', string>;
 export type FillBlankQuestion = QuestionBase<'fill_blank', string> & { sentence: string };
-export type MatchingQuestion = QuestionBase<'matching', Readonly<Record<string, string>>> & { rightOptions: readonly QuestionOption[] };
+export type MatchingQuestion = QuestionBase<'matching', Readonly<Record<string, string>>> & {
+  rightOptions: readonly QuestionOption[];
+};
 export type OrderingQuestion = QuestionBase<'ordering', readonly string[]>;
 export type MultiSelectQuestion = QuestionBase<'multi_select', readonly string[]>;
 export type WhoAmIQuestion = QuestionBase<'who_am_i', string> & { clues: readonly string[] };
 export type ContentCardQuestion = QuestionBase<'content_card', 'seen'> & { body: string };
 export type OddOneOutQuestion = QuestionBase<'odd_one_out', string>;
-export type FixSentenceQuestion = QuestionBase<'fix_sentence', Readonly<Record<'fragment' | 'replacement', string>>> & { fragments: readonly QuestionOption[] };
+export type FixSentenceQuestion = QuestionBase<
+  'fix_sentence',
+  Readonly<Record<'fragment' | 'replacement', string>>
+> & { fragments: readonly QuestionOption[] };
 export type BeforeAfterQuestion = QuestionBase<'before_after', string>;
 export type SequenceQuestion = QuestionBase<'sequence', string> & { sequence: readonly (string | null)[] };
-export type ClassifyQuestion = QuestionBase<'classify', Readonly<Record<string, string>>> & { categories: readonly QuestionOption[] };
-export type CauseEffectQuestion = QuestionBase<'cause_effect', string> & { event: string; relation: 'cause' | 'effect' };
-export type QuoteCharacterQuestion = QuestionBase<'quote_character', string> & { quote: string; source: string };
+export type ClassifyQuestion = QuestionBase<'classify', Readonly<Record<string, string>>> & {
+  categories: readonly QuestionOption[];
+};
+export type CauseEffectQuestion = QuestionBase<'cause_effect', string> & {
+  event: string;
+  relation: 'cause' | 'effect';
+};
+export type QuoteCharacterQuestion = QuestionBase<'quote_character', string> & {
+  quote: string;
+  source: string;
+};
 export type SpotTheErrorQuestion = QuestionBase<'spot_the_error', string>;
 export type StorySummaryQuestion = QuestionBase<'story_summary', string> & { contentId: string };
-export type Question = MultipleChoiceQuestion | TrueFalseQuestion | FillBlankQuestion | MatchingQuestion | OrderingQuestion | MultiSelectQuestion | WhoAmIQuestion | ContentCardQuestion | OddOneOutQuestion | FixSentenceQuestion | BeforeAfterQuestion | SequenceQuestion | ClassifyQuestion | CauseEffectQuestion | QuoteCharacterQuestion | SpotTheErrorQuestion | StorySummaryQuestion;
-export type SingleAnswerQuestion = MultipleChoiceQuestion | TrueFalseQuestion | FillBlankQuestion | WhoAmIQuestion;
+export type Question =
+  | MultipleChoiceQuestion
+  | TrueFalseQuestion
+  | FillBlankQuestion
+  | MatchingQuestion
+  | OrderingQuestion
+  | MultiSelectQuestion
+  | WhoAmIQuestion
+  | ContentCardQuestion
+  | OddOneOutQuestion
+  | FixSentenceQuestion
+  | BeforeAfterQuestion
+  | SequenceQuestion
+  | ClassifyQuestion
+  | CauseEffectQuestion
+  | QuoteCharacterQuestion
+  | SpotTheErrorQuestion
+  | StorySummaryQuestion;
+export type SingleAnswerQuestion =
+  MultipleChoiceQuestion | TrueFalseQuestion | FillBlankQuestion | WhoAmIQuestion;
 export type QuestionAnswer = string | readonly string[] | Readonly<Record<string, string>>;
 export type LessonAnswers = Record<string, QuestionAnswer>;
-export type Lesson = { id: string; unitId: string; title: string; description: string; questions: readonly Question[] };
+export type Lesson = {
+  id: string;
+  unitId: string;
+  title: string;
+  description: string;
+  questions: readonly Question[];
+};
 export type Unit = { id: string; title: string; lessons: readonly Lesson[] };
 export type LessonStatus = 'locked' | 'available' | 'current' | 'completed';
 export type LessonResult = {

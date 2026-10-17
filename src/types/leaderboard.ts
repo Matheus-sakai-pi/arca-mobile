@@ -6,4 +6,8 @@ export type LeaderboardEntry = {
   position: number;
 };
 export type RankingScope = 'total' | 'weekly' | 'friends';
-export type Leaderboard = { top: LeaderboardEntry[]; current: LeaderboardEntry | null; period?: { start: string; end: string } };
+export type Leaderboard = {
+  top: LeaderboardEntry[];
+  current: LeaderboardEntry | null;
+  period?: { start: string; end: string };
+};
