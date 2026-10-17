@@ -4,7 +4,7 @@ Aplicativo React Native com Expo SDK 57, TypeScript estrito e Expo Router. Inclu
 
 Checklist atualizado: [status do produto](docs/STATUS-DO-PRODUTO.md). Novos recursos e roteiro: [refinamentos 0.2.0](docs/REFINAMENTOS-AUTONOMOS.md). Segurança e backup: [revisão técnica](docs/SEGURANCA-E-BACKUP.md).
 
-AAB atual: `artifacts/releases/arca-0.3.0-versionCode-6.aab`, gerado em 17/10/2026. Build EAS concluído, estrutura/manifesto validados e certificado anterior preservado. Não enviado à Play Store. Antes de distribuir, ativar as migrations compatíveis, incluindo a bateria por exercício ([regras e ativação](docs/ENERGY-V2.md)); testes no Android continuam pendentes.
+AAB atual: `artifacts/releases/arca-0.4.0-versionCode-7.aab` (fora do Git), gerado em 17/10/2026 pelo EAS (build 6298bf18). Versão 0.4.0 / versionCode 7, pacote com.arca.mobile, mesmo certificado das versões anteriores (SHA-256 9D:D0:4F:7D:…:C9:5A). Imagens de 78,8 MB para 19,2 MB no bundle. O Supabase remoto já recebeu `artifacts/supabase-2026-10-18/ATUALIZAR-SUPABASE.sql`. Não enviado à Play Store; próximos passos em [docs/PROXIMOS-PASSOS.md](docs/PROXIMOS-PASSOS.md).
 
 Guia do backend: [supabase/README.md](supabase/README.md). Currículo atual: [100 lições](artifacts/CURRICULO-100-LICOES.md). Histórico do ranking e diagnóstico do áudio: [artifacts/RANKING-AVATARES-AUDIO.md](artifacts/RANKING-AVATARES-AUDIO.md).
 

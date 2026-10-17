@@ -17,7 +17,8 @@ e depois as melhorias de 18/10. O teste `tests/integration/remoteCatchUp.test.ts
 
 ## 2. Gerar e testar a nova versão no Android
 
-1. Gere o novo AAB (versionCode 7) pelo EAS e envie para o **teste interno** da Play Store.
+1. O AAB já foi gerado: `artifacts/releases/arca-0.4.0-versionCode-7.aab`. No Play Console, abra
+   **Teste interno → Criar nova versão**, envie esse arquivo e publique para os testadores.
 2. Instale pela loja num celular Android e confira:
    - login, cadastro e recuperação de senha;
    - uma lição completa: som, vibração, botão voltar e a dica da bateria (aparece uma vez);
