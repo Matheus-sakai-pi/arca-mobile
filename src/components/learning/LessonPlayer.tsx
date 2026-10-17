@@ -11,6 +11,7 @@ import { IconButton } from '@/components/common/IconButton';
 import { Notice } from '@/components/common/Notice';
 import { Mascot } from '@/components/mascot/Mascot';
 import { BatteryIcon } from './BatteryIcon';
+import { BatteryTip } from './BatteryTip';
 import { EnergyMeter } from './EnergyMeter';
 import { RewardPulse } from '@/components/animation/RewardPulse';
 import { useEnergy } from '@/providers/EnergyProvider';
@@ -32,6 +33,7 @@ import type { ContentCardQuestion, Lesson } from '@/types/learning';
 import { colors, radius, spacing } from '@/constants/theme';
 
 let attemptSequence = 0;
+const normalizeTitle = (text: string) => text.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
 export function LessonPlayer({ lesson, draft=null }: { lesson: Lesson; draft?:LessonDraft|null }) {
   const { finishLesson, startLesson, endLesson } = useLearning();
   const energy = useEnergy();
@@ -62,6 +64,8 @@ export function LessonPlayer({ lesson, draft=null }: { lesson: Lesson; draft?:Le
   const remainingExercises = exerciseTotal - state.mastered.length;
   const exerciseKey = `${question?.id}:${state.turn}`;
   const correct = question ? isCorrect(question, state.answer) : false;
+  // Evita repetir o título da lição quando a pergunta tem exatamente o mesmo texto.
+  const sameAsTitle = !!question && normalizeTitle(question.prompt) === normalizeTitle(lesson.title);
   const requestExit = useCallback(() => { if (!savingRef.current) {setSaveError(null);setExitVisible(true);} }, []);
   useFocusEffect(useCallback(() => {
     startLesson(lesson.id);
@@ -119,8 +123,9 @@ export function LessonPlayer({ lesson, draft=null }: { lesson: Lesson; draft?:Le
       <Button icon={ArrowRight} title={verified || reading ? 'Continuar' : 'Verificar'} disabled={!reading && !verified && !canVerify(question, state.answer)} loading={saving || confirming} onPress={() => { if (verified || reading) void continueLesson(); else void verify(); }} />
     </>}>
       <View style={styles.top}><IconButton icon={X} label="Sair da lição" onPress={requestExit} /><View style={styles.progress}><ProgressBar value={state.mastered.length / exerciseTotal * 100} label="Progresso da lição" /><AppText variant="small" color={colors.text}>{reading ? 'Leitura' : revisiting ? `Revisão · ${remainingExercises} pendente${remainingExercises === 1 ? '' : 's'}` : `Exercício ${exerciseNumber}/${exerciseTotal}`}</AppText></View><EnergyMeter lesson /></View>
+      {reading ? null : <BatteryTip />}
       <View testID="lesson-exercise" style={styles.exercise}>
-        <AppText variant="label" color={colors.primaryDark}>{lesson.title}</AppText>
+        {sameAsTitle ? null : <AppText variant="label" color={colors.primaryDark}>{lesson.title}</AppText>}
         <AppText variant="small" color={colors.muted}>{questionInstructions[question.type]}</AppText>
         {revisiting && question.type === 'story_summary' ? <AppText>{lesson.questions.find((item): item is ContentCardQuestion => item.id === question.contentId && item.type === 'content_card')?.body}</AppText> : null}
         <QuestionRenderer key={exerciseKey} question={question} answer={state.answer} verified={verified} onAnswer={answer => { if (!actionLock.current && !savingRef.current) dispatch({ type: 'answer', answer }); }} />

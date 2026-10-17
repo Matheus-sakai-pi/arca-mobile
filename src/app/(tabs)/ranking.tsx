@@ -42,6 +42,7 @@ export default function Ranking() {
         {data.top.length ? <><View style={styles.leaders}><LeaderboardPodium rankingKey={scope} entries={data.top.slice(0,3)} currentUserId={currentUserId} /></View>
           {data.top.length > 3 ? <View testID="leaderboard-list" style={styles.list}>{data.top.slice(3).map(entry=><LeaderboardRow key={entry.id} rankingKey={scope} entry={entry} currentUserId={currentUserId} />)}</View> : null}
           {own ? <View style={styles.own}><AppText variant="h3">Sua posição</AppText><LeaderboardRow rankingKey={scope} entry={own} currentUserId={currentUserId} /></View> : null}
+          {!currentUserId ? <View testID="ranking-guest-invite" style={styles.own}><AppText variant="h3">Você ainda não aparece aqui</AppText><AppText color={colors.muted}>Crie sua conta para guardar seu XP e disputar o ranking com outras pessoas. Seu progresso de visitante pode ser levado junto.</AppText><Button title="Criar minha conta" onPress={()=>router.push('/(auth)/signup')} /><Button title="Já tenho uma conta" variant="secondary" onPress={()=>router.push('/(auth)/login')} /></View> : null}
         </> : <EmptyState icon={Trophy} title="A jornada está começando" message="Ainda não há participantes no ranking." />}
       </> : null}
   </Screen>;
