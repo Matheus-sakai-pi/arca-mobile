@@ -7,11 +7,11 @@ All current gameplay numbers live in src/config/energy.ts. Run
 different generated SQL seed. Historical v1 constants exist only for migration
 regression tests, not for current app behavior.
 
-- Capacity 25; each exercise's first answer in an attempt costs 1, right or wrong.
+- Capacity 30; each exercise's first answer in an attempt costs 1, right or wrong.
 - Reading cards and subsequent end-of-attempt mistake corrections cost zero.
 - A new review attempt charges its first answers too. Resuming and replaying an
   already recorded answer do not charge again. Friend challenges remain free.
-- One energy returns every 3,456 seconds (57 minutes 36 seconds): 25 in 24 hours.
+- One energy returns every 2,880 seconds (48 minutes): 30 in 24 hours. Raised from 25 by migration 202610180001_battery_capacity_30.sql (full wallets become 30).
 - Correct-answer streak milestones 5 and 10 each roll 5-8 energy. Every graded
   answer, including a free correction, increments or resets the streak.
 - Perfect first answers throughout a lesson grant +5, confirmed by the owner.

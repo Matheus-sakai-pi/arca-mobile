@@ -3,7 +3,7 @@ begin;
 create table public.battery_rules(singleton boolean primary key default true check(singleton), rules jsonb not null);
 -- ENERGY_CONFIG_START
 -- Generated from src/config/energy.ts. Do not edit these values here.
-insert into public.battery_rules(singleton,rules) values(true,'{"version":2,"capacity":25,"exerciseCost":1,"refillSeconds":3456,"streakMilestones":[5,10],"streakBonusMin":5,"streakBonusMax":8,"perfectBonus":5,"bonusOverflow":false,"minimumDraftHours":72,"pollSeconds":30,"legacyCapacity":5,"legacyRefillSeconds":14400}'::jsonb);
+insert into public.battery_rules(singleton,rules) values(true,'{"version":2,"capacity":30,"exerciseCost":1,"refillSeconds":2880,"streakMilestones":[5,10],"streakBonusMin":5,"streakBonusMax":8,"perfectBonus":5,"bonusOverflow":false,"minimumDraftHours":72,"pollSeconds":30,"legacyCapacity":5,"legacyRefillSeconds":14400}'::jsonb);
 -- ENERGY_CONFIG_END
 alter table public.battery_rules enable row level security;
 revoke all on public.battery_rules from public,anon,authenticated;

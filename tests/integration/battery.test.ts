@@ -108,7 +108,7 @@ test('battery SQL: exhaustion, server refill, perfect +5, capped/overflow reward
   await call({ p_action: 'open', p_guest: registered.guestToken, p_lesson: lesson.id, p_attempt: 'overflow' }, null);
   await db.exec("update battery_rules set rules=jsonb_set(jsonb_set(rules,'{streakBonusMin}','8'),'{streakBonusMax}','8')");
   for (const [turn, q] of lesson.questions.slice(0, 5).entries()) state = await call({ ...first, p_guest: registered.guestToken, p_attempt: 'overflow', p_question: q.id, p_answer: q.correctAnswer, p_turn: turn }, null);
-  assert.equal(state.balance, 28); assert.equal(state.nextRefillAt, null);
+  assert.equal(state.balance, config.capacity - 5 + 8); assert.equal(state.nextRefillAt, null);
   await db.query('delete from auth.users where id=$1', [owner]);
   assert.equal((await db.query('select * from battery_wallets where user_id=$1', [owner])).rows.length, 0);
 });

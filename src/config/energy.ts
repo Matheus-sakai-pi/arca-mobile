@@ -1,8 +1,8 @@
 export const ENERGY_CONFIG = Object.freeze({
   version: 2,
-  capacity: 25,
+  capacity: 30,
   exerciseCost: 1,
-  refillSeconds: 3456,
+  refillSeconds: 2880,
   streakMilestones: [5, 10] as readonly number[],
   streakBonusMin: 5,
   streakBonusMax: 8,

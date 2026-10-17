@@ -62,7 +62,7 @@ test('guest chest requires distinct server-completed lessons and caps the bonus 
     }
   }
   await assert.rejects(call({ p_action: 'chest_claim', p_lesson: firstUnit.id }), /chest_battery_full/);
-  await db.query("update battery_wallets set balance=23,refill_at=now()+interval '1 hour' where guest_hash is not null");
+  await db.query(`update battery_wallets set balance=${ENERGY_CONFIG.capacity - 2},refill_at=now()+interval '1 hour' where guest_hash is not null`);
   const claimed = await call({ p_action: 'chest_claim', p_lesson: firstUnit.id });
   assert.equal(claimed.chest!.completed, 5); assert.equal(claimed.chest!.reward!.amount, 2);
   assert.ok(claimed.chest!.reward!.rolled >= config.min && claimed.chest!.reward!.rolled <= config.max);

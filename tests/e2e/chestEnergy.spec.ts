@@ -27,7 +27,7 @@ test('chest awards 5-7 energy once, updates the header and survives a lost recei
   await expect(dialog.getByTestId('chest-reward-amount')).toHaveText(`+${reward.granted} energias`);
   await capture(page, info, 'chest-reward');
   await dialog.getByRole('button', { name: 'Continuar', exact: true }).click();
-  await expect(page.getByTestId('energy-meter')).toHaveAccessibleName(`${10 + reward.granted} de 25 energias`);
+  await expect(page.getByTestId('energy-meter')).toHaveAccessibleName(`${10 + reward.granted} de 30 energias`);
   await page.reload();
   await expect(page.getByTestId(`trail-chest-${unit.id}`)).toContainText('Baú resgatado');
   await page.getByTestId(`chest-open-${unit.id}`).click();
@@ -71,6 +71,6 @@ test('an unavailable chest service never grants energy or changes an existing wa
   const dialog = page.getByTestId('energy-chest-dialog');
   await expect(dialog).toContainText('As recompensas do baú ainda precisam ser ativadas no servidor. Seu baú não foi gasto.');
   await expect(dialog.getByRole('button', { name: 'Abrir e receber energia', exact: true })).toHaveCount(0);
-  await expect(page.getByTestId('energy-meter')).toHaveAccessibleName('25 de 25 energias');
+  await expect(page.getByTestId('energy-meter')).toHaveAccessibleName('30 de 30 energias');
   expect((await backend.db.query('select * from battery_unit_chests')).rows).toHaveLength(0);
 });

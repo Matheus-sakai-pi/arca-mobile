@@ -9,10 +9,10 @@ import { initialUnit } from '../../src/data/lessons.ts';
 import { lessonFingerprint } from '../../src/lib/studyStore.ts';
 
 const base = (): EnergyState => ({ version: rules.version, owner: 'one', available: true, enabled: true, balance: rules.capacity, nextRefillAt: null, serverNow: '2026-10-17T12:00:00Z', rules, allowed: true, session: null, receipt: null });
-test('one configuration drives app/server rules, 25 points refill in 24 hours and defaults never overflow', async () => {
+test('one configuration drives app/server rules, 30 points refill in 24 hours and defaults never overflow', async () => {
   const migration = await readFile(new URL('../../supabase/migrations/202610170001_exercise_energy.sql', import.meta.url), 'utf8');
   assert.ok(migration.includes(JSON.stringify(rules)));
-  assert.equal(rules.capacity, 25); assert.equal(rules.exerciseCost, 1);
+  assert.equal(rules.capacity, 30); assert.equal(rules.exerciseCost, 1);
   assert.equal(rules.capacity * rules.refillSeconds, 24 * 3600);
   assert.deepEqual(rules.streakMilestones, [5, 10]);
   assert.equal(rules.streakBonusMin, 5); assert.equal(rules.streakBonusMax, 8);
@@ -29,10 +29,10 @@ test('battery responses reject corrupt/foreign balances and honor configured ove
 });
 
 test('countdown uses confirmed server UTC and monotonic elapsed time, never grants energy locally', () => {
-  const state = { ...base(), balance: 0, nextRefillAt: '2026-10-17T12:57:36Z' };
-  assert.equal(energyIntervalText(), '57min 36s');
-  assert.equal(energyWait(state, 1000, 2000), '57min 35s');
-  assert.equal(energyWait(state, 2000, 1000), '57min 36s');
+  const state = { ...base(), balance: 0, nextRefillAt: '2026-10-17T12:48:00Z' };
+  assert.equal(energyIntervalText(), '48min');
+  assert.equal(energyWait(state, 1000, 2000), '47min 59s');
+  assert.equal(energyWait(state, 2000, 1000), '48min');
   assert.equal(energyWait(state, 1000, 1000 + rules.refillSeconds * 1000), 'Atualize para conferir a recarga');
   assert.equal(state.balance, 0);
 });

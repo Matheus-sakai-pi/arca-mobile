@@ -8,7 +8,7 @@ begin;
 create table public.battery_rules(singleton boolean primary key default true check(singleton), rules jsonb not null);
 -- ENERGY_CONFIG_START
 -- Generated from src/config/energy.ts. Do not edit these values here.
-insert into public.battery_rules(singleton,rules) values(true,'{"version":2,"capacity":25,"exerciseCost":1,"refillSeconds":3456,"streakMilestones":[5,10],"streakBonusMin":5,"streakBonusMax":8,"perfectBonus":5,"bonusOverflow":false,"minimumDraftHours":72,"pollSeconds":30,"legacyCapacity":5,"legacyRefillSeconds":14400}'::jsonb);
+insert into public.battery_rules(singleton,rules) values(true,'{"version":2,"capacity":30,"exerciseCost":1,"refillSeconds":2880,"streakMilestones":[5,10],"streakBonusMin":5,"streakBonusMax":8,"perfectBonus":5,"bonusOverflow":false,"minimumDraftHours":72,"pollSeconds":30,"legacyCapacity":5,"legacyRefillSeconds":14400}'::jsonb);
 -- ENERGY_CONFIG_END
 alter table public.battery_rules enable row level security;
 revoke all on public.battery_rules from public,anon,authenticated;
@@ -456,4 +456,17 @@ revoke all on function public.learning_battery(text,text,text,text,jsonb,integer
 grant execute on function public.learning_battery(text,text,text,text,jsonb,integer,text,jsonb) to anon,authenticated;
 notify pgrst,'reload schema';
 commit;
+
+-- 202610180001_battery_capacity_30.sql
+-- Bateria com limite de 30 e carga completa em 24 horas (1 energia a cada 48 minutos).
+-- Seguro para bancos que já aplicaram 202610170001: atualiza as regras e mantém
+-- as carteiras coerentes. Quem estava com a bateria cheia (25) passa a 30;
+-- quem estava abaixo do limite continua recarregando a partir do saldo atual.
+update public.battery_rules
+set rules = jsonb_set(jsonb_set(rules, '{capacity}', '30'::jsonb), '{refillSeconds}', '2880'::jsonb)
+where singleton;
+
+update public.battery_wallets
+set balance = 30, refill_at = null
+where refill_at is null and balance < 30;
 

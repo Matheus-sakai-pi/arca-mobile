@@ -9,21 +9,21 @@ for (const guest of [false, true]) test(`${guest ? 'guest' : 'account'} battery 
   await backend.install(context, guest);
   await page.goto(`/lesson/${lesson.id}`);
   const meter = page.getByTestId('lesson-energy-meter');
-  await expect(meter).toHaveAccessibleName('25 de 25 energias');
+  await expect(meter).toHaveAccessibleName('30 de 30 energias');
   await expect(meter.getByTestId('battery-icon')).toBeVisible();
   const meterBox = await meter.boundingBox(), progress = await page.getByRole('progressbar', { name: 'Progresso da lição' }).boundingBox();
   expect(meterBox!.x).toBeGreaterThanOrEqual(progress!.x + progress!.width);
   await capture(page, info, guest ? 'guest-battery' : 'lesson-battery');
   await verifyAnswer(page, lesson.questions[0]!, wrongAnswer(lesson.questions[0]!));
   await verifyAnswer(page, lesson.questions[1]!);
-  await expect(meter).toHaveAccessibleName('23 de 25 energias');
+  await expect(meter).toHaveAccessibleName('28 de 30 energias');
   // Stay inside the test login lifetime while jumping past many refill intervals.
   await page.evaluate(() => { const now = Date.now(); Date.now = () => now + 12 * 3600000; });
   await meter.click();
-  await expect(page.getByTestId('energy-details')).toContainText('23 de 25 energias');
+  await expect(page.getByTestId('energy-details')).toContainText('28 de 30 energias');
   await page.getByRole('button', { name: 'Fechar energia', exact: true }).click();
   await page.reload();
-  await expect(meter).toHaveAccessibleName('23 de 25 energias');
+  await expect(meter).toHaveAccessibleName('28 de 30 energias');
   const cost = (await backend.db.query<{ total: number }>("select sum((receipt->>'charged')::integer)::integer total from battery_events")).rows[0]!.total;
   expect(cost).toBe(2);
 });
@@ -32,7 +32,7 @@ test('lost receipts retry once; exhaustion saves the selected answer and resumes
   await backend.db.exec('update learning_energy_config set enabled=true,rollout=100');
   await backend.install(context);
   await page.goto('/learn');
-  await expect(page.getByTestId('energy-meter')).toHaveAccessibleName('25 de 25 energias');
+  await expect(page.getByTestId('energy-meter')).toHaveAccessibleName('30 de 30 energias');
   await backend.db.query("update battery_wallets set balance=2,refill_at=now()+interval '1 hour' where user_id=$1", [backend.owner]);
   await page.goto(`/lesson/${lesson.id}`);
   await expect(page.getByRole('heading', { name: 'Sua bateria pode não ser suficiente', exact: true })).toBeVisible();
@@ -44,7 +44,7 @@ test('lost receipts retry once; exhaustion saves the selected answer and resumes
   await expect(page.getByText('Conecte-se para confirmar a energia e continuar. Sua resposta continua guardada.', { exact: true })).toBeVisible();
   await page.getByRole('button', { name: 'Verificar', exact: true }).click();
   await page.getByRole('button', { name: 'Continuar', exact: true }).click();
-  await expect(page.getByTestId('lesson-energy-meter')).toHaveAccessibleName('1 de 25 energias');
+  await expect(page.getByTestId('lesson-energy-meter')).toHaveAccessibleName('1 de 30 energias');
   await verifyAnswer(page, lesson.questions[1]!, wrongAnswer(lesson.questions[1]!));
   const third = lesson.questions[2]!;
   await chooseAnswer(page, third, third.correctAnswer);
@@ -73,7 +73,7 @@ test('end-of-lesson mistake corrections are free at zero battery and still finis
   await expect(page.getByText('Revisão · 1 pendente', { exact: true })).toBeVisible();
   await backend.db.query("update battery_wallets set balance=0,refill_at=now()+interval '1 hour' where user_id=$1", [backend.owner]);
   await page.getByTestId('lesson-energy-meter').click();
-  await expect(page.getByTestId('energy-details')).toContainText('0 de 25 energias');
+  await expect(page.getByTestId('energy-details')).toContainText('0 de 30 energias');
   await page.getByRole('button', { name: 'Fechar energia', exact: true }).click();
   await chooseAnswer(page, lesson.questions[0]!, lesson.questions[0]!.correctAnswer);
   await page.getByRole('button', { name: 'Verificar', exact: true }).click();
@@ -93,7 +93,7 @@ test('streak and perfect rewards animate actual capped gains without replaying a
   await chooseAnswer(page, lesson.questions[4]!, lesson.questions[4]!.correctAnswer);
   await page.getByRole('button', { name: 'Verificar', exact: true }).click();
   await expect(page.getByTestId('battery-bonus')).toContainText('+5 energias');
-  await expect(page.getByTestId('lesson-energy-meter')).toHaveAccessibleName('25 de 25 energias');
+  await expect(page.getByTestId('lesson-energy-meter')).toHaveAccessibleName('30 de 30 energias');
   await capture(page, info, 'streak-battery-bonus');
   await page.reload();
   await expect(page.getByTestId('battery-bonus')).toHaveCount(0);
@@ -102,7 +102,7 @@ test('streak and perfect rewards animate actual capped gains without replaying a
   await chooseAnswer(page, lesson.questions[9]!, lesson.questions[9]!.correctAnswer);
   await page.getByRole('button', { name: 'Verificar', exact: true }).click();
   await expect(page.getByTestId('battery-bonus')).toContainText('lição perfeita');
-  await expect(page.getByTestId('lesson-energy-meter')).toHaveAccessibleName('25 de 25 energias');
+  await expect(page.getByTestId('lesson-energy-meter')).toHaveAccessibleName('30 de 30 energias');
   await capture(page, info, 'perfect-battery-bonus');
   expect((await backend.db.query('select * from battery_rewards')).rows).toHaveLength(3);
 });
