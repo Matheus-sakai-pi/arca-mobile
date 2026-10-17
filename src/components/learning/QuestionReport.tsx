@@ -22,7 +22,7 @@ import { colors, fonts } from '@/constants/theme';
 
 let sequence = 0;
 const requestKey = () => `report-${Date.now()}-${++sequence}-${Math.random().toString(36).slice(2)}`;
-export function QuestionReport({ lessonId, questionId }: { lessonId: string; questionId: string }) {
+export function QuestionReport({ lessonId, questionId, compact = false }: { lessonId: string; questionId: string; compact?: boolean }) {
   const { session } = useAuth();
   return (
     <ScopedReport
@@ -30,6 +30,7 @@ export function QuestionReport({ lessonId, questionId }: { lessonId: string; que
       owner={session?.user.id}
       lessonId={lessonId}
       questionId={questionId}
+      compact={compact}
     />
   );
 }
@@ -37,10 +38,12 @@ function ScopedReport({
   owner,
   lessonId,
   questionId,
+  compact,
 }: {
   owner?: string;
   lessonId: string;
   questionId: string;
+  compact: boolean;
 }) {
   const reduced = useMotionPreference();
   const [open, setOpen] = useState(false),
@@ -95,12 +98,15 @@ function ScopedReport({
         accessibilityRole="button"
         accessibilityLabel="Reportar problema na pergunta"
         onPress={() => setOpen(true)}
-        style={({ pressed }) => [styles.trigger, triggerStyles.surface, pressed && styles.pressed]}
+        hitSlop={compact ? 8 : undefined}
+        style={({ pressed }) => [compact ? triggerStyles.compact : [styles.trigger, triggerStyles.surface], pressed && styles.pressed]}
       >
-        <Flag size={16} color={colors.primaryDark} />
-        <AppText variant="small" color={colors.primaryDark} style={triggerStyles.label}>
-          Reportar problema
-        </AppText>
+        <Flag size={compact ? 18 : 16} color={compact ? colors.muted : colors.primaryDark} />
+        {compact ? null : (
+          <AppText variant="small" color={colors.primaryDark} style={triggerStyles.label}>
+            Reportar problema
+          </AppText>
+        )}
       </Pressable>
       <Modal visible={open} transparent animationType={reduced ? 'none' : 'fade'} onRequestClose={close}>
         <KeyboardAvoidingView style={styles.overlay} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
@@ -198,6 +204,16 @@ function ScopedReport({
 const triggerStyles = StyleSheet.create({
   surface: { backgroundColor: colors.surface, borderWidth: 1, borderColor: colors.border, borderRadius: 8 },
   label: { fontFamily: fonts.bold },
+  compact: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: colors.surface,
+    borderWidth: 1,
+    borderColor: colors.border,
+  },
 });
 function Action({
   label,

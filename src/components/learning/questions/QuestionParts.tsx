@@ -11,7 +11,7 @@ export function QuestionPrompt({ text }: { text: string }) {
         {text}
       </AppText>
       <View style={styles.mascot}>
-        <Mascot state="thinking" size={80} decorative />
+        <Mascot state="thinking" size={96} decorative />
       </View>
     </View>
   );
@@ -19,7 +19,7 @@ export function QuestionPrompt({ text }: { text: string }) {
 export type Tone = 'neutral' | 'selected' | 'correct' | 'wrong';
 export const toneColors = {
   neutral: { background: colors.surface, border: colors.border, ink: colors.text },
-  selected: { background: colors.primarySoft, border: colors.primary, ink: colors.primaryDark },
+  selected: { background: colors.primary, border: colors.primaryDark, ink: colors.surface },
   correct: { background: colors.successSoft, border: colors.success, ink: colors.success },
   wrong: { background: colors.errorSoft, border: colors.error, ink: colors.error },
 } as const;
@@ -53,7 +53,7 @@ export function WordChip({
       style={({ pressed }) => [
         styles.chip,
         { backgroundColor: palette.background, borderColor: palette.border },
-        pressed && { opacity: 0.7 },
+        pressed && !disabled && tactile.pressed,
       ]}
     >
       <AppText style={styles.chipText} color={palette.ink}>
@@ -67,6 +67,11 @@ export function WordChip({
     </Pressable>
   );
 }
+// Efeito de "botão": base mais grossa embaixo, que afunda ao tocar sem mexer no restante da tela.
+export const tactile = StyleSheet.create({
+  base: { borderBottomWidth: 4 },
+  pressed: { borderBottomWidth: 2, marginTop: 2 },
+});
 export const exerciseStyles = StyleSheet.create({
   container: { gap: spacing.lg, width: '100%' },
   chips: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.sm },
@@ -82,7 +87,7 @@ export const exerciseStyles = StyleSheet.create({
 const styles = StyleSheet.create({
   prompt: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm, minHeight: 96 },
   promptText: { flex: 1, minWidth: 0, fontSize: 23, lineHeight: 30 },
-  mascot: { width: 80, height: 96, justifyContent: 'center', flexShrink: 0 },
+  mascot: { width: 96, height: 104, justifyContent: 'center', flexShrink: 0 },
   chip: {
     minHeight: 48,
     maxWidth: '100%',

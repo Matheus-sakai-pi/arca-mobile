@@ -12,6 +12,8 @@ import { Notice } from '@/components/common/Notice';
 import { Mascot } from '@/components/mascot/Mascot';
 import { BatteryIcon } from './BatteryIcon';
 import { BatteryTip } from './BatteryTip';
+import { learningUnits } from '@/data/lessons';
+import { unitTrailTheme } from '@/lib/trailAppearance';
 import { EnergyMeter } from './EnergyMeter';
 import { RewardPulse } from '@/components/animation/RewardPulse';
 import { useEnergy } from '@/providers/EnergyProvider';
@@ -66,6 +68,8 @@ export function LessonPlayer({ lesson, draft=null }: { lesson: Lesson; draft?:Le
   const correct = question ? isCorrect(question, state.answer) : false;
   // Evita repetir o título da lição quando a pergunta tem exatamente o mesmo texto.
   const sameAsTitle = !!question && normalizeTitle(question.prompt) === normalizeTitle(lesson.title);
+  // A barra de progresso usa a cor da unidade, a mesma da trilha.
+  const unitColor = unitTrailTheme(Math.max(0, learningUnits.findIndex(unit => unit.id === lesson.unitId))).color;
   const requestExit = useCallback(() => { if (!savingRef.current) {setSaveError(null);setExitVisible(true);} }, []);
   useFocusEffect(useCallback(() => {
     startLesson(lesson.id);
@@ -118,20 +122,24 @@ export function LessonPlayer({ lesson, draft=null }: { lesson: Lesson; draft?:Le
   return <>
     <Screen style={styles.content} resetScrollKey={exerciseKey} footer={<>
       {bonus ? <View testID="battery-bonus" accessibilityLiveRegion="polite" style={styles.bonus}><RewardPulse event={bonus.key} motion="rise"><BatteryIcon size={40} /></RewardPulse><View style={styles.feedbackCopy}><AppText variant="h3" color="#A51965">{bonus.bonuses.reduce((sum, item) => sum + item.amount, 0) ? `+${bonus.bonuses.reduce((sum, item) => sum + item.amount, 0)} energias` : 'Bateria cheia'}</AppText><AppText variant="small">{bonus.bonuses.some(item => item.kind === 'perfect') ? 'Acertos e lição perfeita' : 'Bônus por acertos seguidos'}</AppText></View></View> : null}
-      {verified ? <Animated.View testID="lesson-feedback" key={exerciseKey} entering={FadeInDown.duration(180).reduceMotion(reduced ? ReduceMotion.Always : ReduceMotion.System)} accessibilityLiveRegion="polite" style={[styles.feedback, { backgroundColor: correct ? colors.successSoft : colors.errorSoft, borderColor: correct ? colors.success : colors.error }]}><View style={styles.feedbackHeading}><View style={styles.feedbackCopy}><View style={styles.feedbackTitle}>{correct ? <CheckCircle2 size={22} color={colors.success} /> : <X size={22} color={colors.error} />}<AppText variant="h3" color={correct ? colors.success : colors.error}>{correct ? 'Correto!' : 'Quase!'}</AppText></View>{!correct ? <AppText variant="small">Resposta correta: {correctResponse(question)}</AppText> : null}</View><Mascot state={correct ? 'happy' : 'wrong_answer'} size={56} animated motionKey={exerciseKey} decorative /></View><AppText variant="small">{question.explanation}</AppText></Animated.View> : null}
+      {verified ? <Animated.View testID="lesson-feedback" key={exerciseKey} entering={FadeInDown.duration(180).reduceMotion(reduced ? ReduceMotion.Always : ReduceMotion.System)} accessibilityLiveRegion="polite" style={[styles.feedback, { backgroundColor: correct ? colors.successSoft : colors.errorSoft, borderColor: correct ? colors.success : colors.error }]}><View style={styles.feedbackHeading}><View style={styles.feedbackCopy}><View style={styles.feedbackTitle}>{correct ? <CheckCircle2 size={22} color={colors.success} /> : <X size={22} color={colors.error} />}<AppText variant="h3" color={correct ? colors.success : colors.error}>{correct ? 'Correto!' : 'Quase!'}</AppText></View>{!correct ? <AppText variant="small">Resposta correta: {correctResponse(question)}</AppText> : null}</View><Mascot state={correct ? 'happy' : 'wrong_answer'} size={72} animated motionKey={exerciseKey} decorative /></View><AppText variant="small">{question.explanation}</AppText></Animated.View> : null}
       {saveError ? <Notice tone="error" message={saveError} /> : null}
       <Button icon={ArrowRight} title={verified || reading ? 'Continuar' : 'Verificar'} disabled={!reading && !verified && !canVerify(question, state.answer)} loading={saving || confirming} onPress={() => { if (verified || reading) void continueLesson(); else void verify(); }} />
     </>}>
-      <View style={styles.top}><IconButton icon={X} label="Sair da lição" onPress={requestExit} /><View style={styles.progress}><ProgressBar value={state.mastered.length / exerciseTotal * 100} label="Progresso da lição" /><AppText variant="small" color={colors.text}>{reading ? 'Leitura' : revisiting ? `Revisão · ${remainingExercises} pendente${remainingExercises === 1 ? '' : 's'}` : `Exercício ${exerciseNumber}/${exerciseTotal}`}</AppText></View><EnergyMeter lesson /></View>
+      <View style={styles.top}><IconButton icon={X} label="Sair da lição" onPress={requestExit} /><View style={styles.progress}><ProgressBar value={state.mastered.length / exerciseTotal * 100} label="Progresso da lição" color={unitColor} thick /><AppText variant="small" color={colors.text}>{reading ? 'Leitura' : revisiting ? `Revisão · ${remainingExercises} pendente${remainingExercises === 1 ? '' : 's'}` : `Exercício ${exerciseNumber}/${exerciseTotal}`}</AppText></View><EnergyMeter lesson /></View>
       {reading ? null : <BatteryTip />}
       <View testID="lesson-exercise" style={styles.exercise}>
-        {sameAsTitle ? null : <AppText variant="label" color={colors.primaryDark}>{lesson.title}</AppText>}
-        <AppText variant="small" color={colors.muted}>{questionInstructions[question.type]}</AppText>
+        <View style={styles.exerciseHeader}>
+          <View style={styles.exerciseHeading}>
+            {sameAsTitle ? null : <AppText variant="label" color={colors.primaryDark}>{lesson.title}</AppText>}
+            <AppText variant="small" color={colors.muted}>{questionInstructions[question.type]}</AppText>
+          </View>
+          <QuestionReport lessonId={lesson.id} questionId={question.id} compact />
+        </View>
         {revisiting && question.type === 'story_summary' ? <AppText>{lesson.questions.find((item): item is ContentCardQuestion => item.id === question.contentId && item.type === 'content_card')?.body}</AppText> : null}
         <QuestionRenderer key={exerciseKey} question={question} answer={state.answer} verified={verified} onAnswer={answer => { if (!actionLock.current && !savingRef.current) dispatch({ type: 'answer', answer }); }} />
       </View>
       {studyError ? <Notice tone="error" message={studyError} /> : null}
-      <QuestionReport lessonId={lesson.id} questionId={question.id} />
     </Screen>
     <Modal visible={batteryEmpty} transparent animationType={reduced ? 'none' : 'fade'} onRequestClose={() => { void pauseLesson(); }}>
       <ScrollView style={styles.modalScroll} contentContainerStyle={styles.overlay}><View testID="battery-exhausted" accessibilityViewIsModal style={styles.dialog}>
@@ -161,6 +169,8 @@ const styles = StyleSheet.create({
   bonus: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm, padding: spacing.sm, borderRadius: 8, backgroundColor: '#FDEAF5' },
   batteryArt: { alignItems: 'center' },
   exercise: { paddingVertical: spacing.sm, gap: spacing.xs },
+  exerciseHeader: { flexDirection: 'row', alignItems: 'flex-start', gap: spacing.sm },
+  exerciseHeading: { flex: 1, minWidth: 0, gap: spacing.xxs },
   instruction: { flexDirection: 'row', gap: spacing.sm, alignItems: 'center', paddingBottom: spacing.sm, borderBottomWidth: 1, borderBottomColor: colors.border },
   instructionText: { flex: 1 },
   feedback: { borderRadius: radius.sm, padding: spacing.sm, gap: spacing.xs, marginBottom: spacing.xs, borderLeftWidth: 3 },

@@ -12,7 +12,8 @@ test('report validates reason, retains comment on failure, retries once and pres
   await report.scrollIntoViewIfNeeded();
   await expect(report).toBeVisible();
   await expect(report).toHaveCSS('background-color', 'rgb(255, 255, 255)');
-  await expect(report.getByText('Reportar problema', { exact: true })).toHaveCSS('color', 'rgb(4, 58, 216)');
+  // Na lição o botão é só o ícone de bandeira, ao lado da instrução; o nome acessível continua o mesmo.
+  await expect(report).toHaveCSS('width', '36px');
   await capture(page, info, 'report-button-contrast');
   await report.click();
   await expect(page.getByRole('button', { name: 'Enviar relato', exact: true })).toBeDisabled();

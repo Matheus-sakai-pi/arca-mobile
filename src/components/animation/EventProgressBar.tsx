@@ -4,11 +4,13 @@ export function EventProgressBar({
   value,
   label,
   motionKey,
+  color,
 }: {
   value: number;
   label: string;
   motionKey: string;
+  color?: string;
 }) {
   const transition = useCounterMotion(motionKey, value, false, motionKey.split(':').slice(1).join(':'));
-  return <AnimatedProgressBar value={transition.to} from={transition.from} duration={450} label={label} />;
+  return <AnimatedProgressBar value={transition.to} from={transition.from} duration={450} label={label} color={color} />;
 }

@@ -25,7 +25,7 @@ export function BeforeAfterQuestion({ question, answer, verified, onAnswer }: Ex
               style={({ pressed }) => [
                 styles.event,
                 { backgroundColor: tone.background, borderColor: tone.border },
-                pressed && { opacity: 0.8 },
+                pressed && !verified && { borderBottomWidth: 3, marginTop: 2 },
               ]}
             >
               <Flag color={tone.ink} size={24} />

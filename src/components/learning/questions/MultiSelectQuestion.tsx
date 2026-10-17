@@ -4,7 +4,7 @@ import { AppText } from '@/components/common/AppText';
 import { colors, radius, spacing } from '@/constants/theme';
 import { isAnswerList } from '@/lib/questionEngine';
 import type { MultiSelectQuestion as Question } from '@/types/learning';
-import { choiceTone, exerciseStyles, QuestionPrompt, toneColors } from './QuestionParts';
+import { choiceTone, exerciseStyles, QuestionPrompt, tactile, toneColors } from './QuestionParts';
 import type { ExerciseProps } from './types';
 
 export function MultiSelectQuestion({ question, answer, verified, onAnswer }: ExerciseProps<Question>) {
@@ -39,8 +39,9 @@ export function MultiSelectQuestion({ question, answer, verified, onAnswer }: Ex
               }
               style={({ pressed }) => [
                 styles.option,
+                tactile.base,
                 { backgroundColor: palette.background, borderColor: palette.border },
-                pressed && { opacity: 0.7 },
+                pressed && !verified && tactile.pressed,
               ]}
             >
               <Icon size={24} color={palette.ink} />

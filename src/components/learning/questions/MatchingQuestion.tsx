@@ -5,7 +5,7 @@ import { AppText } from '@/components/common/AppText';
 import { colors, radius, spacing } from '@/constants/theme';
 import { isAnswerPairs } from '@/lib/questionEngine';
 import type { MatchingQuestion as Question } from '@/types/learning';
-import { exerciseStyles, QuestionPrompt, toneColors, type Tone } from './QuestionParts';
+import { exerciseStyles, QuestionPrompt, tactile, toneColors, type Tone } from './QuestionParts';
 import type { ExerciseProps } from './types';
 
 export function MatchingQuestion({ question, answer, verified, onAnswer }: ExerciseProps<Question>) {
@@ -50,9 +50,10 @@ export function MatchingQuestion({ question, answer, verified, onAnswer }: Exerc
         onPress={() => (side === 'left' ? selectLeft(leftId === id ? null : id) : connect(id))}
         style={({ pressed }) => [
           styles.tile,
+          tactile.base,
           { backgroundColor: palette.background, borderColor: palette.border },
           side === 'left' && leftId === id && styles.active,
-          pressed && { opacity: 0.7 },
+          pressed && !verified && tactile.pressed,
         ]}
       >
         <AppText color={palette.ink} style={styles.label}>

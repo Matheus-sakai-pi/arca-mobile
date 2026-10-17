@@ -3,6 +3,7 @@ import { Check, Circle, X } from 'lucide-react-native';
 import { AppText } from '@/components/common/AppText';
 import { colors, fonts, radius, spacing } from '@/constants/theme';
 import type { SingleAnswerQuestion } from '@/types/learning';
+import { tactile } from './questions/QuestionParts';
 
 type Props = {
   question: SingleAnswerQuestion;
@@ -17,7 +18,8 @@ export function QuestionOptions({ question, selected, verified, onSelect }: Prop
         const chosen = selected === option.id;
         const correct = verified && option.id === question.correctAnswer;
         const wrong = verified && chosen && !correct;
-        const ink = correct ? colors.success : wrong ? colors.error : chosen ? colors.primary : colors.muted;
+        const highlighted = chosen && !verified;
+        const ink = correct ? colors.success : wrong ? colors.error : highlighted ? colors.surface : colors.muted;
         const Icon = correct ? Check : wrong ? X : chosen ? Check : Circle;
         const suffix = correct ? ', resposta correta' : wrong ? ', resposta incorreta' : '';
         return (
@@ -31,18 +33,21 @@ export function QuestionOptions({ question, selected, verified, onSelect }: Prop
             onPress={() => onSelect(option.id)}
             style={({ pressed }) => [
               styles.option,
-              chosen && styles.selected,
+              tactile.base,
+              highlighted && styles.selected,
               correct && styles.correct,
               wrong && styles.wrong,
-              pressed && { opacity: 0.75 },
+              pressed && !verified && tactile.pressed,
             ]}
           >
-            <View style={[styles.number, chosen && styles.selectedNumber]}>
-              <AppText variant="label" color={chosen ? colors.surface : colors.muted}>
+            <View style={[styles.number, highlighted && styles.selectedNumber]}>
+              <AppText variant="label" color={highlighted ? colors.primaryDark : colors.muted}>
                 {index + 1}
               </AppText>
             </View>
-            <AppText style={styles.label}>{option.label}</AppText>
+            <AppText style={styles.label} color={highlighted ? colors.surface : undefined}>
+              {option.label}
+            </AppText>
             <Icon size={22} color={ink} />
           </Pressable>
         );
@@ -63,7 +68,7 @@ const styles = StyleSheet.create({
     borderRadius: radius.sm,
     backgroundColor: colors.surface,
   },
-  selected: { backgroundColor: colors.primarySoft, borderColor: colors.primary },
+  selected: { backgroundColor: colors.primary, borderColor: colors.primaryDark },
   correct: { backgroundColor: colors.successSoft, borderColor: colors.success },
   wrong: { backgroundColor: colors.errorSoft, borderColor: colors.error },
   number: {
@@ -74,6 +79,6 @@ const styles = StyleSheet.create({
     borderRadius: radius.sm,
     backgroundColor: colors.background,
   },
-  selectedNumber: { backgroundColor: colors.primaryDark },
+  selectedNumber: { backgroundColor: colors.surface },
   label: { flex: 1, minWidth: 0, fontFamily: fonts.medium, fontSize: 17, lineHeight: 24 },
 });

@@ -9,6 +9,17 @@ export function unitTrailTheme(index: number) {
   const color = UNIT_TRAIL_COLORS[index] ?? UNIT_TRAIL_COLORS[0];
   return { color, side: darkerTrailColor(color), ink: [1, 3, 4, 5, 6, 7, 8].includes(index) ? '#101828' : '#FFFFFF' };
 }
+// Tons derivados da cor da unidade: fundo suave para ícones e tinta escura legível para textos.
+export function softTrailColor(color: string): string {
+  return '#' + [1, 3, 5].map(offset => { const c = parseInt(color.slice(offset, offset + 2), 16); return Math.round(c + (255 - c) * 0.86).toString(16).padStart(2, '0'); }).join('').toUpperCase();
+}
+export function inkTrailColor(color: string): string {
+  return '#' + [1, 3, 5].map(offset => Math.round(parseInt(color.slice(offset, offset + 2), 16) * 0.55).toString(16).padStart(2, '0')).join('').toUpperCase();
+}
+export function unitAccent(index: number) {
+  const { color, side } = unitTrailTheme(index);
+  return { color, side, soft: softTrailColor(color), ink: inkTrailColor(color) };
+}
 export function savedLessonPercent(lesson: Lesson, saved: LessonDraft | undefined): number {
   const draft = restoredDraft(lesson, saved);
   const exercises = lesson.questions.filter(question => question.type !== 'content_card');

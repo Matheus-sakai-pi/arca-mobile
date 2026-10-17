@@ -5,16 +5,10 @@ import { EventProgressBar } from '@/components/animation/EventProgressBar';
 import { artworkForUnit } from '@/constants/unitArtwork';
 import { colors, fonts } from '@/constants/theme';
 import { lessonStatus } from '@/lib/learningProgress';
+import { unitAccent } from '@/lib/trailAppearance';
 import type { LearningProgress, Unit } from '@/types/learning';
 
 const icons = { book: BookOpen, people: UsersRound, scroll: ScrollText, crown: Crown, fish: Fish, sprout: Sprout, mail: Mail };
-const unitAccents = [
-  { ink: colors.primaryDark, soft: colors.primarySoft },
-  { ink: colors.tealInk, soft: colors.tealSoft },
-  { ink: '#526B2D', soft: '#EDF4DF' },
-  { ink: '#7951A8', soft: '#F1EAF9' },
-  { ink: colors.goldInk, soft: colors.goldSoft },
-] as const;
 
 export function UnitCard({ unit, index, course, progress, onPress }: { unit: Unit; index: number; course: Unit; progress: LearningProgress; onPress: () => void }) {
   const art = artworkForUnit(unit.id);
@@ -23,7 +17,7 @@ export function UnitCard({ unit, index, course, progress, onPress }: { unit: Uni
   const percent = unit.lessons.length ? Math.round(completed / unit.lessons.length * 100) : 0;
   const locked = unit.lessons.every(lesson => lessonStatus(progress, lesson.id, null, course) === 'locked');
   const exercises = unit.lessons.reduce((sum, lesson) => sum + lesson.questions.filter(question => question.type !== 'content_card').length, 0);
-  const accent = unitAccents[index % unitAccents.length]!;
+  const accent = unitAccent(index);
   return <Pressable testID={`unit-card-${unit.id}`} accessibilityRole="button" accessibilityLabel={`Abrir unidade ${index + 1}: ${unit.title}, ${completed} de ${unit.lessons.length} lições concluídas${locked ? ', bloqueada' : ''}`} onPress={onPress} style={({ pressed }) => [styles.card, pressed && styles.pressed]}>
     <View style={styles.labelRow}>
       <View style={[styles.icon, { backgroundColor: accent.soft }]}><Icon size={20} color={accent.ink} /></View>
@@ -37,7 +31,7 @@ export function UnitCard({ unit, index, course, progress, onPress }: { unit: Uni
     </View>
     <AppText variant="small" color={colors.muted}>{exercises} exercícios · {art.caption}</AppText>
     <View style={styles.progressRow}>
-      <View style={styles.bar}><EventProgressBar value={percent} label={`Progresso da unidade ${index + 1}`} motionKey={`learn:unit:${unit.id}`} /></View>
+      <View style={styles.bar}><EventProgressBar value={percent} label={`Progresso da unidade ${index + 1}`} motionKey={`learn:unit:${unit.id}`} color={accent.color} /></View>
       <AppText variant="small" style={styles.percent}>{percent}%</AppText>
       {locked ? <LockKeyhole size={14} color={colors.muted} accessibilityLabel="Unidade bloqueada" /> : null}
     </View>

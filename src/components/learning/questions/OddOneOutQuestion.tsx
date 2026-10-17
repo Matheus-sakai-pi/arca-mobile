@@ -24,7 +24,7 @@ export function OddOneOutQuestion({ question, answer, verified, onAnswer }: Exer
               style={({ pressed }) => [
                 styles.tile,
                 { backgroundColor: tone.background, borderColor: tone.border },
-                pressed && { transform: [{ scale: 0.97 }] },
+                pressed && !verified && { borderBottomWidth: 3, marginTop: 2 },
               ]}
             >
               <AppText variant="h3" color={tone.ink} style={styles.text}>
