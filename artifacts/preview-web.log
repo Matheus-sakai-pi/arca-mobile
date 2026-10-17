@@ -1,0 +1,6 @@
+env: load .env
+env: export EXPO_PUBLIC_AUTH_REDIRECT_URL EXPO_PUBLIC_SUPABASE_ANON_KEY EXPO_PUBLIC_SUPABASE_URL
+Starting project at C:\Users\mathe\.codex\.chatgpt-projects\g-p-6ac4124455988191b94724c1d08cec26\arca-mobile
+Using src/app as the root directory for Expo Router.
+Starting Metro Bundler
+

@@ -1,0 +1,14 @@
+Atualizacao de desafios entre amigos e diagnostico do conteudo.
+
+Se ja executou os arquivos Arca-1 e Arca-2, execute APENAS Arca-3-desafios-diagnostico.sql uma unica vez no SQL Editor do projeto Arca.
+Se ainda nao ativou o painel, execute 1, 2 e 3, nessa ordem. Nao repita as migracoes ja aplicadas.
+A migracao de amizades e nomes de usuario existente deve estar aplicada antes do arquivo 3.
+
+O painel separado continua no mesmo endereco. A aba Diagnostico pode ficar vazia ate haver amostras suficientes.
+Erros por pergunta: pelo menos cinco respostas apos ativacao/edicao. Licoes sem conclusao: tentativas novas sem atividade por 24h, nao abandono definitivo.
+
+No app: Perfil > Desafios entre amigos, Resumo semanal e Lembrete de estudo.
+Lembretes sao locais e opcionais no Android/iOS. A entrega real precisa ser conferida no celular em uma nova compilacao; nao existe na previa web. O Android pode atrasar alertas por economia de bateria.
+O AAB anterior NAO inclui essas mudancas. A Politica de Privacidade gerada tambem precisa ser republicada no endereco publico antes do lancamento. Revise a declaracao Seguranca dos dados no Play Console para os novos registros de interacao de estudo e desafios.
+
+Nenhuma migracao remota foi executada automaticamente. Nenhum email foi enviado.

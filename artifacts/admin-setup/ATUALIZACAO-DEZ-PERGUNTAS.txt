@@ -1,0 +1,11 @@
+Desafios de dez perguntas e convite opcional para lembrete.
+
+Se ja executou Arca-1, Arca-2 e Arca-3: execute APENAS Arca-4-desafios-10-perguntas.sql no SQL Editor do projeto Arca.
+Se o painel e os desafios ainda nao foram ativados: execute os arquivos 1, 2, 3 e 4, nessa ordem, sem repetir os ja aplicados. As migracoes anteriores de amizades/nomes de usuario tambem sao necessarias.
+
+O arquivo 4 preserva os desafios antigos de cinco perguntas e seus resultados. Os novos passam a ter dez perguntas, incluindo formatos variados. Nao muda XP ou progresso.
+O popup do lembrete aparece na tela de resultado depois de tres licoes diferentes e abre a escolha de horario, sem ativar nada sozinho. Agora nao dispensa o convite neste aparelho/conta. O popup nao requer SQL adicional.
+
+AAB anterior nao inclui essas mudancas. Lembretes reais precisam de nova compilacao e teste no celular. Na web nao sao enviados. A politica publica gerada precisa ser republicada antes de lancar a versao.
+
+Nenhum SQL remoto, email ou notificacao foi executado automaticamente.

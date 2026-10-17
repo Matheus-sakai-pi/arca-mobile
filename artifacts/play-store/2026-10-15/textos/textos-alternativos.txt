@@ -1,0 +1,26 @@
+destaque-1024x500.png
+Arca: Aprenda a Bíblia, com uma arca de madeira sobre uma colina e um vale iluminado ao fundo.
+
+01-aprender.png
+Unidades de estudo ilustradas, com lições concluídas e barras de progresso.
+
+02-trilha.png
+Trilha de lições sobre um vale, com moedas para etapas concluídas e a próxima lição disponível.
+
+03-exercicio.png
+Exercício interativo sobre a Bíblia com alternativas e botão para verificar a resposta.
+
+04-resultado.png
+Resultado de uma lição concluída, com precisão, acertos e XP recebido.
+
+05-inicio.png
+Início do Arca, com sequência de estudo, XP e acesso à próxima lição da unidade.
+
+06-ranking.png
+Ranking de XP com pódio e abas para XP total, XP semanal e amigos. Participantes de demonstração.
+
+07-amigos.png
+Busca por nome de usuário, pedidos de amizade e lista de amigos. Contas de demonstração.
+
+08-conquistas.png
+Conquistas do Perfil com ilustrações próprias e critérios de desbloqueio.

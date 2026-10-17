@@ -1,0 +1,116 @@
+[
+  {
+    "level": "warn",
+    "message": "props.pointerEvents is deprecated. Use style.pointerEvents",
+    "timestamp": "2026-10-06T13:24:08.476Z",
+    "url": "http://127.0.0.1:8083/node_modules/expo-router/entry.bundle?platform=web&dev=true&hot=false&lazy=true&transform.engine=hermes&transform.routerRoot=src%2Fapp&unstable_transformProfile=hermes-stable"
+  },
+  {
+    "level": "debug",
+    "message": "[arca.audio.wrong] {\"loaded\":true,\"playing\":false,\"finished\":false,\"duration\":0.36}",
+    "timestamp": "2026-10-06T13:25:33.377Z",
+    "url": "http://127.0.0.1:8083/node_modules/expo-router/entry.bundle?platform=web&dev=true&hot=false&lazy=true&transform.engine=hermes&transform.routerRoot=src%2Fapp&unstable_transformProfile=hermes-stable"
+  },
+  {
+    "level": "debug",
+    "message": "[arca.audio.correct] {\"loaded\":true,\"playing\":false,\"finished\":false,\"duration\":0.48}",
+    "timestamp": "2026-10-06T13:25:33.430Z",
+    "url": "http://127.0.0.1:8083/node_modules/expo-router/entry.bundle?platform=web&dev=true&hot=false&lazy=true&transform.engine=hermes&transform.routerRoot=src%2Fapp&unstable_transformProfile=hermes-stable"
+  },
+  {
+    "level": "debug",
+    "message": "[arca.audio.wrong] {\"loaded\":true,\"playing\":true,\"finished\":false,\"duration\":0.36}",
+    "timestamp": "2026-10-06T13:25:38.706Z",
+    "url": "http://127.0.0.1:8083/node_modules/expo-router/entry.bundle?platform=web&dev=true&hot=false&lazy=true&transform.engine=hermes&transform.routerRoot=src%2Fapp&unstable_transformProfile=hermes-stable"
+  },
+  {
+    "level": "debug",
+    "message": "[arca.audio.wrong] {\"loaded\":true,\"playing\":false,\"finished\":false,\"duration\":0.36}",
+    "timestamp": "2026-10-06T13:25:38.708Z",
+    "url": "http://127.0.0.1:8083/node_modules/expo-router/entry.bundle?platform=web&dev=true&hot=false&lazy=true&transform.engine=hermes&transform.routerRoot=src%2Fapp&unstable_transformProfile=hermes-stable"
+  },
+  {
+    "level": "debug",
+    "message": "[arca.audio.wrong] {\"loaded\":true,\"playing\":false,\"finished\":true,\"duration\":0.36}",
+    "timestamp": "2026-10-06T13:25:39.112Z",
+    "url": "http://127.0.0.1:8083/node_modules/expo-router/entry.bundle?platform=web&dev=true&hot=false&lazy=true&transform.engine=hermes&transform.routerRoot=src%2Fapp&unstable_transformProfile=hermes-stable"
+  },
+  {
+    "level": "debug",
+    "message": "[arca.audio.wrong] {\"loaded\":true,\"playing\":true,\"finished\":false,\"duration\":0.36}",
+    "timestamp": "2026-10-06T13:25:56.821Z",
+    "url": "http://127.0.0.1:8083/node_modules/expo-router/entry.bundle?platform=web&dev=true&hot=false&lazy=true&transform.engine=hermes&transform.routerRoot=src%2Fapp&unstable_transformProfile=hermes-stable"
+  },
+  {
+    "level": "debug",
+    "message": "[arca.audio.wrong] {\"loaded\":true,\"playing\":false,\"finished\":false,\"duration\":0.36}",
+    "timestamp": "2026-10-06T13:25:56.835Z",
+    "url": "http://127.0.0.1:8083/node_modules/expo-router/entry.bundle?platform=web&dev=true&hot=false&lazy=true&transform.engine=hermes&transform.routerRoot=src%2Fapp&unstable_transformProfile=hermes-stable"
+  },
+  {
+    "level": "debug",
+    "message": "[arca.audio.wrong] {\"loaded\":true,\"playing\":false,\"finished\":true,\"duration\":0.36}",
+    "timestamp": "2026-10-06T13:25:57.232Z",
+    "url": "http://127.0.0.1:8083/node_modules/expo-router/entry.bundle?platform=web&dev=true&hot=false&lazy=true&transform.engine=hermes&transform.routerRoot=src%2Fapp&unstable_transformProfile=hermes-stable"
+  },
+  {
+    "level": "debug",
+    "message": "[arca.audio.wrong] {\"loaded\":true,\"playing\":true,\"finished\":false,\"duration\":0.36}",
+    "timestamp": "2026-10-06T13:26:10.892Z",
+    "url": "http://127.0.0.1:8083/node_modules/expo-router/entry.bundle?platform=web&dev=true&hot=false&lazy=true&transform.engine=hermes&transform.routerRoot=src%2Fapp&unstable_transformProfile=hermes-stable"
+  },
+  {
+    "level": "debug",
+    "message": "[arca.audio.wrong] {\"loaded\":true,\"playing\":false,\"finished\":true,\"duration\":0.36}",
+    "timestamp": "2026-10-06T13:26:11.272Z",
+    "url": "http://127.0.0.1:8083/node_modules/expo-router/entry.bundle?platform=web&dev=true&hot=false&lazy=true&transform.engine=hermes&transform.routerRoot=src%2Fapp&unstable_transformProfile=hermes-stable"
+  },
+  {
+    "level": "debug",
+    "message": "[arca.audio.wrong] {\"loaded\":true,\"playing\":true,\"finished\":false,\"duration\":0.36}",
+    "timestamp": "2026-10-06T13:26:25.968Z",
+    "url": "http://127.0.0.1:8083/node_modules/expo-router/entry.bundle?platform=web&dev=true&hot=false&lazy=true&transform.engine=hermes&transform.routerRoot=src%2Fapp&unstable_transformProfile=hermes-stable"
+  },
+  {
+    "level": "debug",
+    "message": "[arca.audio.wrong] {\"loaded\":true,\"playing\":false,\"finished\":true,\"duration\":0.36}",
+    "timestamp": "2026-10-06T13:26:26.351Z",
+    "url": "http://127.0.0.1:8083/node_modules/expo-router/entry.bundle?platform=web&dev=true&hot=false&lazy=true&transform.engine=hermes&transform.routerRoot=src%2Fapp&unstable_transformProfile=hermes-stable"
+  },
+  {
+    "level": "debug",
+    "message": "[arca.audio.wrong] {\"loaded\":true,\"playing\":true,\"finished\":false,\"duration\":0.36}",
+    "timestamp": "2026-10-06T13:26:38.806Z",
+    "url": "http://127.0.0.1:8083/node_modules/expo-router/entry.bundle?platform=web&dev=true&hot=false&lazy=true&transform.engine=hermes&transform.routerRoot=src%2Fapp&unstable_transformProfile=hermes-stable"
+  },
+  {
+    "level": "debug",
+    "message": "[arca.audio.wrong] {\"loaded\":true,\"playing\":false,\"finished\":true,\"duration\":0.36}",
+    "timestamp": "2026-10-06T13:26:39.183Z",
+    "url": "http://127.0.0.1:8083/node_modules/expo-router/entry.bundle?platform=web&dev=true&hot=false&lazy=true&transform.engine=hermes&transform.routerRoot=src%2Fapp&unstable_transformProfile=hermes-stable"
+  },
+  {
+    "level": "debug",
+    "message": "[arca.audio.wrong] {\"loaded\":true,\"playing\":false,\"finished\":false,\"duration\":0.36}",
+    "timestamp": "2026-10-06T13:27:04.480Z",
+    "url": "http://127.0.0.1:8083/node_modules/expo-router/entry.bundle?platform=web&dev=true&hot=false&lazy=true&transform.engine=hermes&transform.routerRoot=src%2Fapp&unstable_transformProfile=hermes-stable"
+  },
+  {
+    "level": "debug",
+    "message": "[arca.audio.correct] {\"loaded\":true,\"playing\":false,\"finished\":false,\"duration\":0.48}",
+    "timestamp": "2026-10-06T13:27:04.487Z",
+    "url": "http://127.0.0.1:8083/node_modules/expo-router/entry.bundle?platform=web&dev=true&hot=false&lazy=true&transform.engine=hermes&transform.routerRoot=src%2Fapp&unstable_transformProfile=hermes-stable"
+  },
+  {
+    "level": "debug",
+    "message": "[arca.audio.correct] {\"loaded\":true,\"playing\":true,\"finished\":false,\"duration\":0.48}",
+    "timestamp": "2026-10-06T13:27:04.963Z",
+    "url": "http://127.0.0.1:8083/node_modules/expo-router/entry.bundle?platform=web&dev=true&hot=false&lazy=true&transform.engine=hermes&transform.routerRoot=src%2Fapp&unstable_transformProfile=hermes-stable"
+  },
+  {
+    "level": "debug",
+    "message": "[arca.audio.correct] {\"loaded\":true,\"playing\":false,\"finished\":true,\"duration\":0.48}",
+    "timestamp": "2026-10-06T13:27:05.482Z",
+    "url": "http://127.0.0.1:8083/node_modules/expo-router/entry.bundle?platform=web&dev=true&hot=false&lazy=true&transform.engine=hermes&transform.routerRoot=src%2Fapp&unstable_transformProfile=hermes-stable"
+  }
+]

@@ -1,0 +1,36 @@
+import { test, expect } from './fixtures';
+import { initialUnit } from '../../src/data/lessons.ts';
+import { capture } from './actions';
+
+test('report validates reason, retains comment on failure, retries once and preserves lesson answer', async ({ page, context, backend }, info) => {
+  await backend.install(context);
+  const lesson = initialUnit.lessons[0]!;
+  await page.goto(`/lesson/${lesson.id}`);
+  const answer = page.getByRole('radio', { name: 'Uma coleção de livros', exact: true });
+  await answer.click();
+  const report = page.getByRole('button', { name: 'Reportar problema na pergunta', exact: true });
+  await report.scrollIntoViewIfNeeded();
+  await expect(report).toBeVisible();
+  await expect(report).toHaveCSS('background-color', 'rgb(255, 255, 255)');
+  await expect(report.getByText('Reportar problema', { exact: true })).toHaveCSS('color', 'rgb(4, 58, 216)');
+  await capture(page, info, 'report-button-contrast');
+  await report.click();
+  await expect(page.getByRole('button', { name: 'Enviar relato', exact: true })).toBeDisabled();
+  await page.getByRole('radio', { name: 'Resposta incorreta', exact: true }).click();
+  await page.getByLabel('Comentário do relato', { exact: true }).fill('Quero conferir esta resposta.');
+  backend.failNext('submit_question_report', true);
+  await page.getByRole('button', { name: 'Enviar relato', exact: true }).click();
+  await expect(page.getByText('Não foi possível concluir. Confira a conexão e tente novamente.', { exact: true })).toBeVisible();
+  await expect(page.getByLabel('Comentário do relato', { exact: true })).toHaveValue('Quero conferir esta resposta.');
+  await page.getByRole('button', { name: 'Enviar relato', exact: true }).click();
+  await expect(page.getByRole('heading', { name: 'Relato recebido', exact: true })).toBeVisible();
+  const submissions = backend.calls.filter(call => call.name === 'submit_question_report');
+  expect(submissions).toHaveLength(2); expect(submissions[0]!.body).toEqual(submissions[1]!.body);
+  expect(submissions[0]!.body).not.toHaveProperty('reporterId');
+  const reports = await backend.db.query<{ comment: string }>('select comment from question_reports where reporter_id=$1', [backend.owner]);
+  expect(reports.rows).toEqual([{ comment: 'Quero conferir esta resposta.' }]);
+  await capture(page, info, 'report-received');
+  await page.getByRole('button', { name: 'Voltar à lição', exact: true }).click();
+  await expect(answer).toBeChecked();
+  await expect(page.getByText('Exercício 1/10', { exact: true })).toBeVisible();
+});

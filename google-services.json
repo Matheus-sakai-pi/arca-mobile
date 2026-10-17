@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "556251078234",
+    "project_id": "arca-efe4b",
+    "storage_bucket": "arca-efe4b.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:556251078234:android:4e5124fd765c4143068263",
+        "android_client_info": {
+          "package_name": "com.arca.mobile"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyADBPhXbZgViFH3w2ZvBrXvzdrHGmu4j2g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

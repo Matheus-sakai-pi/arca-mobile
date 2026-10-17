@@ -1,0 +1,26 @@
+{
+  "units": 10,
+  "lessons": 100,
+  "exercises": 1000,
+  "readings": 2,
+  "formats": {
+    "multiple_choice": 193,
+    "fill_blank": 196,
+    "classify": 2,
+    "sequence": 130,
+    "spot_the_error": 2,
+    "multi_select": 103,
+    "true_false": 194,
+    "odd_one_out": 3,
+    "matching": 96,
+    "fix_sentence": 2,
+    "ordering": 39,
+    "before_after": 30,
+    "who_am_i": 4,
+    "quote_character": 2,
+    "cause_effect": 2,
+    "content_card": 2,
+    "story_summary": 2
+  },
+  "issues": []
+}

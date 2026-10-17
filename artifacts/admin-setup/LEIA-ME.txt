@@ -1,0 +1,9 @@
+No Supabase do Arca, abra SQL Editor.
+1. Execute o conteudo completo de Arca-1-ativar-relatos.sql uma unica vez.
+2. Confira que sua conta existente e matheussakai23032001@gmail.com, com email confirmado.
+3. Execute Arca-2-liberar-admin.sql. Ele autoriza somente o UUID atual dessa conta.
+4. Entre no dashboard separado com essa mesma conta do Arca.
+
+Nao crie tabelas manualmente, nao envie chaves administrativas ou senhas no chat e nao altere as contas dos usuarios.
+Esses arquivos nao criam contas nem mandam emails. A etapa 2 e de permissao administrativa, nao de cadastro.
+A previa do app possui o formulario novo. O AAB anterior ainda nao.

@@ -6,6 +6,8 @@ node_modules/
 # Expo
 .expo/
 dist/
+.logs/
+.cache/
 web-build/
 expo-env.d.ts
 
@@ -17,6 +19,9 @@ expo-env.d.ts
 *.p12
 *.key
 *.mobileprovision
+credentials.json
+*service-account*.json
+*firebase-adminsdk*.json
 
 # Metro
 .metro-health-check*
@@ -31,11 +36,24 @@ yarn-error.*
 *.pem
 
 # local env files
+.env
 .env*.local
 
 # typescript
 *.tsbuildinfo
 
+# Automated browser test output (can contain synthetic test sessions)
+/playwright-report/
+/test-results/
+/blob-report/
+
 # generated native folders
 /ios
 /android
+
+# Builds e arquivos grandes (ficam no disco, fora do Git)
+/artifacts/releases/
+/artifacts/eas-archive-*/
+
+# Rascunho local com valores do .env
+/Novo(a) Documento de Texto.txt

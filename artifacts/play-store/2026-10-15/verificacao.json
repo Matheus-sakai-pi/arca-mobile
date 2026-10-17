@@ -1,0 +1,87 @@
+{
+  "date": "2026-10-15T18:56:52.021Z",
+  "source": "Production web export; isolated fictional accounts; not an Android installation",
+  "errors": [],
+  "files": [
+    {
+      "file": "icone-512.png",
+      "width": 512,
+      "height": 512,
+      "channels": 4,
+      "bytes": 491781,
+      "sha256": "54b2220d20ca0e3d0abd843160d3af21fafd61993a38f1bffe3582074f667539"
+    },
+    {
+      "file": "destaque-1024x500.png",
+      "width": 1024,
+      "height": 500,
+      "channels": 3,
+      "bytes": 1163811,
+      "sha256": "aa39f05ae937254ad83721c5563210695c259a4dd9599c443c72355f75779473"
+    },
+    {
+      "file": "capturas/01-aprender.png",
+      "width": 1080,
+      "height": 1920,
+      "channels": 3,
+      "bytes": 1327317,
+      "sha256": "7e413d5d86f5f1c83d5e872349d43974a091ecb37f02448ed42a9c99fb29f997"
+    },
+    {
+      "file": "capturas/02-trilha.png",
+      "width": 1080,
+      "height": 1920,
+      "channels": 3,
+      "bytes": 2169792,
+      "sha256": "57770d26a0bb2d7964ee79c8feb71df5b37d7c4c02ec124528a1ff385ce81cee"
+    },
+    {
+      "file": "capturas/03-exercicio.png",
+      "width": 1080,
+      "height": 1920,
+      "channels": 3,
+      "bytes": 1350320,
+      "sha256": "eb730c554d630f8fc6816751713a393c4dcbe087b38b35b133f124f192c7a0e3"
+    },
+    {
+      "file": "capturas/04-resultado.png",
+      "width": 1080,
+      "height": 1920,
+      "channels": 3,
+      "bytes": 903497,
+      "sha256": "59c7a2854ee088e58ca5a876467a11136f3d862f1b8ebe253fe19e8c524c82b7"
+    },
+    {
+      "file": "capturas/05-inicio.png",
+      "width": 1080,
+      "height": 1920,
+      "channels": 3,
+      "bytes": 1265886,
+      "sha256": "25dbe3da5908c22ec6dbb85081551797f98d30b827994d1f664fae3ab411474b"
+    },
+    {
+      "file": "capturas/06-ranking.png",
+      "width": 1080,
+      "height": 1920,
+      "channels": 3,
+      "bytes": 2279108,
+      "sha256": "e2d26b1a20d5a4794872ecbacb087de711a218eddd320f9def48e33618aca5ca"
+    },
+    {
+      "file": "capturas/07-amigos.png",
+      "width": 1080,
+      "height": 1920,
+      "channels": 3,
+      "bytes": 160196,
+      "sha256": "5ac3ad425aaa59c0d492a13f175c056dfa11cdbcb1eb95827f5f8baa46a2a922"
+    },
+    {
+      "file": "capturas/08-conquistas.png",
+      "width": 1080,
+      "height": 1920,
+      "channels": 3,
+      "bytes": 418554,
+      "sha256": "02644456d99b6f736ac8a7fc1716b93fc9938e54990ed507fde11a77460abac2"
+    }
+  ]
+}

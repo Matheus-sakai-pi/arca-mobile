@@ -1,0 +1,31 @@
+:root { color-scheme: light; font-family: system-ui, sans-serif; color: #18233b; background: #f5f8fc; line-height: 1.65; }
+* { box-sizing: border-box; }
+body { margin: 0; }
+a { color: #074cc4; overflow-wrap: anywhere; }
+header, main, footer { max-width: 800px; margin: auto; padding: 24px; }
+header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px; border-bottom: 1px solid #d9e3ee; }
+.brand { display: flex; gap: 12px; align-items: center; font-weight: 800; font-size: 26px; text-decoration: none; }
+.brand img { border-radius: 8px; }
+.brand small { display: block; color: #536279; font-size: 13px; font-weight: 500; }
+nav { display: flex; flex-wrap: wrap; gap: 20px; font-size: 15px; }
+nav a { padding: 8px 0; text-decoration: none; }
+nav a[aria-current] { border-bottom: 2px solid #074cc4; font-weight: 700; }
+main { background: white; padding-top: 36px; padding-bottom: 48px; }
+h1 { font-size: 32px; line-height: 1.2; margin: 0 0 12px; overflow-wrap: anywhere; }
+h2 { font-size: 21px; line-height: 1.4; margin: 0 0 12px; }
+p { margin: 0 0 16px; }
+section { border-top: 1px solid #e1e8f0; padding-top: 28px; margin-top: 28px; }
+.intro { font-size: 18px; color: #074cc4; font-weight: 600; }
+.date, footer { color: #536279; font-size: 14px; }
+form { margin: 24px 0; padding: 20px 0; display: grid; gap: 14px; border-top: 1px solid #e1e8f0; border-bottom: 1px solid #e1e8f0; }
+label { font-weight: 600; }
+input[type=email] { width: 100%; min-height: 48px; border: 1px solid #8b9cb4; border-radius: 6px; padding: 12px; font: inherit; }
+.check { display: flex; align-items: flex-start; gap: 12px; font-weight: 400; }
+.check input { margin-top: 6px; width: 20px; height: 20px; flex-shrink: 0; accent-color: #074cc4; }
+.action { display: inline-flex; align-items: center; justify-content: space-between; gap: 16px; background: #075ce0; color: white; padding: 14px 20px; border: 0; border-radius: 6px; font: inherit; font-weight: 700; text-decoration: none; cursor: pointer; min-height: 48px; max-width: 100%; }
+#request-status:empty { display: none; }
+#request-status { color: #146342; margin: 0; }
+:focus-visible { outline: 3px solid #ffbf47; outline-offset: 4px; }
+.skip { position: absolute; top: -80px; left: 20px; background: white; padding: 12px; z-index: 1; }
+.skip:focus { top: 8px; }
+@media(max-width:480px) { header, main, footer { padding-left: 20px; padding-right: 20px; } h1 { font-size: 28px; } header { gap: 12px; } nav { width: 100%; } }

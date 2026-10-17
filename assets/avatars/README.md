@@ -1,0 +1,28 @@
+# Avatares Arca
+
+Cinco PNGs reais gerados pela ferramenta integrada image_gen, sem CLI/API key e sem placeholders. Referencia de direcao artistica: Folha de Design do Profeta Mascote.png enviada pelo usuario. As imagens foram inspecionadas e copiadas sem alteracao para assets/avatars/avatar-01.png ate avatar-05.png. Personagens genericos, sem identidade biblica especifica.
+
+Registro: src/constants/avatarKeys.ts; assets: src/constants/avatars.ts; consumidor comum: Avatar. Arquivos quadrados de 1254 x 1254, fundo azul claro simples, composicao para recorte circular. Android usa resizeMethod=resize no Image para decodificar no tamanho exibido.
+
+## Prompts finais
+
+### avatar-01.png
+
+Use case: stylized-concept. Asset type: square local PNG portrait avatar for Arca mobile learning app. Subject: An elderly wise man, rounded white hair and full fluffy white beard, warm peach skin, kind large navy eyes, cream robe and red cloak, cheerful open-mouth smile. Style: professional polished rounded 2D cartoon mascot illustration, gentle cel shading, soft sculpted rounded shapes, no black outlines, friendly oversized head and expressive eyes, akin to a high-quality children's educational character sheet. Composition: one single centered head and shoulders, front three-quarter near-front view, full hair silhouette and shoulders visible within generous 12% safe margin suitable for circular cropping. Simple solid pale blue background #EAF1FF. Consistent soft upper-left lighting. Not a specific biblical character. No objects, staff, books, halos, religious emblems, text, borders, labels, photorealism, sheet, collage or multiple characters. Output one square polished PNG.
+
+### avatar-02.png
+
+Use case: stylized-concept. Asset type: square local PNG portrait avatar for Arca mobile learning app. Subject: A young male traveler, medium warm brown skin, short curly dark hair, large navy eyes, teal tunic and blue shoulder scarf, friendly confident smile. Style: professional polished rounded 2D cartoon mascot illustration, gentle cel shading, soft sculpted rounded shapes, no black outlines, friendly oversized head and expressive eyes, akin to a high-quality children's educational character sheet. Composition: one single centered head and shoulders, front three-quarter near-front view, full hair silhouette and shoulders visible within generous 12% safe margin suitable for circular cropping. Simple solid pale blue background #EAF1FF. Consistent soft upper-left lighting. Not a specific biblical character. No objects, staff, books, halos, religious emblems, text, borders, labels, photorealism, sheet, collage or multiple characters. Output one square polished PNG.
+
+### avatar-03.png
+
+Use case: stylized-concept. Asset type: square local PNG portrait avatar for Arca mobile learning app. Subject: A young woman, olive skin, long dark wavy hair under a simple turquoise head scarf, large navy eyes, cream garment with blue collar, friendly joyful smile. Style: professional polished rounded 2D cartoon mascot illustration, gentle cel shading, soft sculpted rounded shapes, no black outlines, friendly oversized head and expressive eyes, akin to a high-quality children's educational character sheet. Composition: one single centered head and shoulders, front three-quarter near-front view, full hair silhouette and shoulders visible within generous 12% safe margin suitable for circular cropping. Simple solid pale blue background #EAF1FF. Consistent soft upper-left lighting. Not a specific biblical character. No objects, staff, books, halos, religious emblems, text, borders, labels, photorealism, sheet, collage or multiple characters. Output one square polished PNG.
+
+### avatar-04.png
+
+Use case: stylized-concept. Asset type: square local PNG portrait avatar for Arca mobile learning app. Subject: An adult man, deep warm brown skin, rounded short black beard and curly hair, large navy eyes, ochre tunic and red shoulder scarf, calm welcoming smile. Style: professional polished rounded 2D cartoon mascot illustration, gentle cel shading, soft sculpted rounded shapes, no black outlines, friendly oversized head and expressive eyes, akin to a high-quality children's educational character sheet. Composition: one single centered head and shoulders, front three-quarter near-front view, full hair silhouette and shoulders visible within generous 12% safe margin suitable for circular cropping. Simple solid pale blue background #EAF1FF. Consistent soft upper-left lighting. Not a specific biblical character. No objects, staff, books, halos, religious emblems, text, borders, labels, photorealism, sheet, collage or multiple characters. Output one square polished PNG.
+
+### avatar-05.png
+
+Use case: stylized-concept. Asset type: square local PNG portrait avatar for Arca mobile learning app. Subject: An adult scholar/traveler woman, warm peach skin, dark auburn wavy hair, simple indigo head scarf, large navy eyes, teal garment, warm thoughtful smile. Style: professional polished rounded 2D cartoon mascot illustration, gentle cel shading, soft sculpted rounded shapes, no black outlines, friendly oversized head and expressive eyes, akin to a high-quality children's educational character sheet. Composition: one single centered head and shoulders, front three-quarter near-front view, full hair silhouette and shoulders visible within generous 12% safe margin suitable for circular cropping. Simple solid pale blue background #EAF1FF. Consistent soft upper-left lighting. Not a specific biblical character. No objects, staff, books, halos, religious emblems, text, borders, labels, photorealism, sheet, collage or multiple characters. Output one square polished PNG.
+

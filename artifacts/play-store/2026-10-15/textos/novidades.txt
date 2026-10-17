@@ -1,0 +1,5 @@
+Três rankings: XP total, XP semanal e entre amigos.
+Busca e pedidos de amizade pelo Perfil.
+Nome de usuário único no cadastro e na edição do perfil.
+Unidades ilustradas e trilhas de lições renovadas.
+Ícones próprios para conquistas e melhorias no visual.

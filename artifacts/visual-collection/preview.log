@@ -1,0 +1,21 @@
+env: load .env
+env: export EXPO_PUBLIC_AUTH_REDIRECT_URL EXPO_PUBLIC_SUPABASE_ANON_KEY EXPO_PUBLIC_SUPABASE_URL
+Starting project at C:\Users\mathe\.codex\.chatgpt-projects\g-p-6ac4124455988191b94724c1d08cec26\arca-mobile
+Using src/app as the root directory for Expo Router.
+Starting Metro Bundler
+
+Waiting on http://localhost:8087
+
+An update for expo is available: 57.0.29 → ~57.0.30
+1 other package may need updating. Run npx expo install --check for details.
+Logs for your project will appear below.
+Web Bundled 4864ms node_modules\expo-router\entry.js (3454 modules)
+Web  INFO  %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+Web  LOG  Running application "main" with appParams:
+ {"hydrate": undefined, "rootTag": "#root"} 
+Development-level warnings: ON.
+Performance optimizations: OFF.
+Web  WARN  "textShadow*" style props are deprecated. Use "textShadow".
+Web  WARN  props.pointerEvents is deprecated. Use style.pointerEvents
+| (node:14040) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+| (Use `node --trace-warnings ...` to show where the warning was created)

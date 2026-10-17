@@ -1,0 +1,8 @@
+project_id = "arca-mobile"
+
+[functions.delete-account]
+verify_jwt = true
+
+[functions.dispatch-push]
+# The dispatcher validates its own dedicated server-only Bearer secret.
+verify_jwt = false
