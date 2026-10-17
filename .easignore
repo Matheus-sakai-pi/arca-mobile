@@ -46,3 +46,9 @@ credentials.json
 /sources/
 /*.txt
 **/*.md
+
+# Builds antigos, relatórios e materiais locais não entram no envio para a nuvem.
+artifacts/
+playwright-report/
+test-results/
+blob-report/
