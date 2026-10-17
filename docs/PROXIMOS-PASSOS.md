@@ -5,17 +5,13 @@ Guia simples do que precisa da sua conta ou do seu celular. Atualizado em 18/10/
 ## 1. Atualizar o banco de dados (Supabase)
 
 As melhorias de bateria (30), conquistas na nuvem e revisão editorial só valem depois disso.
+Consulta feita em 18/10/2026: o banco remoto já tem a bateria nova e os baús; falta só o arquivo abaixo.
 
 1. Entre em [supabase.com](https://supabase.com), abra o projeto **Arca** e clique em **SQL Editor**.
-2. Clique em **New query**, abra o arquivo `artifacts/supabase-2026-10-18/1-ativar-bateria-30.sql`,
-   copie todo o conteúdo, cole e clique em **Run**.
-   - Se aparecer erro dizendo que algo "already exists", a bateria nova já estava ativa: nesse caso,
-     rode apenas o arquivo `supabase/migrations/202610180001_battery_capacity_30.sql`.
-3. Faça o mesmo com `artifacts/supabase-2026-10-18/2-ativar-melhorias.sql`.
-4. Aplique uma vez só. Os arquivos não apagam progresso, XP nem contas.
-
-Importante: a bateria nova exige a versão nova do app. Aplique o passo 1 junto com a publicação do
-próximo AAB (versionCode 7), não antes.
+2. Clique em **New query**, abra o arquivo `artifacts/supabase-2026-10-18/ATUALIZAR-SUPABASE.sql`,
+   copie todo o conteúdo, cole e clique em **Run**. Deve aparecer "Success".
+3. Aplique uma vez só. O arquivo não apaga progresso, XP nem contas e funciona também com a
+   versão atual do app, então pode ser aplicado agora.
 
 ## 2. Gerar e testar a nova versão no Android
 

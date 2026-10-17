@@ -1,7 +1,21 @@
--- Arca — melhorias de 18/10/2026: conquistas/preferências na nuvem e revisão editorial.
--- Aplique uma única vez no SQL Editor do Supabase, depois do arquivo 1-ativar-bateria-30.sql.
+-- Arca — atualização de 18/10/2026 para colar no SQL Editor do Supabase (uma única vez).
+-- 1) Bateria com limite de 30  2) Conquistas e preferências na conta  3) Revisão editorial.
+-- Não apaga contas, progresso nem XP. Funciona também com a versão atual do app.
 
--- 202610180002_user_settings_sync.sql
+-- ===== 202610180001_battery_capacity_30.sql =====
+-- Bateria com limite de 30 e carga completa em 24 horas (1 energia a cada 48 minutos).
+-- Seguro para bancos que já aplicaram 202610170001: atualiza as regras e mantém
+-- as carteiras coerentes. Quem estava com a bateria cheia (25) passa a 30;
+-- quem estava abaixo do limite continua recarregando a partir do saldo atual.
+update public.battery_rules
+set rules = jsonb_set(jsonb_set(rules, '{capacity}', '30'::jsonb), '{refillSeconds}', '2880'::jsonb)
+where singleton;
+
+update public.battery_wallets
+set balance = 30, refill_at = null
+where refill_at is null and balance < 30;
+
+-- ===== 202610180002_user_settings_sync.sql =====
 -- Conquistas e preferências da conta guardadas no servidor, para não se perderem ao trocar de aparelho.
 -- Conquistas só se acumulam (união); preferências guardam o último valor enviado.
 create table public.user_settings (
@@ -48,7 +62,7 @@ end $$;
 revoke all on function public.learning_user_settings(text[],jsonb) from public,anon,authenticated;
 grant execute on function public.learning_user_settings(text[],jsonb) to authenticated;
 
--- 202610180003_editorial_review.sql
+-- ===== 202610180003_editorial_review.sql =====
 -- Revisão editorial de 18/10/2026: grafia (Benjamim, ação de graças), redação de uma
 -- pergunta sobre a Páscoa e enunciado mais claro nas perguntas de associação.
 -- Atualiza apenas o texto das perguntas alteradas; IDs, respostas e progresso são preservados.
@@ -163,3 +177,4 @@ insert into public.questions(id,lesson_id,type,prompt,explanation,content,order_
 insert into public.questions(id,lesson_id,type,prompt,explanation,content,order_index,curriculum_revision) values('cartas-tiago-6-practice-v3','cartas-tiago','multiple_choice','Qual destas opções corresponde a “Ouvir e praticar”?','Tiago 1: Ouvir e praticar. (Tiago 1:19–27; 2:1–9; 3:1–12)','{"options":[{"id":"1","label":"Tiago 1"},{"id":"2","label":"Tiago 2"},{"id":"3","label":"Tiago 3"}],"correctAnswer":"1"}'::jsonb,5,3) on conflict(id) do update set type = excluded.type,prompt = excluded.prompt,explanation = excluded.explanation,content = excluded.content,order_index = excluded.order_index,curriculum_revision = excluded.curriculum_revision;
 insert into public.questions(id,lesson_id,type,prompt,explanation,content,order_index,curriculum_revision) values('panorama-apocalipse-6-practice-v3','panorama-apocalipse','multiple_choice','Qual destas opções corresponde a “Ilha mencionada por João”?','Patmos: Ilha mencionada por João. (Apocalipse 1:1–11; 2–3; 21–22)','{"options":[{"id":"1","label":"Apocalipse 2–3"},{"id":"2","label":"Apocalipse 21–22"},{"id":"3","label":"Patmos"}],"correctAnswer":"3"}'::jsonb,5,3) on conflict(id) do update set type = excluded.type,prompt = excluded.prompt,explanation = excluded.explanation,content = excluded.content,order_index = excluded.order_index,curriculum_revision = excluded.curriculum_revision;
 commit;
+
