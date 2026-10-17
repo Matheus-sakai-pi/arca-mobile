@@ -5,7 +5,9 @@ Guia simples do que precisa da sua conta ou do seu celular. Atualizado em 18/10/
 ## 1. Atualizar o banco de dados (Supabase)
 
 As melhorias de bateria (30), conquistas na nuvem e revisão editorial só valem depois disso.
-Consulta feita em 18/10/2026: o banco remoto já tem a bateria nova e os baús; falta só o arquivo abaixo.
+Consulta feita em 18/10/2026: o banco remoto tem todas as migrations, exceto a das 10 perguntas por
+lição (`202610140001`). O arquivo abaixo aplica essa parte adaptada (sem desfazer a proteção da bateria)
+e depois as melhorias de 18/10. O teste `tests/integration/remoteCatchUp.test.ts` reproduz esse cenário.
 
 1. Entre em [supabase.com](https://supabase.com), abra o projeto **Arca** e clique em **SQL Editor**.
 2. Clique em **New query**, abra o arquivo `artifacts/supabase-2026-10-18/ATUALIZAR-SUPABASE.sql`,
