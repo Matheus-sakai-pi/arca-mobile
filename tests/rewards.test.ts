@@ -44,12 +44,16 @@ test('rank motion distinguishes upward, downward and unchanged positions without
   assert.equal(ledger.number('rank:a',9).from,12);
 });
 const facts=()=>({progress:createProgress(),units:learningUnits,longestStreak:0});
-test('nine achievement definitions reflect real progress, perfect result, units, streak and XP thresholds',()=>{
-  assert.equal(achievementDefinitions.length,9);assert.deepEqual(eligibleAchievements(facts()),[]);
+test('achievement definitions reflect real progress, perfect result, units, full course, streak and XP thresholds',()=>{
+  assert.equal(achievementDefinitions.length,27);assert.deepEqual(eligibleAchievements(facts()),[]);
   const input=facts();
-  input.progress={...input.progress,xp:1000,completedLessonIds:learningUnits.flatMap(unit=>unit.lessons.map(lesson=>lesson.id)),lastResult:{attemptId:'a',lessonId:learningUnits[0]!.lessons[0]!.id,correct:5,total:5,accuracy:100,xpEarned:25,completedAt:'2026-10-07T12:00:00Z'}};
-  input.longestStreak=7;
+  input.progress={...input.progress,xp:10000,completedLessonIds:learningUnits.flatMap(unit=>unit.lessons.map(lesson=>lesson.id)),lastResult:{attemptId:'a',lessonId:learningUnits[0]!.lessons[0]!.id,correct:5,total:5,accuracy:100,xpEarned:25,completedAt:'2026-10-07T12:00:00Z'}};
+  input.longestStreak=100;
   assert.deepEqual(eligibleAchievements(input),achievementDefinitions.map(item=>item.id));
+  // Jornada completa só com todas as unidades; metas de lições contam lições diferentes.
+  const almost={...input,progress:{...input.progress,completedLessonIds:input.progress.completedLessonIds.slice(0,-1)}};
+  assert.ok(!eligibleAchievements(almost).includes('course_complete'));
+  assert.ok(eligibleAchievements(almost).includes('lessons_50'));
   input.progress.completedLessonIds=learningUnits[0]!.lessons.slice(0,9).map(lesson=>lesson.id);
   assert.ok(!eligibleAchievements(input).includes('scholar'));
   input.progress.completedLessonIds.push(learningUnits[0]!.lessons[9]!.id);

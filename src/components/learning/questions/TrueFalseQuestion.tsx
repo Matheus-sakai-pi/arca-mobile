@@ -18,7 +18,7 @@ export function TrueFalseQuestion({ question, answer, verified, onAnswer }: Exer
             tone === 'neutral'
               ? {
                   background: option.id === 'true' ? '#F0FCF4' : '#FFF1F2',
-                  border: colors.surface,
+                  border: option.id === 'true' ? '#BDEBCB' : '#FFC9CE',
                   ink: accent,
                 }
               : toneColors[tone];
@@ -37,7 +37,7 @@ export function TrueFalseQuestion({ question, answer, verified, onAnswer }: Exer
                 pressed && { opacity: 0.7 },
               ]}
             >
-              <Icon size={58} color={colors.surface} fill={palette.ink} />
+              <Icon size={58} />
               <AppText
                 variant="h3"
                 color={tone === 'neutral' ? colors.text : palette.ink}
@@ -62,11 +62,11 @@ const styles = StyleSheet.create({
     minHeight: 170,
     padding: spacing.sm,
     borderRadius: radius.lg,
-    borderWidth: 3,
+    borderWidth: 2,
+    borderBottomWidth: 5,
     alignItems: 'center',
     justifyContent: 'center',
     gap: spacing.lg,
-    boxShadow: '0 5px 18px rgba(66,105,180,0.12)',
   },
   label: { textAlign: 'center', width: '100%' },
 });

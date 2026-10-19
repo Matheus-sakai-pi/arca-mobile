@@ -10,6 +10,24 @@ export const achievementDefinitions = [
   {id:'unit_2',title:'Histórias Fundamentais',description:'Complete a Unidade 2.',kind:'unit',target:2},
   {id:'xp_500',title:'500 XP',description:'Alcance 500 XP.',kind:'xp',target:500},
   {id:'xp_1000',title:'1000 XP',description:'Alcance 1000 XP.',kind:'xp',target:1000},
+  {id:'unit_3',title:'Gênesis e os Patriarcas',description:'Complete a Unidade 3.',kind:'unit',target:3},
+  {id:'unit_4',title:'Caminhada no Deserto',description:'Complete a Unidade 4.',kind:'unit',target:4},
+  {id:'unit_5',title:'Reis e Sabedoria',description:'Complete a Unidade 5.',kind:'unit',target:5},
+  {id:'unit_6',title:'Voz dos Profetas',description:'Complete a Unidade 6.',kind:'unit',target:6},
+  {id:'unit_7',title:'Vida de Jesus',description:'Complete a Unidade 7.',kind:'unit',target:7},
+  {id:'unit_8',title:'Parábolas',description:'Complete a Unidade 8.',kind:'unit',target:8},
+  {id:'unit_9',title:'Primeiras Comunidades',description:'Complete a Unidade 9.',kind:'unit',target:9},
+  {id:'unit_10',title:'Cartas Apostólicas',description:'Complete a Unidade 10.',kind:'unit',target:10},
+  {id:'course_complete',title:'Jornada Completa',description:'Complete todas as unidades.',kind:'course',target:1},
+  {id:'lessons_25',title:'Aprendiz Fiel',description:'Complete 25 lições diferentes.',kind:'lessons',target:25},
+  {id:'lessons_50',title:'Discípulo Dedicado',description:'Complete 50 lições diferentes.',kind:'lessons',target:50},
+  {id:'lessons_100',title:'Guardião da Palavra',description:'Complete 100 lições diferentes.',kind:'lessons',target:100},
+  {id:'streak_14',title:'Duas Semanas de Fé',description:'Alcance uma sequência de 14 dias.',kind:'streak',target:14},
+  {id:'streak_30',title:'Um Mês de Jornada',description:'Alcance uma sequência de 30 dias.',kind:'streak',target:30},
+  {id:'streak_100',title:'Cem Dias de Jornada',description:'Alcance uma sequência de 100 dias.',kind:'streak',target:100},
+  {id:'xp_2500',title:'2500 XP',description:'Alcance 2500 XP.',kind:'xp',target:2500},
+  {id:'xp_5000',title:'5000 XP',description:'Alcance 5000 XP.',kind:'xp',target:5000},
+  {id:'xp_10000',title:'10 mil XP',description:'Alcance 10000 XP.',kind:'xp',target:10000},
 ] as const;
 export type AchievementId=typeof achievementDefinitions[number]['id'];
 export type Achievement=typeof achievementDefinitions[number];
@@ -34,6 +52,7 @@ export function eligibleAchievements({progress,units,longestStreak}:AchievementF
       case 'streak': return longestStreak >= item.target;
       case 'perfect': return !!progress.lastResult && progress.lastResult.accuracy === 100 && progress.completedLessonIds.includes(progress.lastResult.lessonId);
       case 'unit': { const unit=units[item.target-1]; return !!unit && unit.lessons.length > 0 && unit.lessons.every(lesson=>progress.completedLessonIds.includes(lesson.id)); }
+      case 'course': return units.length > 0 && units.every(unit=>unit.lessons.length > 0 && unit.lessons.every(lesson=>progress.completedLessonIds.includes(lesson.id)));
     }
   }).map(item=>item.id);
 }

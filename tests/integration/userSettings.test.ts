@@ -27,6 +27,9 @@ test('user settings: achievements only accumulate, preferences validated, privat
   assert.deepEqual((await settings(db, one)).achievements, ['first_step', 'perfect_lesson', 'scholar']);
   assert.deepEqual(await settings(db, two), { achievements: [], preferences: null });
   await assert.rejects(settings(db, one, ['invented']), /settings_invalid/);
+  await assert.rejects(settings(db, one, ['unit_x']), /settings_invalid/);
+  // Conquistas novas do app (metas numéricas e jornada completa) são aceitas sem lista fixa.
+  assert.ok((await settings(db, one, ['unit_10', 'streak_100', 'xp_10000', 'lessons_25', 'course_complete'])).achievements.includes('course_complete'));
   await assert.rejects(settings(db, one, null, { ...prefs, dailyGoal: 15 }), /settings_invalid/);
   await assert.rejects(settings(db, one, null, { ...prefs, extra: 1 }), /settings_invalid/);
   await assert.rejects(settings(db, null), /permission denied|auth_required/);

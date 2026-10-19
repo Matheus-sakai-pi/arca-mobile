@@ -1,24 +1,16 @@
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
-import { createHash } from 'node:crypto';
 import { test } from 'node:test';
 import { achievementDefinitions } from '../src/lib/achievements.ts';
 
-test('every achievement has distinct bundled transparent artwork', async () => {
-  const registry = await readFile(new URL('../src/constants/achievementArtwork.ts', import.meta.url), 'utf8');
-  const entries = [...registry.matchAll(/^  (\w+): require\('\.\.\/\.\.\/assets\/achievements\/([^']+)'\)/gm)];
-  assert.deepEqual(entries.map(entry => entry[1]), achievementDefinitions.map(item => item.id));
-  assert.doesNotMatch(registry, /https?:/);
-  assert.match(registry, /satisfies Record<AchievementId, ImageSourcePropType>/);
-  const hashes = new Set<string>();
-  for (const entry of entries) {
-    const png = await readFile(new URL(`../assets/achievements/${entry[2]}`, import.meta.url));
-    assert.equal(png.subarray(1, 4).toString(), 'PNG');
-    assert.ok(png.readUInt32BE(16) >= 512 && png.readUInt32BE(20) >= 512);
-    assert.equal(png[25], 6, 'Achievement art retains RGBA transparency');
-    hashes.add(createHash('sha256').update(png).digest('hex'));
-  }
-  assert.equal(hashes.size, achievementDefinitions.length);
+test('every achievement has its own flat medal (color, icon and number)', async () => {
+  const source = await readFile(new URL('../src/components/profile/AchievementIcon.tsx', import.meta.url), 'utf8');
+  const entries = [...source.matchAll(/^  (\w+): \{ tone: '([^']+)', ring: '([^']+)', icon: (\w+)(?:, label: '([^']+)')? \},$/gm)];
+  assert.deepEqual(entries.map(entry => entry[1]).sort(), achievementDefinitions.map(item => item.id).sort());
+  const looks = new Set(entries.map(entry => `${entry[3]}|${entry[4]}|${entry[5] ?? ''}`));
+  assert.equal(looks.size, achievementDefinitions.length, 'duas conquistas não podem ter a mesma medalha');
+  assert.match(source, /satisfies|Record<AchievementId/);
+  assert.doesNotMatch(source, /require\(|https?:/);
 });
 
 test('profile and celebration reuse the same decorative artwork without writing progress', async () => {

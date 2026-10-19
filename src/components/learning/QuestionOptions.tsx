@@ -19,7 +19,7 @@ export function QuestionOptions({ question, selected, verified, onSelect }: Prop
         const correct = verified && option.id === question.correctAnswer;
         const wrong = verified && chosen && !correct;
         const highlighted = chosen && !verified;
-        const ink = correct ? colors.success : wrong ? colors.error : highlighted ? colors.surface : colors.muted;
+        const ink = correct ? colors.success : wrong ? colors.error : highlighted ? colors.primary : colors.muted;
         const Icon = correct ? Check : wrong ? X : chosen ? Check : Circle;
         const suffix = correct ? ', resposta correta' : wrong ? ', resposta incorreta' : '';
         return (
@@ -41,11 +41,11 @@ export function QuestionOptions({ question, selected, verified, onSelect }: Prop
             ]}
           >
             <View style={[styles.number, highlighted && styles.selectedNumber]}>
-              <AppText variant="label" color={highlighted ? colors.primaryDark : colors.muted}>
+              <AppText variant="label" color={highlighted ? colors.surface : colors.muted}>
                 {index + 1}
               </AppText>
             </View>
-            <AppText style={styles.label} color={highlighted ? colors.surface : undefined}>
+            <AppText style={styles.label} color={highlighted ? colors.primaryDark : undefined}>
               {option.label}
             </AppText>
             <Icon size={22} color={ink} />
@@ -68,7 +68,7 @@ const styles = StyleSheet.create({
     borderRadius: radius.sm,
     backgroundColor: colors.surface,
   },
-  selected: { backgroundColor: colors.primary, borderColor: colors.primaryDark },
+  selected: { backgroundColor: colors.primarySoft, borderColor: colors.primary },
   correct: { backgroundColor: colors.successSoft, borderColor: colors.success },
   wrong: { backgroundColor: colors.errorSoft, borderColor: colors.error },
   number: {
@@ -79,6 +79,6 @@ const styles = StyleSheet.create({
     borderRadius: radius.sm,
     backgroundColor: colors.background,
   },
-  selectedNumber: { backgroundColor: colors.surface },
+  selectedNumber: { backgroundColor: colors.primary },
   label: { flex: 1, minWidth: 0, fontFamily: fonts.medium, fontSize: 17, lineHeight: 24 },
 });

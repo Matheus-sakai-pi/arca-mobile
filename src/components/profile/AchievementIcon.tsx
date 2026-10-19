@@ -1,7 +1,8 @@
 import { StyleSheet, View } from 'react-native';
 import Svg, { Circle, Path, Rect, Text as SvgText } from 'react-native-svg';
-import { Award, BookOpen, Crown, Flame, ScrollText, Sprout, Star, Target, type LucideIcon } from '@/components/icons';
+import { Award, BookOpen, Compass, Crown, Fish, Flame, Leaf, Mail, MessageCircle, ScrollText, ShieldCheck, Sparkles, Sprout, Star, Target, Trophy, UsersRound, Zap, type LucideIcon } from '@/components/icons';
 import type { AchievementId } from '@/lib/achievements';
+import { fonts } from '@/constants/theme';
 
 // Medalhas planas: círculo colorido com borda mais escura, um ícone plano no centro e,
 // quando ajuda, um número numa faixa. Bloqueadas ficam cinza.
@@ -15,6 +16,24 @@ const medals: Record<AchievementId, { tone: string; ring: string; icon: LucideIc
   unit_2: { tone: '#EEE6FF', ring: '#9B6BFF', icon: Award, label: '2' },
   xp_500: { tone: '#FFF4CC', ring: '#F2A21B', icon: Star, label: '500' },
   xp_1000: { tone: '#FFF4CC', ring: '#D29A20', icon: Crown, label: '1000' },
+  unit_3: { tone: '#DDF7E6', ring: '#24914F', icon: Leaf, label: '3' },
+  unit_4: { tone: '#DCF3FF', ring: '#2A9BD8', icon: Compass, label: '4' },
+  unit_5: { tone: '#EEE6FF', ring: '#7B4FE0', icon: Crown, label: '5' },
+  unit_6: { tone: '#D9F7F4', ring: '#14A79C', icon: MessageCircle, label: '6' },
+  unit_7: { tone: '#FFF4CC', ring: '#E8A317', icon: Sparkles, label: '7' },
+  unit_8: { tone: '#D9F7F4', ring: '#1E8F87', icon: Fish, label: '8' },
+  unit_9: { tone: '#DCEBFF', ring: '#3A6FE0', icon: UsersRound, label: '9' },
+  unit_10: { tone: '#FFEFE3', ring: '#E07A3A', icon: Mail, label: '10' },
+  course_complete: { tone: '#FFF4CC', ring: '#C98A0B', icon: Trophy },
+  lessons_25: { tone: '#DCEBFF', ring: '#1E7BFF', icon: BookOpen, label: '25' },
+  lessons_50: { tone: '#FFF1D2', ring: '#C9952E', icon: ScrollText, label: '50' },
+  lessons_100: { tone: '#DCEBFF', ring: '#0B5BD9', icon: ShieldCheck, label: '100' },
+  streak_14: { tone: '#FFE9D6', ring: '#FF7A2E', icon: Flame, label: '14' },
+  streak_30: { tone: '#FFE3E4', ring: '#E5484D', icon: Flame, label: '30' },
+  streak_100: { tone: '#EEE6FF', ring: '#8A4FE8', icon: Flame, label: '100' },
+  xp_2500: { tone: '#FFF4CC', ring: '#E8A317', icon: Zap, label: '2500' },
+  xp_5000: { tone: '#FFF4CC', ring: '#B9820A', icon: Award, label: '5000' },
+  xp_10000: { tone: '#FFEFD0', ring: '#A86B00', icon: Trophy, label: '10k' },
 };
 export function AchievementIcon({ id, unlocked = true, size = 72 }: { id: AchievementId; unlocked?: boolean; size?: number }) {
   const medal = medals[id];
@@ -27,7 +46,7 @@ export function AchievementIcon({ id, unlocked = true, size = 72 }: { id: Achiev
       <Path d="M11 17a15 15 0 0 1 17-10" stroke="rgba(255,255,255,0.7)" strokeWidth={3} strokeLinecap="round" fill="none" />
       {medal.label ? <>
         <Rect x={24 - (6 + medal.label.length * 3.6) / 2} y={33} width={6 + medal.label.length * 3.6} height={10} rx={5} fill={ring} />
-        <SvgText x={24} y={40.6} fontSize={8} fontWeight="800" fill="#FFFFFF" textAnchor="middle">{medal.label}</SvgText>
+        <SvgText x={24} y={40.6} fontSize={8} fontWeight="800" fontFamily={fonts.heavy} fill="#FFFFFF" textAnchor="middle">{medal.label}</SvgText>
       </> : null}
     </Svg>
     <View style={[styles.center, medal.label ? styles.raised : null]}><Icon size={size * 0.46} /></View>

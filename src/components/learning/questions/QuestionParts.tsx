@@ -19,7 +19,8 @@ export function QuestionPrompt({ text }: { text: string }) {
 export type Tone = 'neutral' | 'selected' | 'correct' | 'wrong';
 export const toneColors = {
   neutral: { background: colors.surface, border: colors.border, ink: colors.text },
-  selected: { background: colors.primary, border: colors.primaryDark, ink: colors.surface },
+  // Estilo plano: escolhida fica azul-clara com borda e texto azuis (ícones mantêm as cores).
+  selected: { background: colors.primarySoft, border: colors.primary, ink: colors.primaryDark },
   correct: { background: colors.successSoft, border: colors.success, ink: colors.success },
   wrong: { background: colors.errorSoft, border: colors.error, ink: colors.error },
 } as const;
