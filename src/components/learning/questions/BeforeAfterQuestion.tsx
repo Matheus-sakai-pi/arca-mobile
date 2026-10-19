@@ -1,5 +1,5 @@
 import { Pressable, StyleSheet, View } from 'react-native';
-import { Flag } from 'lucide-react-native';
+import { Flag } from '@/components/icons';
 import { AppText } from '@/components/common/AppText';
 import type { BeforeAfterQuestion as Data } from '@/types/learning';
 import { spacing } from '@/constants/theme';

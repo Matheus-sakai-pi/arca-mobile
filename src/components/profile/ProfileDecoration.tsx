@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { Image, StyleSheet, View } from 'react-native';
-import { Crown, Leaf, Sparkles } from 'lucide-react-native';
+import { Crown, Leaf, Sparkles } from '@/components/icons';
 import Animated, {
   cancelAnimation,
   ReduceMotion,

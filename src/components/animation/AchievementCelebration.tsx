@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Modal, ScrollView, StyleSheet, View } from 'react-native';
 import { usePathname } from 'expo-router';
-import { ArrowRight } from 'lucide-react-native';
+import { ArrowRight } from '@/components/icons';
 import Animated, { ZoomIn, ReduceMotion } from 'react-native-reanimated';
 import { AppText } from '@/components/common/AppText';
 import { Button } from '@/components/common/Button';

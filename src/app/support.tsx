@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Switch, View } from 'react-native';
 import { router } from 'expo-router';
-import { ArrowLeft, Mail } from 'lucide-react-native';
+import { ArrowLeft, Mail } from '@/components/icons';
 import { Screen } from '@/components/common/Screen';
 import { AppText } from '@/components/common/AppText';
 import { Button } from '@/components/common/Button';

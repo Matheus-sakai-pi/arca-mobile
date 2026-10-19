@@ -11,8 +11,9 @@ test('scrolling scenery fills both native edges instead of using a padded percen
   assert.match(scene, /right:\s*0/);
   assert.doesNotMatch(scene, /\bwidth\s*:/);
   assert.match(scene, /aspectRatio:\s*2\s*\/\s*3/);
+  // As abas usam o fundo branco do estilo plano; o cenário fica para momentos especiais.
   for (const tab of ['home', 'profile']) {
     const screen = await readFile(new URL(`../../src/app/(tabs)/${tab}.tsx`, import.meta.url), 'utf8');
-    assert.match(screen, /scene="ark" sceneScrolls/);
+    assert.doesNotMatch(screen, /sceneScrolls/);
   }
 });

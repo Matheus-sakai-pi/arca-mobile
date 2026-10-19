@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { Crown, RefreshCw } from 'lucide-react-native';
+import { Crown, RefreshCw } from '@/components/icons';
 import * as Crypto from 'expo-crypto';
 import type { Purchase, SubscriptionOffer } from 'expo-iap';
 import { Button } from '@/components/common/Button';

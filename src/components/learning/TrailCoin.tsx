@@ -1,5 +1,5 @@
 import { StyleSheet, View } from 'react-native';
-import { Check, LockKeyhole, Play } from 'lucide-react-native';
+import { Check, LockKeyhole, Play } from '@/components/icons';
 import type { LessonStatus } from '@/types/learning';
 import { darkerTrailColor } from '@/lib/trailAppearance';
 

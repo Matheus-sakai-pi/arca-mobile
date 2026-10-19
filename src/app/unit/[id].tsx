@@ -1,7 +1,7 @@
 import { useCallback, useRef, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { router, useFocusEffect, useLocalSearchParams } from 'expo-router';
-import { ArrowLeft, BookOpen } from 'lucide-react-native';
+import { ArrowLeft, BookOpen } from '@/components/icons';
 import { Screen } from '@/components/common/Screen';
 import { AppText } from '@/components/common/AppText';
 import { IconButton } from '@/components/common/IconButton';

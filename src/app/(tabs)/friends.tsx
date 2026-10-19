@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { Modal, ScrollView, StyleSheet, View } from 'react-native';
 import { router } from 'expo-router';
 import {
-  ArrowLeft,
   Check,
   RefreshCw,
   Search,
@@ -11,7 +10,7 @@ import {
   UserPlus,
   UsersRound,
   X,
-} from 'lucide-react-native';
+} from '@/components/icons';
 import { Screen } from '@/components/common/Screen';
 import { AppText } from '@/components/common/AppText';
 import { Button } from '@/components/common/Button';
@@ -53,12 +52,7 @@ export default function FriendsScreen() {
   return (
     <Screen keyboard>
       <View style={styles.heading}>
-        <IconButton
-          icon={ArrowLeft}
-          label="Voltar"
-          onPress={() => (router.canGoBack() ? router.back() : router.replace('/(tabs)/profile'))}
-        />
-        <AppText variant="h2" accessibilityRole="header" style={styles.title}>
+        <AppText variant="h1" accessibilityRole="header" style={styles.title}>
           Amigos
         </AppText>
         {session ? (

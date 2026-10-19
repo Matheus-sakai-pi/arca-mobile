@@ -9,7 +9,9 @@ test('ranking presentation keeps real data, refresh and exceptional states with 
   assert.match(ranking,/appearance="ranking"/);
   assert.doesNotMatch(ranking,/TabHeader|SEGUIDORES|sceneScrolls/);
   assert.match(ranking,/RankingTabs value=\{scope\} onChange=\{setScope\}/);
-  assert.match(ranking,/colors.surface,textShadowColor/);
+  // Estilo plano: título escuro sobre fundo branco, sem sombra de texto.
+  assert.match(ranking,/fontSize:32,lineHeight:40,color:colors.text/);
+  assert.doesNotMatch(ranking,/textShadowColor|scene=/);
   const row=await source('components/leaderboard/LeaderboardRow.tsx');
   assert.match(row,/borderBottomWidth:1/);
   assert.doesNotMatch(row,/borderRadius|borderWidth:1|backgroundColor:colors.surface/);
@@ -22,8 +24,7 @@ test('ranking stats is opt-in, shows day units and keeps shared animated XP and 
   assert.match(stats,/appearance === 'ranking'/);
   assert.match(stats,/showcase: \{ minHeight: 68/);
   assert.match(stats,/showcaseValue: \{ fontSize: 20, lineHeight: 26/);
-  assert.equal((stats.match(/source=\{visualArtwork.streak\}/g) ?? []).length,1);
-  assert.match(stats,/width: showcase \? 28 : 24, height: showcase \? 28 : 24/);
+  assert.match(stats,/<Flame size=\{showcase \? 28 : 24\} \/>/);
   assert.match(stats, /<EnergyMeter inline/);
   assert.match(stats,/streak === 1 \? 'dia' : 'dias'/);
   assert.match(stats,/useCounterMotion\(`\$\{motionKey\}:xp`,xp,entrance,'xp'\)/);

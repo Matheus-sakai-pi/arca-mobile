@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Modal, Pressable, ScrollView, StyleSheet, Switch, View } from 'react-native';
-import { Accessibility, Goal, Vibrate, Volume2, X } from 'lucide-react-native';
+import { Accessibility, Goal, Vibrate, Volume2, X } from '@/components/icons';
 import { AppText } from '@/components/common/AppText';
 import { IconButton } from '@/components/common/IconButton';
 import { Notice } from '@/components/common/Notice';

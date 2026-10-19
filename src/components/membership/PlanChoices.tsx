@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
-import { Check } from 'lucide-react-native';
+import { Check } from '@/components/icons';
 import { AppText } from '@/components/common/AppText';
 import { MEMBERSHIP_CONFIG as config } from '@/config/membership';
 import { formatMembershipPrice } from '@/lib/membership';

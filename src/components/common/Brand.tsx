@@ -1,5 +1,5 @@
 import { View, StyleSheet } from 'react-native';
-import { BookOpen } from 'lucide-react-native';
+import { BookOpen } from '@/components/icons';
 import { AppText } from './AppText';
 import { colors, spacing } from '@/constants/theme';
 

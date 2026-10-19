@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import * as Linking from 'expo-linking';
 import { router } from 'expo-router';
-import { Crown } from 'lucide-react-native';
+import { Crown } from '@/components/icons';
 import { AppText } from '@/components/common/AppText';
 import { Button } from '@/components/common/Button';
 import { Notice } from '@/components/common/Notice';

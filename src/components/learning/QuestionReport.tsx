@@ -10,7 +10,7 @@ import {
   TextInput,
   View,
 } from 'react-native';
-import { ArrowLeft, CheckCircle2, Circle, CircleCheck, Flag, Send, X } from 'lucide-react-native';
+import { ArrowLeft, CheckCircle2, Circle, CircleCheck, Flag, Send, X } from '@/components/icons';
 import { AppText } from '@/components/common/AppText';
 import { IconButton } from '@/components/common/IconButton';
 import { Notice } from '@/components/common/Notice';

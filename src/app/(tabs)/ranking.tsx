@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { RefreshControl, StyleSheet, View } from 'react-native';
 import { router } from 'expo-router';
-import { Crown, RefreshCw, Trophy, UsersRound } from 'lucide-react-native';
+import { Crown, RefreshCw, Trophy, UsersRound } from '@/components/icons';
 import { Screen } from '@/components/common/Screen';
 import { AppText } from '@/components/common/AppText';
 import { EmptyState, ErrorState, LoadingState } from '@/components/common/States';
@@ -18,7 +18,7 @@ import { ownPositionOutsideTop } from '@/lib/leaderboard';
 import { LearningStats } from '@/components/learning/LearningStats';
 import { useLearning } from '@/providers/LearningProvider';
 import { isSupabaseConfigured } from '@/lib/supabase';
-import { colors, fonts, spacing } from '@/constants/theme';
+import { colors, fonts, spacing, surfaces } from '@/constants/theme';
 export default function Ranking() {
   const [scope,setScope]=useState<RankingScope>('total');
   const {data,loading,error,refreshing,refresh}=useLeaderboard(scope);
@@ -26,8 +26,8 @@ export default function Ranking() {
   const {profile,progress}=useLearning();
   const own = data ? ownPositionOutsideTop(data) : null;
   const currentUserId = session?.user.id ?? null;
-  return <Screen scene="ark" style={styles.content} refreshControl={<RefreshControl refreshing={refreshing} onRefresh={()=>void refresh()} tintColor={colors.primary} colors={[colors.primary]} />}>
-    <View style={styles.header}><View style={styles.heading}><View style={styles.titleRow}><AppText accessibilityRole="header" style={styles.title}>Ranking</AppText><Crown size={26} color={colors.gold} fill={colors.gold} /></View><AppText style={styles.subtitle}>Cada passo merece ser celebrado.</AppText></View><IconButton icon={RefreshCw} label="Atualizar ranking" disabled={refreshing || !isSupabaseConfigured} onPress={()=>void refresh()} /></View>
+  return <Screen style={styles.content} refreshControl={<RefreshControl refreshing={refreshing} onRefresh={()=>void refresh()} tintColor={colors.primary} colors={[colors.primary]} />}>
+    <View style={styles.header}><View style={styles.heading}><View style={styles.titleRow}><AppText accessibilityRole="header" style={styles.title}>Ranking</AppText><Crown size={26} color={colors.gold} fill={colors.gold} /></View></View><IconButton icon={RefreshCw} label="Atualizar ranking" disabled={refreshing || !isSupabaseConfigured} onPress={()=>void refresh()} /></View>
     {progress ? <LearningStats appearance="ranking" motionKey="ranking" xp={progress.xp} streak={profile?.current_streak ?? 0} /> : null}
     <RankingTabs value={scope} onChange={setScope} />
     {scope === 'weekly' ? <View style={scopeStyles.context}><AppText variant="small" color={colors.muted}>{data?.period ? `${new Date(data.period.start).toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit',timeZone:'America/Sao_Paulo'})} a ${new Date(Date.parse(data.period.end)-1).toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit',timeZone:'America/Sao_Paulo'})} · Horário de Brasília` : 'Semana de segunda a domingo · Horário de Brasília'}</AppText></View> : null}
@@ -47,5 +47,5 @@ export default function Ranking() {
       </> : null}
   </Screen>;
 }
-const scopeStyles=StyleSheet.create({context:{backgroundColor:'rgba(255,255,255,0.92)',paddingHorizontal:12,paddingVertical:8,borderRadius:8}});
-const styles=StyleSheet.create({content:{gap:20},leaders:{gap:spacing.xs},totalLabel:{alignSelf:'flex-start',backgroundColor:colors.surface,paddingHorizontal:12,paddingVertical:6,borderRadius:8},header:{flexDirection:'row',alignItems:'flex-start',gap:12,paddingTop:12},heading:{flex:1,minWidth:0,gap:6},titleRow:{flexDirection:'row',alignItems:'center',gap:10,flexWrap:'wrap'},title:{fontFamily:fonts.heavy,fontSize:36,lineHeight:44,color:colors.surface,textShadowColor:'rgba(0,46,110,0.4)',textShadowOffset:{width:0,height:2},textShadowRadius:7},subtitle:{color:colors.surface,fontSize:16,lineHeight:23,textShadowColor:'rgba(0,35,85,0.65)',textShadowOffset:{width:0,height:1},textShadowRadius:5},list:{backgroundColor:colors.surface,borderRadius:24,paddingHorizontal:12,paddingVertical:4,overflow:'hidden'},own:{gap:spacing.sm,backgroundColor:colors.surface,borderRadius:20,padding:12}});
+const scopeStyles=StyleSheet.create({context:{paddingHorizontal:4}});
+const styles=StyleSheet.create({content:{gap:20},leaders:{gap:spacing.xs},totalLabel:{alignSelf:'flex-start',backgroundColor:colors.surface,paddingHorizontal:12,paddingVertical:6,borderRadius:8},header:{flexDirection:'row',alignItems:'center',gap:12,paddingTop:spacing.xs},heading:{flex:1,minWidth:0,gap:6},titleRow:{flexDirection:'row',alignItems:'center',gap:10,flexWrap:'wrap'},title:{fontFamily:fonts.heavy,fontSize:32,lineHeight:40,color:colors.text},list:{...surfaces.card,paddingHorizontal:12,paddingVertical:4,overflow:'hidden'},own:{...surfaces.card,gap:spacing.sm,padding:12}});

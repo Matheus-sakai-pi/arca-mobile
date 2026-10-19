@@ -1,6 +1,6 @@
 import { useState, type Ref } from 'react';
 import { Pressable, StyleSheet, TextInput, View, type TextInputProps } from 'react-native';
-import { Eye, EyeOff, type LucideIcon } from 'lucide-react-native';
+import { Eye, EyeOff, type LucideIcon } from '@/components/icons';
 import { AppText } from './AppText';
 import { colors, fonts, layout, radius, spacing } from '@/constants/theme';
 

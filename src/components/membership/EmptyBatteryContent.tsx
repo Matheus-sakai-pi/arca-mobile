@@ -1,5 +1,5 @@
 import { Image, StyleSheet, View } from 'react-native';
-import { Clock3, ShieldCheck } from 'lucide-react-native';
+import { Clock3, ShieldCheck } from '@/components/icons';
 import { AppText } from '@/components/common/AppText';
 import { RewardPulse } from '@/components/animation/RewardPulse';
 import { EnergyOffers } from './EnergyOffers';

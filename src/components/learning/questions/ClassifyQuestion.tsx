@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
-import { Check, X } from 'lucide-react-native';
+import { Check, X } from '@/components/icons';
 import { AppText } from '@/components/common/AppText';
 import type { ClassifyQuestion as Data } from '@/types/learning';
 import { isAnswerPairs } from '@/lib/questionEngine';

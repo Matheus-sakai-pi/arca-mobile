@@ -1,6 +1,6 @@
 import { Pressable, StyleSheet, View } from 'react-native';
 import { router } from 'expo-router';
-import { CalendarDays, CheckCircle2, History, RotateCcw, Play } from 'lucide-react-native';
+import { CalendarDays, CheckCircle2, History, RotateCcw, Play } from '@/components/icons';
 import { useStudy } from '@/providers/StudyProvider';
 import { useLearning } from '@/providers/LearningProvider';
 import { usePreferences } from '@/providers/PreferencesProvider';
@@ -9,7 +9,7 @@ import { lessonStatus } from '@/lib/learningProgress';
 import { AppText } from '@/components/common/AppText';
 import { Notice } from '@/components/common/Notice';
 import { ProgressBar } from './ProgressBar';
-import { colors, fonts } from '@/constants/theme';
+import { colors, fonts, surfaces } from '@/constants/theme';
 import { useEffect, useState } from 'react';
 export function StudySummary() {
   const {state,draft,error}=useStudy();
@@ -45,7 +45,7 @@ const styles=StyleSheet.create({
   goalTitle:{fontFamily:fonts.bold},
   goalCount:{flexDirection:'row',alignItems:'center',gap:4},
   count:{fontFamily:fonts.bold},
-  resume:{flexDirection:'row',alignItems:'center',gap:16,padding:16,backgroundColor:colors.surface,borderWidth:1,borderColor:colors.border,borderRadius:16},
+  resume:{...surfaces.tactile,flexDirection:'row',alignItems:'center',gap:16,padding:16},
   resumeText:{flex:1,minWidth:0,gap:4},
   lesson:{fontSize:18,lineHeight:24},
   play:{width:48,height:48,borderRadius:24,backgroundColor:colors.primary,alignItems:'center',justifyContent:'center'},

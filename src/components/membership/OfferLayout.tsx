@@ -1,7 +1,7 @@
 import type { PropsWithChildren, ReactNode } from 'react';
 import { Image, Pressable, ScrollView, StyleSheet, View, type ImageSourcePropType } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { ArrowLeft } from 'lucide-react-native';
+import { ArrowLeft } from '@/components/icons';
 import Svg, { Path } from 'react-native-svg';
 import { AppText } from '@/components/common/AppText';
 import { RewardPulse } from '@/components/animation/RewardPulse';

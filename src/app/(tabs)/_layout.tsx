@@ -1,16 +1,25 @@
-import { StyleSheet, View, type ColorValue } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { Tabs } from 'expo-router';
-import { BookOpen, House, Trophy, UserRound, type LucideIcon } from 'lucide-react-native';
+import { Award, BookOpen, House, Trophy, UserRound, UsersRound, type LucideIcon } from '@/components/icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { colors, fonts, radius, shadows, spacing } from '@/constants/theme';
+import { colors, spacing } from '@/constants/theme';
 
-function TabIcon({ icon: Icon, color, focused }: { icon: LucideIcon; color: ColorValue; focused: boolean }) {
+// Estilo plano: ícones ilustrados sem texto; a aba ativa ganha um quadro azul-claro com borda.
+function TabIcon({ icon: Icon, focused }: { icon: LucideIcon; focused: boolean }) {
   return (
     <View style={[styles.icon, focused && styles.activeIcon]}>
-      <Icon size={28} color={color} strokeWidth={2.2} />
+      <Icon size={30} />
     </View>
   );
 }
+const tabs: { name: string; title: string; icon: LucideIcon }[] = [
+  { name: 'home', title: 'Início', icon: House },
+  { name: 'learn', title: 'Aprender', icon: BookOpen },
+  { name: 'ranking', title: 'Ranking', icon: Trophy },
+  { name: 'friends', title: 'Amigos', icon: UsersRound },
+  { name: 'achievements', title: 'Conquistas', icon: Award },
+  { name: 'profile', title: 'Perfil', icon: UserRound },
+];
 export default function TabLayout() {
   const insets = useSafeAreaInsets();
   return (
@@ -18,66 +27,45 @@ export default function TabLayout() {
       initialRouteName="home"
       screenOptions={{
         headerShown: false,
-        tabBarActiveTintColor: colors.primaryDark,
-        tabBarInactiveTintColor: colors.muted,
-        tabBarLabelStyle: styles.label,
+        tabBarShowLabel: false,
         tabBarItemStyle: styles.item,
         tabBarStyle: [
           styles.bar,
-          {
-            height: 82 + Math.max(insets.bottom, spacing.xs),
-            paddingBottom: Math.max(insets.bottom, spacing.xs),
-          },
+          { height: 68 + Math.max(insets.bottom, spacing.xs), paddingBottom: Math.max(insets.bottom, spacing.xs) },
         ],
       }}
     >
-      <Tabs.Screen
-        name="home"
-        options={{
-          title: 'Início',
-          tabBarAccessibilityLabel: 'Início',
-          tabBarIcon: ({ color, focused }) => <TabIcon icon={House} color={color} focused={focused} />,
-        }}
-      />
-      <Tabs.Screen
-        name="learn"
-        options={{
-          title: 'Aprender',
-          tabBarAccessibilityLabel: 'Aprender',
-          tabBarIcon: ({ color, focused }) => <TabIcon icon={BookOpen} color={color} focused={focused} />,
-        }}
-      />
-      <Tabs.Screen
-        name="ranking"
-        options={{
-          title: 'Ranking',
-          tabBarAccessibilityLabel: 'Ranking',
-          tabBarIcon: ({ color, focused }) => <TabIcon icon={Trophy} color={color} focused={focused} />,
-        }}
-      />
-      <Tabs.Screen
-        name="profile"
-        options={{
-          title: 'Perfil',
-          tabBarAccessibilityLabel: 'Perfil',
-          tabBarIcon: ({ color, focused }) => <TabIcon icon={UserRound} color={color} focused={focused} />,
-        }}
-      />
+      {tabs.map(tab => (
+        <Tabs.Screen
+          key={tab.name}
+          name={tab.name}
+          options={{
+            title: tab.title,
+            tabBarAccessibilityLabel: tab.title,
+            tabBarIcon: ({ focused }) => <TabIcon icon={tab.icon} focused={focused} />,
+          }}
+        />
+      ))}
     </Tabs>
   );
 }
 const styles = StyleSheet.create({
-  label: { fontFamily: fonts.bold, fontSize: 12, lineHeight: 18, letterSpacing: 0, marginHorizontal: 0 },
-  icon: { width: 60, height: 40, borderRadius: radius.pill, alignItems: 'center', justifyContent: 'center' },
-  activeIcon: { backgroundColor: colors.primarySoft },
-  item: { marginHorizontal: 0, borderRadius: radius.lg, paddingVertical: spacing.xxs },
+  icon: {
+    width: 50,
+    height: 46,
+    borderRadius: 14,
+    borderWidth: 2,
+    borderColor: 'transparent',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  activeIcon: { backgroundColor: colors.primarySoft, borderColor: '#9CC0FF' },
+  item: { marginHorizontal: 0, paddingVertical: spacing.xxs },
   bar: {
     backgroundColor: colors.surface,
-    borderTopWidth: 0,
-    paddingTop: spacing.sm,
-    paddingHorizontal: spacing.sm,
-    borderTopLeftRadius: 36,
-    borderTopRightRadius: 36,
-    ...shadows.navigation,
+    borderTopWidth: 2,
+    borderTopColor: colors.border,
+    paddingTop: spacing.xs,
+    paddingHorizontal: spacing.xxs,
   },
 });

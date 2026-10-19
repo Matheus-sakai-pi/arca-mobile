@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Image, StyleSheet, View, useWindowDimensions } from 'react-native';
-import { Crown } from 'lucide-react-native';
+import { Crown } from '@/components/icons';
 import { Avatar } from '@/components/profile/Avatar';
 import { ProfileAvatar, VIPBadge } from '@/components/profile/ProfileDecoration';
 import { AppText } from '@/components/common/AppText';

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { router } from 'expo-router';
-import { ArrowLeft, History as HistoryIcon } from 'lucide-react-native';
+import { ArrowLeft, History as HistoryIcon } from '@/components/icons';
 import { useStudy } from '@/providers/StudyProvider';
 import { useLearning } from '@/providers/LearningProvider';
 import { subjectPerformance } from '@/lib/studyStore';

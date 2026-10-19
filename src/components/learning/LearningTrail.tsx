@@ -1,6 +1,6 @@
 import { Pressable, StyleSheet, View } from 'react-native';
 import { router } from 'expo-router';
-import { BookOpen, Check, ChevronRight, LockKeyhole, Play, Star } from 'lucide-react-native';
+import { BookOpen, Check, ChevronRight, LockKeyhole, Play, Star } from '@/components/icons';
 import { AppText } from '@/components/common/AppText';
 import { lessonStatus } from '@/lib/learningProgress';
 import { useLearning } from '@/providers/LearningProvider';

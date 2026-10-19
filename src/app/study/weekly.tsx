@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { router } from 'expo-router';
-import { ArrowLeft, ArrowRight, CalendarDays, RotateCcw } from 'lucide-react-native';
+import { ArrowLeft, ArrowRight, CalendarDays, RotateCcw } from '@/components/icons';
 import { Screen } from '@/components/common/Screen';
 import { AppText } from '@/components/common/AppText';
 import { IconButton } from '@/components/common/IconButton';

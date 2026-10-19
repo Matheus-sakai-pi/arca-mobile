@@ -1,5 +1,5 @@
 import { StyleSheet, View } from 'react-native';
-import { Quote, UserRound } from 'lucide-react-native';
+import { Quote, UserRound } from '@/components/icons';
 import { AppText } from '@/components/common/AppText';
 import type { QuoteCharacterQuestion as Data } from '@/types/learning';
 import { colors, spacing } from '@/constants/theme';

@@ -1,5 +1,5 @@
 import { StyleSheet, View } from 'react-native';
-import { Award, Check, LockKeyhole } from 'lucide-react-native';
+import { Award, Check, LockKeyhole } from '@/components/icons';
 import { AppText } from '@/components/common/AppText';
 import { Notice } from '@/components/common/Notice';
 import { Button } from '@/components/common/Button';

@@ -1,5 +1,5 @@
 import { router } from 'expo-router';
-import { Compass } from 'lucide-react-native';
+import { Compass } from '@/components/icons';
 import { Screen } from '@/components/common/Screen';
 import { EmptyState } from '@/components/common/States';
 import { Button } from '@/components/common/Button';

@@ -1,7 +1,7 @@
 import { useCallback, useReducer, useRef, useState } from 'react';
 import { BackHandler, Pressable, StyleSheet, View, useWindowDimensions } from 'react-native';
 import { router, useFocusEffect } from 'expo-router';
-import { ArrowLeft, ArrowRight, BookOpen, Check, CheckCircle2, Clock3, LogIn, RotateCcw, ShieldCheck, Star, UserPlus, type LucideIcon } from 'lucide-react-native';
+import { ArrowLeft, ArrowRight, BookOpen, Check, CheckCircle2, Clock3, LogIn, RotateCcw, ShieldCheck, Star, UserPlus, type LucideIcon } from '@/components/icons';
 import { Screen } from '@/components/common/Screen';
 import { Brand } from '@/components/common/Brand';
 import { Button } from '@/components/common/Button';

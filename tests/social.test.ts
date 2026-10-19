@@ -122,7 +122,8 @@ test('social entry is protected, scope caches are separated and all requests rem
   assert.match(hook,/version===epoch\.current/);
   assert.match(hook,/state\?\.owner===owner/);
   assert.match(hook,/request\.abort\(\)/);
-  assert.match(await source('app/(tabs)/profile.tsx'),/title="Amigos".*router.push\('\/friends'\)/);
+  // Amigos virou uma aba própria (o endereço /friends continua o mesmo).
+  assert.match(await source('app/(tabs)/_layout.tsx'),/name: 'friends', title: 'Amigos'/);
   const navigation=await source('app/_layout.tsx');
-  assert.match(navigation,/<Stack.Protected guard=\{\(\!\!session \|\| isGuest\)[\s\S]*name="friends"[\s\S]*<\/Stack.Protected>/);
+  assert.match(navigation,/<Stack.Protected guard=\{\(\!\!session \|\| isGuest\)[\s\S]*name="\(tabs\)"[\s\S]*<\/Stack.Protected>/);
 });

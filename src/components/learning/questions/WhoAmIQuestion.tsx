@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { Lightbulb } from 'lucide-react-native';
+import { Lightbulb } from '@/components/icons';
 import Animated, { FadeInDown, ReduceMotion } from 'react-native-reanimated';
 import { useMotionPreference } from '@/hooks/useMotionPreference';
 import { AppText } from '@/components/common/AppText';

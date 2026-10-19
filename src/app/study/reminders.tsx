@@ -1,7 +1,7 @@
 import { useCallback, useRef, useState } from 'react';
 import { AppState, Linking, StyleSheet, Switch, TextInput, View } from 'react-native';
 import { router, useFocusEffect } from 'expo-router';
-import { ArrowLeft, Bell, Check, Settings } from 'lucide-react-native';
+import { ArrowLeft, Bell, Check, Settings } from '@/components/icons';
 import { Screen } from '@/components/common/Screen';
 import { AppText } from '@/components/common/AppText';
 import { IconButton } from '@/components/common/IconButton';

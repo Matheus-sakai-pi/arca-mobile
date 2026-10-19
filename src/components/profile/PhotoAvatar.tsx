@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Image, Modal, Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Ban, Flag, X } from 'lucide-react-native';
+import { Ban, Flag, X } from '@/components/icons';
 import { useAuth } from '@/hooks/useAuth';
 import { signedPhoto, photoSafety } from '@/services/profilePhoto';
 import { getAvatarSource } from '@/constants/avatars';

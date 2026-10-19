@@ -1,5 +1,5 @@
 import { router } from 'expo-router';
-import { LockKeyhole } from 'lucide-react-native';
+import { LockKeyhole } from '@/components/icons';
 import { AuthForm } from '@/components/auth/AuthForm';
 import { Screen } from '@/components/common/Screen';
 import { EmptyState } from '@/components/common/States';

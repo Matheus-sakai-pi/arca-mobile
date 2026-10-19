@@ -11,13 +11,13 @@ test('redesign uses thirteen separate high-resolution PNG illustrations and real
     if (!name.endsWith('landscape')) assert.equal(png[25], 6, name + ' must retain RGBA transparency');
   }
 });
-test('assets stay local, navigation retains scenery and exercises keep a quiet background', async () => {
+test('assets stay local, tabs use the flat white background and exercises keep a quiet background', async () => {
   const registry = await readFile(new URL('../src/constants/redesignAssets.ts', import.meta.url), 'utf8');
   for (const name of illustrations) assert.ok(registry.includes(name + '.png'));
   assert.doesNotMatch(registry, /https?:/);
-  for (const path of ['(tabs)/home.tsx','(tabs)/learn.tsx','(tabs)/ranking.tsx','(tabs)/profile.tsx']) {
+  for (const path of ['(tabs)/home.tsx','(tabs)/learn.tsx','(tabs)/ranking.tsx','(tabs)/profile.tsx','(tabs)/friends.tsx','(tabs)/achievements.tsx']) {
     const source = await readFile(new URL('../src/app/' + path, import.meta.url), 'utf8');
-    assert.match(source, /scene="(ark|valley)"/, path);
+    assert.doesNotMatch(source, /scene="(ark|valley)"|sceneScrolls/, path);
   }
   const player = await readFile(new URL('../src/components/learning/LessonPlayer.tsx', import.meta.url), 'utf8');
   assert.doesNotMatch(player, /<Screen[^>]*scene=/);
@@ -28,7 +28,7 @@ test('visual refinements keep blur opt-in, remove the redundant heading and keep
   const source = async (path: string) => readFile(new URL('../' + path, import.meta.url), 'utf8');
   const learn = await source('src/app/(tabs)/learn.tsx');
   assert.doesNotMatch(learn, /TabHeader|Um passo de cada vez/);
-  assert.match(learn, /scene="ark"/);
+  assert.match(learn, /<Screen style=\{styles.content\}>/);
   assert.match(await source('src/app/unit/[id].tsx'), /backgroundColor="#FFFFFF"/);
   const screen = await source('src/components/common/Screen.tsx');
   assert.match(screen, /backgroundBlur = 0/);
@@ -39,18 +39,17 @@ test('visual refinements keep blur opt-in, remove the redundant heading and keep
   const profile = await source('src/app/(tabs)/profile.tsx');
   assert.doesNotMatch(profile, /TabHeader/);
   assert.match(profile, /accessibilityRole="header" style=\{styles.title\}>Perfil/);
-  assert.match(profile, /fontFamily: fonts.heavy, fontSize: 36, lineHeight: 44, color: colors.surface/);
-  assert.match(profile, /textShadowColor: 'rgba\(0,30,75,0.85\)'/);
+  assert.match(profile, /fontFamily: fonts.heavy, fontSize: 32, lineHeight: 40, color: colors.text/);
+  assert.doesNotMatch(profile, /textShadowColor/);
   const ranking=await source('src/app/(tabs)/ranking.tsx');
   assert.doesNotMatch(ranking,/TabHeader/);
-  assert.match(ranking,/textShadowColor/);
+  assert.doesNotMatch(ranking,/textShadowColor/);
   assert.match(ranking,/appearance="ranking"/);
 });
 
-test('home and profile use finite scenes; overview keeps scenery and the lesson trail stays white', async () => {
+test('tabs stay white (scenery stays available for special moments) and the lesson trail stays white', async () => {
   const source = async (path: string) => readFile(new URL('../' + path, import.meta.url), 'utf8');
-  for (const route of ['home', 'profile']) assert.match(await source(`src/app/(tabs)/${route}.tsx`), /<Screen[^>]*sceneScrolls/);
-  for (const route of ['ranking', 'learn']) assert.doesNotMatch(await source(`src/app/(tabs)/${route}.tsx`), /sceneScrolls/);
+  for (const route of ['home', 'profile', 'ranking', 'learn']) assert.doesNotMatch(await source(`src/app/(tabs)/${route}.tsx`), /sceneScrolls/);
   const trail = await source('src/app/unit/[id].tsx');
   assert.doesNotMatch(trail, /scene="valley"|scene="ark"/);
   assert.match(trail, /backgroundColor="#FFFFFF"/);

@@ -1,7 +1,7 @@
 import { useCallback, useRef, useState } from 'react';
 import { StyleSheet, Switch, View } from 'react-native';
 import { useFocusEffect } from 'expo-router';
-import { Bell, Check, RefreshCw, Zap } from 'lucide-react-native';
+import { Bell, Check, RefreshCw, Zap } from '@/components/icons';
 import { useAuth } from '@/hooks/useAuth';
 import { AppText } from '@/components/common/AppText';
 import { Button } from '@/components/common/Button';

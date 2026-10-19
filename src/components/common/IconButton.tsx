@@ -1,5 +1,5 @@
 import { Pressable, StyleSheet } from 'react-native';
-import type { LucideIcon } from 'lucide-react-native';
+import type { LucideIcon } from '@/components/icons';
 import { colors, layout, radius } from '@/constants/theme';
 
 export function IconButton({
@@ -30,11 +30,13 @@ const styles = StyleSheet.create({
   button: {
     width: layout.iconButton,
     height: layout.iconButton,
-    borderRadius: radius.pill,
+    // Estilo plano: quadrado arredondado com base mais grossa, como os botões.
+    borderRadius: radius.md - 2,
     backgroundColor: colors.surface,
     alignItems: 'center',
     justifyContent: 'center',
-    borderWidth: 1,
+    borderWidth: 2,
+    borderBottomWidth: 4,
     borderColor: colors.border,
   },
 });

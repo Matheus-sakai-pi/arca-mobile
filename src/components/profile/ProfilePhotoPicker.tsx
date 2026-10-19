@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Image, Modal, ScrollView, StyleSheet, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Camera, RefreshCw, Send, Trash2, X } from 'lucide-react-native';
+import { Camera, RefreshCw, Send, Trash2, X } from '@/components/icons';
 import { router } from 'expo-router';
 import * as Crypto from 'expo-crypto';
 import { AppText } from '@/components/common/AppText';

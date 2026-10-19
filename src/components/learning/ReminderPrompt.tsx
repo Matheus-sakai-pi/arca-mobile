@@ -1,7 +1,7 @@
 import { useCallback, useRef, useState } from 'react';
 import { Modal, ScrollView, StyleSheet, View } from 'react-native';
 import { router, useFocusEffect } from 'expo-router';
-import { Bell, Clock3, X } from 'lucide-react-native';
+import { Bell, Clock3, X } from '@/components/icons';
 import { AppText } from '@/components/common/AppText';
 import { Button } from '@/components/common/Button';
 import { IconButton } from '@/components/common/IconButton';

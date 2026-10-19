@@ -1,5 +1,5 @@
 import { router } from 'expo-router';
-import { ArrowRight, Crown, MessageCircle } from 'lucide-react-native';
+import { ArrowRight, Crown, MessageCircle } from '@/components/icons';
 import { Pressable, StyleSheet, View } from 'react-native';
 import { AppText } from '@/components/common/AppText';
 import { offerColors } from './OfferLayout';

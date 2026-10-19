@@ -30,7 +30,9 @@ test('profile and celebration reuse the same decorative artwork without writing 
   assert.match(profile, /unlocked \? <Check/);
   assert.match(celebration, /dismissAchievement\(id\)/);
   const icon = await source('components/profile/AchievementIcon.tsx');
-  assert.match(icon, /resizeMode="contain"/);
+  // Estilo plano: medalha em SVG com ícone plano, cinza quando bloqueada.
+  assert.match(icon, /<Svg /);
+  assert.match(icon, /unlocked \? medal.ring : '#C3CBD8'/);
   assert.match(icon, /pointerEvents="none"/);
   assert.match(icon, /width: size, height: size/);
   assert.doesNotMatch(icon, /setItem|completeLesson|unlockAchievements|useEffect/);

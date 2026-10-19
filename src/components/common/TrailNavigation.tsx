@@ -1,6 +1,6 @@
 import { Pressable, StyleSheet, View } from 'react-native';
 import { router } from 'expo-router';
-import { House, BookOpen, Trophy, UserRound } from 'lucide-react-native';
+import { House, BookOpen, Trophy, UserRound } from '@/components/icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { colors, fonts, radius, shadows } from '@/constants/theme';
 import { AppText } from './AppText';

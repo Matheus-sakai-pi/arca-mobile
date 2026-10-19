@@ -46,10 +46,7 @@ export function RankingTabs({
 const styles = StyleSheet.create({
   tabs: {
     flexDirection: 'row',
-    backgroundColor: 'rgba(240,246,255,0.92)',
-    borderRadius: 32,
-    padding: 4,
-    gap: 2,
+    gap: 8,
   },
   tab: {
     flex: 1,
@@ -59,9 +56,14 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingHorizontal: 3,
     paddingVertical: 8,
-    borderRadius: 28,
+    borderRadius: 14,
+    borderWidth: 2,
+    borderBottomWidth: 4,
+    borderColor: colors.border,
+    backgroundColor: colors.surface,
   },
-  selected: { backgroundColor: colors.surface },
+  // Cada opção é um botão plano; a escolhida fica azul-clara com borda azul.
+  selected: { backgroundColor: colors.primarySoft, borderColor: '#9CC0FF' },
   pressed: { opacity: 0.75 },
   text: { fontSize: 12, lineHeight: 17, textAlign: 'center' },
 });

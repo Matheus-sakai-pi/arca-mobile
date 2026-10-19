@@ -1,5 +1,5 @@
 import { Pressable, StyleSheet, View } from 'react-native';
-import { Check, X } from 'lucide-react-native';
+import { Check, X } from '@/components/icons';
 import { AppText } from '@/components/common/AppText';
 import { colors, radius, spacing } from '@/constants/theme';
 import { Mascot } from '@/components/mascot/Mascot';

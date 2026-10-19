@@ -1,5 +1,5 @@
 import { StyleSheet, View } from 'react-native';
-import { ArrowDown, GitBranch } from 'lucide-react-native';
+import { ArrowDown, GitBranch } from '@/components/icons';
 import { AppText } from '@/components/common/AppText';
 import type { CauseEffectQuestion as Data } from '@/types/learning';
 import { colors, spacing } from '@/constants/theme';

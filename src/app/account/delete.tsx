@@ -2,7 +2,7 @@ import { useCallback, useRef, useState } from 'react';
 import { BackHandler, Pressable, StyleSheet, View } from 'react-native';
 import { router, useFocusEffect } from 'expo-router';
 import * as Linking from 'expo-linking';
-import { ArrowLeft, Check, LockKeyhole, Mail, Square, Trash2 } from 'lucide-react-native';
+import { ArrowLeft, Check, LockKeyhole, Mail, Square, Trash2 } from '@/components/icons';
 import { Screen } from '@/components/common/Screen';
 import { AppText } from '@/components/common/AppText';
 import { Button } from '@/components/common/Button';

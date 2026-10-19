@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Image, Modal, ScrollView, StyleSheet, View } from 'react-native';
 import { router } from 'expo-router';
 import Animated, { ReduceMotion, ZoomIn } from 'react-native-reanimated';
-import { ArrowRight, BatteryFull, Camera, Crown, Palette, Sparkles, type LucideIcon } from 'lucide-react-native';
+import { ArrowRight, BatteryFull, Camera, Crown, Palette, Sparkles, type LucideIcon } from '@/components/icons';
 import { AppText } from '@/components/common/AppText';
 import { Button } from '@/components/common/Button';
 import { VisualBurst } from '@/components/animation/VisualBurst';

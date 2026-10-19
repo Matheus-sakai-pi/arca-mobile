@@ -1,5 +1,5 @@
 import { StyleSheet, View } from 'react-native';
-import { RefreshCw } from 'lucide-react-native';
+import { RefreshCw } from '@/components/icons';
 import { AppText } from '@/components/common/AppText';
 import { Button } from '@/components/common/Button';
 import { useLearning } from '@/providers/LearningProvider';

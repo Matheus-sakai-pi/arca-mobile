@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { AtSign, Save } from 'lucide-react-native';
+import { AtSign, Save } from '@/components/icons';
 import { useLearning } from '@/providers/LearningProvider';
 import { normalizeUsername, validUsername, usernameHint, hasChosenUsername } from '@/lib/username';
 import { authErrorMessage } from '@/services/validation';

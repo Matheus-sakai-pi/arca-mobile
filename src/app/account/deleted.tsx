@@ -1,7 +1,7 @@
 import { useCallback, useRef, useState } from 'react';
 import { BackHandler } from 'react-native';
 import { router, useFocusEffect } from 'expo-router';
-import { CircleCheck, Trash2 } from 'lucide-react-native';
+import { CircleCheck, Trash2 } from '@/components/icons';
 import { Screen } from '@/components/common/Screen';
 import { AppText } from '@/components/common/AppText';
 import { Button } from '@/components/common/Button';

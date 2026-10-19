@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Modal, Pressable, ScrollView, StyleSheet, View } from 'react-native';
-import { Clock3, Infinity, RefreshCw, X } from 'lucide-react-native';
+import { Clock3, Infinity, RefreshCw, X } from '@/components/icons';
 import { useEnergy } from '@/providers/EnergyProvider';
 import { energyWait, energyIntervalText } from '@/lib/energy';
 import { AppText } from '@/components/common/AppText';

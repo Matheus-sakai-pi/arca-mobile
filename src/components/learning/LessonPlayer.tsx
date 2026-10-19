@@ -3,7 +3,7 @@ import { BackHandler, Modal, Platform, ScrollView, StyleSheet, View } from 'reac
 import { router, useFocusEffect } from 'expo-router';
 import * as Haptics from 'expo-haptics';
 import Animated, { FadeInDown, ReduceMotion } from 'react-native-reanimated';
-import { ArrowRight, CheckCircle2, X } from 'lucide-react-native';
+import { ArrowRight, CheckCircle2, X } from '@/components/icons';
 import { Screen } from '@/components/common/Screen';
 import { AppText } from '@/components/common/AppText';
 import { Button } from '@/components/common/Button';

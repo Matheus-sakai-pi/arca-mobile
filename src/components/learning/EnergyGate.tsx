@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { View, StyleSheet } from 'react-native';
-import { ArrowLeft, RefreshCw, ArrowRight } from 'lucide-react-native';
+import { ArrowLeft, RefreshCw, ArrowRight } from '@/components/icons';
 import { useEnergy } from '@/providers/EnergyProvider';
 import { useStudy } from '@/providers/StudyProvider';
 import { energyWait, monotonicNow, type EnergyState } from '@/lib/energy';

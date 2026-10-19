@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
-import { Check, Link2, X } from 'lucide-react-native';
+import { Check, Link2, X } from '@/components/icons';
 import { AppText } from '@/components/common/AppText';
 import { colors, radius, spacing } from '@/constants/theme';
 import { isAnswerPairs } from '@/lib/questionEngine';

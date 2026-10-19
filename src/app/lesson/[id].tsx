@@ -1,5 +1,5 @@
 import { useLocalSearchParams } from 'expo-router';
-import { LockKeyhole, SearchX } from 'lucide-react-native';
+import { LockKeyhole, SearchX } from '@/components/icons';
 import { Screen } from '@/components/common/Screen';
 import { Button } from '@/components/common/Button';
 import { EmptyState, ErrorState, LoadingState } from '@/components/common/States';

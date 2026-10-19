@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Image, Modal, Pressable, ScrollView, StyleSheet, Switch, View } from 'react-native';
-import { Camera, Check, ChevronRight, Crown, RefreshCw, RotateCcw, Save, X } from 'lucide-react-native';
+import { Camera, Check, ChevronRight, Crown, RefreshCw, RotateCcw, Save, X } from '@/components/icons';
 import { router } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { AppText } from '@/components/common/AppText';

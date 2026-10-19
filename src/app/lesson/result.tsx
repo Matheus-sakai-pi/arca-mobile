@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
 import { BackHandler, StyleSheet, View } from 'react-native';
 import { useFocusEffect } from 'expo-router';
-import { ArrowRight } from 'lucide-react-native';
+import { ArrowRight } from '@/components/icons';
 import { Screen } from '@/components/common/Screen';
 import { AppText } from '@/components/common/AppText';
 import { Button } from '@/components/common/Button';

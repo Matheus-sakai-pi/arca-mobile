@@ -18,7 +18,7 @@ async function loadPodium(fontScale = 1, width = 390, nameHeights:Record<string,
       if (name === 'react/jsx-runtime') return jsxRuntime;
       if (name === 'react') return {useState:()=>[nameHeights,()=>undefined]};
       if (name === 'react-native') return { Image: 'Image', View: 'View', useWindowDimensions: () => ({ fontScale, width }), StyleSheet: { create: (styles: unknown) => styles } };
-      if (name === 'lucide-react-native') return { Crown: 'Crown' };
+      if (name.endsWith('/icons')) return { Crown: 'Crown' };
       if (name.endsWith('/Avatar')) return { Avatar: 'Avatar' };
       if (name.endsWith('/ProfileDecoration')) return { ProfileAvatar: 'ProfileAvatar', VIPBadge: 'VIPBadge' };
       if (name.endsWith('/AppText')) return { AppText: 'AppText' };

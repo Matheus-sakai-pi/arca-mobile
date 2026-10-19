@@ -3,7 +3,7 @@ import { Platform, StyleSheet, View } from 'react-native';
 import * as Linking from 'expo-linking';
 import * as Clipboard from 'expo-clipboard';
 import { router } from 'expo-router';
-import { Check, Copy, Gift, MessageCircle, RefreshCw, UsersRound } from 'lucide-react-native';
+import { Check, Copy, Gift, MessageCircle, RefreshCw, UsersRound } from '@/components/icons';
 import { AppText } from '@/components/common/AppText';
 import { Button } from '@/components/common/Button';
 import { IconButton } from '@/components/common/IconButton';

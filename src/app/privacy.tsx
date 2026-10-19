@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { router } from 'expo-router';
 import * as Linking from 'expo-linking';
-import { ArrowLeft, Mail, Trash2 } from 'lucide-react-native';
+import { ArrowLeft, Mail, Trash2 } from '@/components/icons';
 import { Screen } from '@/components/common/Screen';
 import { AppText } from '@/components/common/AppText';
 import { IconButton } from '@/components/common/IconButton';

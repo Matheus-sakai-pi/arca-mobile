@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { StyleSheet, View, type TextInput } from 'react-native';
 import { router } from 'expo-router';
-import { ArrowLeft, ArrowRight, AtSign, LockKeyhole, Mail } from 'lucide-react-native';
+import { ArrowLeft, ArrowRight, AtSign, LockKeyhole, Mail } from '@/components/icons';
 import { Screen } from '@/components/common/Screen';
 import { AppText } from '@/components/common/AppText';
 import { Brand } from '@/components/common/Brand';

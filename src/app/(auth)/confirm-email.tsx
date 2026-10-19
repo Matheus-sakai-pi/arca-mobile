@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { router, useLocalSearchParams } from 'expo-router';
-import { MailCheck } from 'lucide-react-native';
+import { MailCheck } from '@/components/icons';
 import { Screen } from '@/components/common/Screen';
 import { Brand } from '@/components/common/Brand';
 import { Button } from '@/components/common/Button';

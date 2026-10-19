@@ -1,7 +1,7 @@
 import { useCallback, useRef, useState } from 'react';
 import { Modal, ScrollView, StyleSheet, View } from 'react-native';
 import { router, useFocusEffect } from 'expo-router';
-import { ArrowLeft, Check, Plus, RefreshCw, Send, Swords, X } from 'lucide-react-native';
+import { ArrowLeft, Check, Plus, RefreshCw, Send, Swords, X } from '@/components/icons';
 import { Screen } from '@/components/common/Screen';
 import { AppText } from '@/components/common/AppText';
 import { IconButton } from '@/components/common/IconButton';

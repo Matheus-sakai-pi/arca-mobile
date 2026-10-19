@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Modal, Pressable, ScrollView, StyleSheet, View } from 'react-native';
-import { Check, Crown, Save, X } from 'lucide-react-native';
+import { Check, Crown, Save, X } from '@/components/icons';
 import { router } from 'expo-router';
 import { useMembership } from '@/providers/MembershipProvider';
 import { SafeAreaView } from 'react-native-safe-area-context';

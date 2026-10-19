@@ -1,5 +1,5 @@
 import { StyleSheet, View } from 'react-native';
-import { CheckCircle2, Target, Star } from 'lucide-react-native';
+import { CheckCircle2, Target, Star } from '@/components/icons';
 import Animated, { FadeInDown, ReduceMotion } from 'react-native-reanimated';
 import { AppText } from '@/components/common/AppText';
 import { AnimatedCounter } from '@/components/animation/AnimatedCounter';

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Modal, ScrollView, StyleSheet, View } from 'react-native';
 import { router } from 'expo-router';
-import { BookOpen, CloudUpload, Sparkles } from 'lucide-react-native';
+import { BookOpen, CloudUpload, Sparkles } from '@/components/icons';
 import { AppText } from '@/components/common/AppText';
 import { Button } from '@/components/common/Button';
 import { Notice } from '@/components/common/Notice';

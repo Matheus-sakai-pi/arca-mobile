@@ -1,5 +1,5 @@
 import { ActivityIndicator, StyleSheet, View } from 'react-native';
-import { CircleAlert, RefreshCw, type LucideIcon } from 'lucide-react-native';
+import { CircleAlert, RefreshCw, type LucideIcon } from '@/components/icons';
 import { AppText } from './AppText';
 import { Button } from './Button';
 import { colors, radius, spacing } from '@/constants/theme';
@@ -88,9 +88,9 @@ const styles = StyleSheet.create({
     padding: spacing.lg,
     gap: spacing.sm,
     backgroundColor: colors.surface,
-    borderWidth: 1,
+    borderWidth: 2,
     borderColor: colors.border,
-    borderRadius: radius.sm,
+    borderRadius: radius.md + 4,
   },
   icon: {
     width: 56,

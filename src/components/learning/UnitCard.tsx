@@ -1,9 +1,9 @@
 import { Image, Pressable, StyleSheet, View } from 'react-native';
-import { BookOpen, UsersRound, ScrollText, Crown, Fish, Sprout, Mail, ChevronRight, LockKeyhole } from 'lucide-react-native';
+import { BookOpen, UsersRound, ScrollText, Crown, Fish, Sprout, Mail, ChevronRight, LockKeyhole } from '@/components/icons';
 import { AppText } from '@/components/common/AppText';
 import { EventProgressBar } from '@/components/animation/EventProgressBar';
 import { artworkForUnit } from '@/constants/unitArtwork';
-import { colors, fonts } from '@/constants/theme';
+import { colors, fonts, surfaces } from '@/constants/theme';
 import { lessonStatus } from '@/lib/learningProgress';
 import { unitAccent } from '@/lib/trailAppearance';
 import type { LearningProgress, Unit } from '@/types/learning';
@@ -38,7 +38,7 @@ export function UnitCard({ unit, index, course, progress, onPress }: { unit: Uni
   </Pressable>;
 }
 const styles = StyleSheet.create({
-  card: { backgroundColor: colors.surface, borderRadius: 16, padding: 16, gap: 10, borderWidth: 1, borderColor: colors.border },
+  card: { ...surfaces.tactile, padding: 16, gap: 10 },
   pressed: { backgroundColor: '#F9FBFF', borderColor: colors.primary },
   labelRow: { flexDirection: 'row', alignItems: 'center', gap: 8 },
   label: { flex: 1, fontSize: 13 },

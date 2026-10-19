@@ -1,5 +1,5 @@
 import { StyleSheet, View } from 'react-native';
-import { Check, Flag } from 'lucide-react-native';
+import { Check, Flag } from '@/components/icons';
 import { AppText } from '@/components/common/AppText';
 import { VisualArtwork } from '@/components/animation/VisualArtwork';
 import { journeyCheckpoint } from '@/lib/visualContent';

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Image, Pressable, StyleSheet, View } from 'react-native';
 import { router } from 'expo-router';
-import { ArrowRight, RotateCcw, Settings } from 'lucide-react-native';
+import { ArrowRight, RotateCcw, Settings } from '@/components/icons';
 import { Avatar } from '@/components/profile/Avatar';
 import { ProfileSettings } from '@/components/profile/ProfileSettings';
 import { LearningStats } from '@/components/learning/LearningStats';
@@ -18,7 +18,7 @@ import { EventProgressBar } from '@/components/animation/EventProgressBar';
 import { useLearning } from '@/providers/LearningProvider';
 import { nextLesson } from '@/lib/learningProgress';
 import { unitAccent } from '@/lib/trailAppearance';
-import { colors, spacing } from '@/constants/theme';
+import { colors, spacing, surfaces } from '@/constants/theme';
 import { redesignAssets } from '@/constants/redesignAssets';
 
 export default function Home() { return <LearningGate><HomeContent /></LearningGate>; }
@@ -33,7 +33,7 @@ function HomeContent() {
   const unitIndex = units.findIndex(unit => unit.id === currentUnit.id);
   const accent = unitAccent(Math.max(0, unitIndex));
   const completed = currentUnit.lessons.filter(lesson => progress.completedLessonIds.includes(lesson.id)).length;
-  return <Screen scene="ark" sceneScrolls>
+  return <Screen>
     <View style={styles.hero}>
       <View style={styles.header}><Image source={redesignAssets.logoWhite} style={styles.brand} resizeMode="contain" accessible accessibilityLabel="Arca" testID="home-brand-logo" />
         <View style={styles.tools}><Pressable accessibilityRole="button" accessibilityLabel="Abrir meu perfil" onPress={() => router.navigate('/(tabs)/profile')} style={styles.avatarRing}><Avatar avatarKey={profile?.avatar_key} size={48} /></Pressable><IconButton icon={Settings} label="Configurações" onPress={() => setSettings(true)} /></View>
@@ -55,10 +55,11 @@ function HomeContent() {
 const styles = StyleSheet.create({
   hero: { gap: spacing.sm, paddingTop: spacing.xs },
   header: { flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', gap: spacing.xs },
-  brand: { width: 164, height: 56, flexShrink: 0 },
+  // O logo branco vira azul sobre o fundo branco.
+  brand: { width: 132, height: 44, flexShrink: 0, tintColor: colors.primary },
   tools: { flexDirection: 'row', alignItems: 'center', gap: spacing.xs },
-  avatarRing: { padding: 3, borderWidth: 2, borderColor: colors.surface, borderRadius: 999, backgroundColor: colors.surface },
-  feature: { backgroundColor: colors.surface, borderRadius: 16, padding: spacing.md, gap: spacing.md, borderWidth: 1, borderColor: colors.border },
+  avatarRing: { padding: 2, borderWidth: 2, borderColor: colors.border, borderRadius: 999, backgroundColor: colors.surface },
+  feature: { ...surfaces.tactile, padding: spacing.md, gap: spacing.md },
   featureTop: { flexDirection: 'row', alignItems: 'center', gap: spacing.xs },
   featureText: { flex: 1, minWidth: 0, gap: spacing.xs },
   featureHeading: { fontSize: 22, lineHeight: 28 },

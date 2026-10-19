@@ -1,6 +1,6 @@
 import { StyleSheet, View } from 'react-native';
 import { router } from 'expo-router';
-import { ArrowLeft, RotateCcw } from 'lucide-react-native';
+import { ArrowLeft, RotateCcw } from '@/components/icons';
 import { useStudy } from '@/providers/StudyProvider';
 import { useLearning } from '@/providers/LearningProvider';
 import { dueReviews, reviewSchedule } from '@/lib/studyStore';

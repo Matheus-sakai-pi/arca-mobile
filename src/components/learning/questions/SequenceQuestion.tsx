@@ -1,5 +1,5 @@
 import { StyleSheet, View } from 'react-native';
-import { ArrowRight } from 'lucide-react-native';
+import { ArrowRight } from '@/components/icons';
 import { AppText } from '@/components/common/AppText';
 import type { SequenceQuestion as Data } from '@/types/learning';
 import { colors, spacing } from '@/constants/theme';

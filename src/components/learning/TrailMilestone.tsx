@@ -1,6 +1,6 @@
 import { StyleSheet, View } from 'react-native';
 import Svg, { Ellipse, Path, Rect } from 'react-native-svg';
-import { Star, Trophy } from 'lucide-react-native';
+import { Star, Trophy } from '@/components/icons';
 import { AppText } from '@/components/common/AppText';
 import { colors } from '@/constants/theme';
 

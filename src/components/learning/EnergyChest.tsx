@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Modal, Pressable, ScrollView, StyleSheet, View } from 'react-native';
-import { Gift, RefreshCw, X } from 'lucide-react-native';
+import { Gift, RefreshCw, X } from '@/components/icons';
 import { CHEST_ENERGY_CONFIG } from '@/config/energy';
 import { colors } from '@/constants/theme';
 import type { EnergyChest as ChestState, EnergyState } from '@/lib/energy';

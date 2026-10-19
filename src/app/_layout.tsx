@@ -58,7 +58,6 @@ function Navigator({ fontsReady }: { fontsReady: boolean }) {
         <Stack.Screen name="study/reminders" />
         <Stack.Screen name="challenges" />
         <Stack.Screen name="challenges/[id]" options={{ gestureEnabled: false }} />
-        <Stack.Screen name="friends" />
         <Stack.Screen name="vip" />
         <Stack.Screen name="invite" />
       </Stack.Protected>

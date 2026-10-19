@@ -1,5 +1,5 @@
 import { Pressable, StyleSheet, View } from 'react-native';
-import { Check, Circle, X } from 'lucide-react-native';
+import { Check, Circle, X } from '@/components/icons';
 import { AppText } from '@/components/common/AppText';
 import { colors, fonts, radius, spacing } from '@/constants/theme';
 import type { SingleAnswerQuestion } from '@/types/learning';

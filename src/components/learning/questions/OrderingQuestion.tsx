@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
-import { ArrowDown, ArrowUp, Check, X, type LucideIcon } from 'lucide-react-native';
+import { ArrowDown, ArrowUp, Check, X, type LucideIcon } from '@/components/icons';
 import Animated, { LinearTransition, ReduceMotion } from 'react-native-reanimated';
 import { useMotionPreference } from '@/hooks/useMotionPreference';
 import { AppText } from '@/components/common/AppText';

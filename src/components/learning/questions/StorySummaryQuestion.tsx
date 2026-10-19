@@ -1,5 +1,5 @@
 import { Pressable, StyleSheet, View } from 'react-native';
-import { BookOpen } from 'lucide-react-native';
+import { BookOpen } from '@/components/icons';
 import { AppText } from '@/components/common/AppText';
 import type { StorySummaryQuestion as Data } from '@/types/learning';
 import { spacing } from '@/constants/theme';

@@ -1,5 +1,5 @@
 import { StyleSheet, View } from 'react-native';
-import { Check, Crown, Minus } from 'lucide-react-native';
+import { Check, Crown, Minus } from '@/components/icons';
 import { AppText } from '@/components/common/AppText';
 import { offerColors } from './OfferLayout';
 const rows = [
