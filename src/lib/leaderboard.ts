@@ -1,12 +1,16 @@
 import type { Leaderboard, LeaderboardEntry, RankingScope } from '../types/leaderboard.ts';
 import { integer, object } from './backendDecoders.ts';
+import { profileFrames, type ProfileFrame } from './profileAppearance.ts';
+
+// Servidores sem a atualização do ranking não mandam moldura/VIP: mostra o padrão.
+const frameOf = (value: unknown): ProfileFrame => profileFrames.find(option => option.key === value)?.key ?? 'classic';
 
 function entry(value: unknown): LeaderboardEntry {
   if (!object(value) || typeof value.id !== 'string' || !value.id || typeof value.display_name !== 'string'
     || !value.display_name.trim() || typeof value.avatar_key !== 'string' || !integer(value.xp_total)
     || !integer(value.position) || value.position < 1) throw new Error('Ranking recebido em formato inválido.');
   // Explicit projection also discards unexpected server fields.
-  return {id:value.id,display_name:value.display_name,avatar_key:value.avatar_key,xp_total:value.xp_total,position:value.position};
+  return {id:value.id,display_name:value.display_name,avatar_key:value.avatar_key,xp_total:value.xp_total,position:value.position,frame:frameOf(value.frame),vip:value.vip === true};
 }
 export function decodeLeaderboard(value: unknown, userId: string | null, scope: RankingScope = 'total'): Leaderboard {
   if (!object(value) || !Array.isArray(value.top) || value.top.length > 10) throw new Error('Ranking recebido em formato inválido.');

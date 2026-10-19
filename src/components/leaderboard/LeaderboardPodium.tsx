@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Image, StyleSheet, View, useWindowDimensions } from 'react-native';
 import { Crown } from 'lucide-react-native';
 import { Avatar } from '@/components/profile/Avatar';
+import { ProfileAvatar, VIPBadge } from '@/components/profile/ProfileDecoration';
 import { AppText } from '@/components/common/AppText';
 import { redesignAssets } from '@/constants/redesignAssets';
 import type { LeaderboardEntry } from '@/types/leaderboard';
@@ -30,9 +31,15 @@ export function LeaderboardPodium({ entries, currentUserId, rankingKey='total' }
       const award = awards[position], own = person.id === currentUserId;
       const pedestalHeight = award.height * textScale + extraHeight;
       const avatarSize=Math.max(28,Math.min(position === 1 ? 96 : 80,Math.floor(slotWidth-(position === 1 ? 12 : 24))));
-      return <PodiumEntrance key={position} position={position}><View style={styles.column} accessibilityLabel={`${position}º lugar, ${person.display_name}, ${person.xp_total} XP${own ? ', você' : ''}`}>
+      return <PodiumEntrance key={position} position={position}><View style={styles.column} accessibilityLabel={`${position}º lugar, ${person.display_name}${person.vip ? ', Arca VIP' : ''}, ${person.xp_total} XP${own ? ', você' : ''}`}>
         {position === 1 ? <Crown size={34} color={colors.goldInk} fill={colors.gold} /> : null}
-        <View testID={`podium-avatar-${position}`} style={[styles.avatarRing, { borderColor: award.ring }]}><Avatar avatarKey={person.avatar_key} size={avatarSize} /></View>
+        {/* Sem espaço ao lado do nome no pódio: o selo VIP fica encostado embaixo do avatar. */}
+        <View style={styles.avatarSlot}>
+          {person.frame === 'classic'
+            ? <View testID={`podium-avatar-${position}`} style={[styles.avatarRing, { borderColor: award.ring }]}><Avatar avatarKey={person.avatar_key} size={avatarSize} /></View>
+            : <View testID={`podium-avatar-${position}`}><ProfileAvatar avatarKey={person.avatar_key} frame={person.frame} size={avatarSize - 8} animate={false} /></View>}
+          {person.vip ? <View testID={`podium-vip-${position}`} style={styles.vipTag} pointerEvents="none"><VIPBadge /></View> : null}
+        </View>
         <View testID={`podium-pedestal-${position}`} style={[styles.pedestal, { height: pedestalHeight, paddingTop: pedestalHeight * award.faceStart }]}>
           <View testID={`podium-art-${position}`} style={styles.pedestalArt} pointerEvents="none"><Image source={redesignAssets.podiums[position]} resizeMode="stretch" style={styles.image} accessible={false} /></View>
           <View testID={`podium-rank-${position}`} style={styles.rankArea}>
@@ -52,6 +59,8 @@ const styles = StyleSheet.create({
   // Only the outer row slots grow. Vertical flex here makes Yoga displace the podium bases.
   column: { width: '100%', minWidth: 0, alignItems: 'center', gap: 4 },
   emptyColumn: { flex: 1, minWidth: 0 },
+  avatarSlot: { alignItems: 'center' },
+  vipTag: { position: 'absolute', left: 0, right: 0, bottom: -10, alignItems: 'center' },
   avatarRing: { padding: 3, borderWidth: 3, borderRadius: radius.pill, backgroundColor: colors.surface, boxShadow: '0 5px 15px rgba(44,70,115,0.18)' },
   own: { backgroundColor: '#F0F6FF' },
   pedestal: { width: '100%', borderRadius: 12, alignItems: 'center', gap: 4, paddingHorizontal: 4, paddingBottom: 10 },

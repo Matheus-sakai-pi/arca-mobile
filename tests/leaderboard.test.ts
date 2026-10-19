@@ -8,7 +8,10 @@ import { avatarOptions, isAvatarKey, resolveAvatarKey } from '../src/constants/a
 test('leaderboard decoder rejects malformed/cross-account data and exposes only public fields',()=>{
   const row={id:'a',display_name:'Aprendiz',avatar_key:'avatar-03',xp_total:25,position:1};
   const value=decodeLeaderboard({top:[{...row,email:'private'}],current:row},'a');
-  assert.deepEqual(value.top,[row]);assert.equal(ownPositionOutsideTop(value),null);
+  assert.deepEqual(value.top,[{...row,frame:'classic',vip:false}]);assert.equal(ownPositionOutsideTop(value),null);
+  // Moldura conhecida e selo vêm do servidor; valores desconhecidos voltam ao padrão.
+  assert.deepEqual(decodeLeaderboard({top:[{...row,frame:'gold',vip:true}],current:null},null).top[0],{...row,frame:'gold',vip:true});
+  assert.deepEqual(decodeLeaderboard({top:[{...row,frame:'neon',vip:'yes'}],current:null},null).top[0],{...row,frame:'classic',vip:false});
   assert.equal(ownPositionOutsideTop({top:[],current:{...row,position:37}})?.position,37);
   assert.throws(()=>decodeLeaderboard({top:[row,row],current:null},null));
   assert.throws(()=>decodeLeaderboard({top:[{...row,position:2}],current:null},null));
@@ -59,9 +62,9 @@ test('real PostgreSQL leaderboard: top10, exact own rank, deterministic ties, pr
     const refreshed=await ranking(user(2));assert.equal(refreshed.current?.position,3);assert.equal(refreshed.current?.avatar_key,'avatar-03');
     assert.deepEqual(refreshed.top.map(row=>row.id),result.top.map(row=>row.id));
   });
-  await t.test('RPC exposes exactly five public fields; table/auth privacy and protected XP remain intact',async()=>{
+  await t.test('RPC exposes exactly the public fields (incl. frame and VIP tag); table/auth privacy and protected XP remain intact',async()=>{
     const result=await ranking(null);
-    for(const row of result.top)assert.deepEqual(Object.keys(row).sort(),['avatar_key','display_name','id','position','xp_total']);
+    for(const row of result.top)assert.deepEqual(Object.keys(row).sort(),['avatar_key','display_name','frame','id','position','vip','xp_total']);
     await asUser(user(37),async tx=>{
       assert.equal((await tx.query('select * from public.profiles')).rows.length,1);
       assert.equal((await tx.query("update public.profiles set avatar_key='avatar-04' where id=$1 returning id",[user(1)])).rows.length,0);

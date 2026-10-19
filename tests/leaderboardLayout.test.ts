@@ -20,6 +20,7 @@ async function loadPodium(fontScale = 1, width = 390, nameHeights:Record<string,
       if (name === 'react-native') return { Image: 'Image', View: 'View', useWindowDimensions: () => ({ fontScale, width }), StyleSheet: { create: (styles: unknown) => styles } };
       if (name === 'lucide-react-native') return { Crown: 'Crown' };
       if (name.endsWith('/Avatar')) return { Avatar: 'Avatar' };
+      if (name.endsWith('/ProfileDecoration')) return { ProfileAvatar: 'ProfileAvatar', VIPBadge: 'VIPBadge' };
       if (name.endsWith('/AppText')) return { AppText: 'AppText' };
       if (name.endsWith('/PodiumEntrance')) return { PodiumEntrance: 'PodiumEntrance' };
       if (name.endsWith('/AnimatedRankChange')) return { AnimatedRankChange: 'AnimatedRankChange' };
@@ -39,7 +40,7 @@ function elements(tree: unknown): Element[] {
 function style(element: Element) {
   return Object.assign({}, ...[element.props.style].flat().filter(Boolean)) as Record<string, unknown>;
 }
-const entries: LeaderboardEntry[] = [1, 2, 3].map(position => ({ id: `user-${position}`, position, display_name: 'Nome de participante com duas linhas', avatar_key: 'avatar-01', xp_total: 100000 - position }));
+const entries: LeaderboardEntry[] = [1, 2, 3].map(position => ({ id: `user-${position}`, position, display_name: 'Nome de participante com duas linhas', avatar_key: 'avatar-01', xp_total: 100000 - position, frame: 'classic' as const, vip: false }));
 
 test('native podium uses natural column heights and unpadded full-size pedestal artwork', async () => {
   const render = await loadPodium();

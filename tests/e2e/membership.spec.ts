@@ -119,3 +119,16 @@ test('an account that was already VIP before this version opens without the welc
   await expect.poll(() => page.evaluate(owner => localStorage.getItem(`arca.vip-welcome.${owner}.v1`), backend.owner)).toBe('true');
   await expect(page.getByTestId('vip-welcome')).toHaveCount(0);
 });
+
+test('ranking shows the VIP frame and a VIP tag under the podium avatar without squeezing the name', async ({ page, context, backend }, info) => {
+  await backend.completeLessons(1); await backend.install(context);
+  const account = createHash('sha256').update(backend.owner).digest('hex');
+  await backend.db.query("select store_play_subscription($1,$2,$3,'arca_vip','mensal','SUBSCRIPTION_STATE_ACTIVE',now()+interval '30 days',now(),true)", [backend.owner, `e2e-${backend.owner}`, account]);
+  await backend.db.query("insert into profile_appearance(user_id,frame_key,background_key,show_badge) values($1,'gold','garden',true)", [backend.owner]);
+  await page.goto('/ranking');
+  const podium = page.getByTestId('leaderboard-podium');
+  await expect(podium.getByTestId('profile-frame-gold')).toBeVisible();
+  await expect(podium.getByTestId('profile-vip-badge')).toBeVisible();
+  await expect(podium.getByLabel(/Arca VIP/).first()).toBeVisible();
+  await capture(page, info, 'ranking-vip');
+});
