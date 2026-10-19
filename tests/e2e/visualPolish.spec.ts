@@ -76,6 +76,8 @@ test('result presents XP, statistics and real unit progress with reduced and ful
   await page.evaluate(owner => {
     const key = `arca.preferences.${owner}.v1`;
     localStorage.setItem(key, JSON.stringify({ ...JSON.parse(localStorage.getItem(key)!), reduceMotion: false }));
+    // Escolha feita neste aparelho que ainda não chegou à conta: não pode ser desfeita pela cópia da conta.
+    localStorage.setItem(`${key}.pending`, '1');
   }, backend.owner);
   await page.reload();
   await expect(page.getByText('35 XP no total', { exact: true })).toBeVisible();

@@ -34,6 +34,24 @@ export function createDeletionHandler(deps: DeletionDependencies, cors: Readonly
   };
 }
 
+type PhotoCleanup = {
+  freeze: (user: string) => Promise<boolean>;
+  list: (user: string) => Promise<string[] | null>;
+  remove: (paths: string[]) => Promise<boolean>;
+};
+export async function clearProfilePhotos(user: string, deps: PhotoCleanup): Promise<boolean> {
+  try {
+    if (!await deps.freeze(user)) return false;
+    for (let batch = 0; batch < 100; batch++) {
+      const names = await deps.list(user);
+      if (!names || names.length > 100 || names.some(name => !/^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}\.jpg$/i.test(name))) return false;
+      if (!names.length) return true;
+      if (!await deps.remove(names.map(name => `${user}/${name}`))) return false;
+    }
+  } catch { return false; }
+  return false;
+}
+
 
 const url = Deno.env.get('SUPABASE_URL')!;
 const publicKey = Deno.env.get('SUPABASE_ANON_KEY')!;
@@ -55,6 +73,13 @@ Deno.serve(createDeletionHandler({
     return { id, limited: error?.status === 429 };
   },
   deleteUser: async id => {
+    // Freeze new uploads before draining the private folder. A failed deletion is retryable.
+    const photos = admin.storage.from('profile-photos');
+    if (!await clearProfilePhotos(id, {
+      freeze: async owner => !(await admin.rpc('profile_photo_prepare_delete', { p_user: owner })).error,
+      list: async owner => { const { data, error } = await photos.list(owner, { limit: 100 }); return error ? null : (data ?? []).map(item => item.name); },
+      remove: async paths => !(await photos.remove(paths)).error,
+    })) return false;
     const { error } = await admin.auth.admin.deleteUser(id, false);
     return !error;
   },

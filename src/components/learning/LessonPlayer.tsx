@@ -11,6 +11,8 @@ import { IconButton } from '@/components/common/IconButton';
 import { Notice } from '@/components/common/Notice';
 import { Mascot } from '@/components/mascot/Mascot';
 import { BatteryIcon } from './BatteryIcon';
+import { EmptyBatteryContent } from '@/components/membership/EmptyBatteryContent';
+import { OfferLayout } from '@/components/membership/OfferLayout';
 import { BatteryTip } from './BatteryTip';
 import { learningUnits } from '@/data/lessons';
 import { unitTrailTheme } from '@/lib/trailAppearance';
@@ -56,7 +58,7 @@ export function LessonPlayer({ lesson, draft=null }: { lesson: Lesson; draft?:Le
   const actionLock = useRef(false);
   useEffect(()=>{void saveDraft(lesson,attemptId,state).catch(()=>undefined);},[lesson,attemptId,state,saveDraft]);
   useEffect(() => { actionLock.current = false; }, [state.turn, state.phase]);
-  const batteryEmpty = batteryBlocked && (!energy.status || energy.status.balance < energy.status.rules.exerciseCost);
+  const batteryEmpty = batteryBlocked && !energy.status?.unlimited && (!energy.status || energy.status.balance < energy.status.rules.exerciseCost);
   const question = lesson.questions[state.index];
   const verified = state.phase === 'feedback';
   const reading = question?.type === 'content_card';
@@ -142,15 +144,7 @@ export function LessonPlayer({ lesson, draft=null }: { lesson: Lesson; draft?:Le
       {studyError ? <Notice tone="error" message={studyError} /> : null}
     </Screen>
     <Modal visible={batteryEmpty} transparent animationType={reduced ? 'none' : 'fade'} onRequestClose={() => { void pauseLesson(); }}>
-      <ScrollView style={styles.modalScroll} contentContainerStyle={styles.overlay}><View testID="battery-exhausted" accessibilityViewIsModal style={styles.dialog}>
-        <View style={styles.batteryArt}><BatteryIcon size={112} /></View>
-        <AppText variant="h2" accessibilityRole="header">Sem energia agora</AppText>
-        <AppText>Sua pergunta e a resposta escolhida continuam guardadas. Você pode sair e retomar esta tentativa depois.</AppText>
-        {energy.status?.nextRefillAt ? <AppText color={colors.muted}>Próxima energia em {energyWait(energy.status, energy.receivedAt)}.</AppText> : null}
-        {saveError ? <Notice tone="error" message={saveError} /> : null}
-        <Button title="Salvar e sair" loading={saving} onPress={() => void pauseLesson()} />
-        <Button title="Atualizar bateria" variant="secondary" disabled={saving} onPress={() => void energy.refresh()} />
-      </View></ScrollView>
+      <View testID="battery-exhausted" accessibilityViewIsModal style={styles.energyModal}><OfferLayout footer={<>{saveError ? <Notice tone="error" message={saveError} /> : null}<Button title="Atualizar bateria" variant="secondary" disabled={saving} onPress={() => void energy.refresh()} /><Button title="Salvar e sair" variant="quiet" loading={saving} onPress={() => void pauseLesson()} /></>}><EmptyBatteryContent title="Sem energia agora" wait={energy.status?.nextRefillAt ? energyWait(energy.status, energy.receivedAt) : undefined} onNavigate={() => setBatteryBlocked(false)} /></OfferLayout></View>
     </Modal>
     <Modal visible={exitVisible} transparent animationType={reduced ? 'none' : 'fade'} onRequestClose={() => {if(!savingRef.current)setExitVisible(false);}}>
       <ScrollView style={styles.modalScroll} contentContainerStyle={styles.overlay}><View accessibilityViewIsModal style={styles.dialog}>
@@ -168,6 +162,7 @@ const styles = StyleSheet.create({
   progress: { flex: 1, minWidth: 0, gap: spacing.xs },
   bonus: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm, padding: spacing.sm, borderRadius: 8, backgroundColor: '#FDEAF5' },
   batteryArt: { alignItems: 'center' },
+  energyModal: { flex: 1, width: '100%', maxWidth: 480, alignSelf: 'center', backgroundColor: 'white' },
   exercise: { paddingVertical: spacing.sm, gap: spacing.xs },
   exerciseHeader: { flexDirection: 'row', alignItems: 'flex-start', gap: spacing.sm },
   exerciseHeading: { flex: 1, minWidth: 0, gap: spacing.xxs },

@@ -1,5 +1,6 @@
+import { useCallback, useRef, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { router, useLocalSearchParams } from 'expo-router';
+import { router, useFocusEffect, useLocalSearchParams } from 'expo-router';
 import { ArrowLeft, BookOpen } from 'lucide-react-native';
 import { Screen } from '@/components/common/Screen';
 import { AppText } from '@/components/common/AppText';
@@ -11,6 +12,7 @@ import { JourneyTrail } from '@/components/learning/JourneyTrail';
 import { journeyUnits } from '@/data/lessons';
 import { unitTrailTheme } from '@/lib/trailAppearance';
 import { useLearning } from '@/providers/LearningProvider';
+import { useMotionPreference } from '@/hooks/useMotionPreference';
 
 export default function UnitJourney() {
   return (
@@ -21,6 +23,10 @@ export default function UnitJourney() {
 }
 function JourneyContent() {
   const { id } = useLocalSearchParams<{ id: string }>();
+  const currentLessonRef = useRef<View>(null);
+  const reducedMotion = useMotionPreference();
+  const [visit, setVisit] = useState(0);
+  useFocusEffect(useCallback(() => { setVisit(value => value + 1); }, []));
   const { progress, unit: course, profile } = useLearning();
   const units = journeyUnits(course);
   const index = units.findIndex(unit => unit.id === id);
@@ -42,7 +48,9 @@ function JourneyContent() {
       <Screen
         backgroundColor="#FFFFFF"
         style={styles.content}
-        resetScrollKey={id}
+        resetScrollKey={`${id}:${visit}`}
+        initialScrollTarget={currentLessonRef}
+        animateInitialScroll={!reducedMotion}
         header={
           <LearningMasthead
             appearance="trail"
@@ -70,7 +78,7 @@ function JourneyContent() {
             </View>
             <BookOpen size={32} color={theme.ink} strokeWidth={2.2} />
           </View>
-          <JourneyTrail lessons={unit.lessons} startIndex={startIndex} color={theme.color} unitId={unit.id} />
+          <JourneyTrail lessons={unit.lessons} startIndex={startIndex} color={theme.color} unitId={unit.id} currentLessonRef={currentLessonRef} />
         </View>
       </Screen>
       <TrailNavigation />

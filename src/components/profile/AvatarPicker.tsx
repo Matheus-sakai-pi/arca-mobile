@@ -1,13 +1,15 @@
 import { useState } from 'react';
 import { Modal, Pressable, ScrollView, StyleSheet, View } from 'react-native';
-import { Check, Save, X } from 'lucide-react-native';
+import { Check, Crown, Save, X } from 'lucide-react-native';
+import { router } from 'expo-router';
+import { useMembership } from '@/providers/MembershipProvider';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Avatar } from './Avatar';
 import { AppText } from '@/components/common/AppText';
 import { Button } from '@/components/common/Button';
 import { IconButton } from '@/components/common/IconButton';
 import { Notice } from '@/components/common/Notice';
-import { avatarOptions, resolveAvatarKey, type AvatarKey } from '@/constants/avatarKeys';
+import { avatarOptions, isVIPAvatar, resolveAvatarKey, type AvatarKey } from '@/constants/avatarKeys';
 import { colors, radius, spacing } from '@/constants/theme';
 export function AvatarPicker({
   currentKey,
@@ -19,6 +21,7 @@ export function AvatarPicker({
   onClose: () => void;
 }) {
   const [selected, setSelected] = useState<AvatarKey>(resolveAvatarKey(currentKey));
+  const { status } = useMembership();
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
   async function save() {
@@ -61,6 +64,11 @@ export function AvatarPicker({
                 accessibilityState={{ checked: selected === option.key, disabled: saving }}
                 disabled={saving}
                 onPress={() => {
+                  if (isVIPAvatar(option.key) && !status?.vip && option.key !== currentKey) {
+                    onClose();
+                    router.push('/vip');
+                    return;
+                  }
                   setSelected(option.key);
                   setError(null);
                 }}
@@ -72,6 +80,7 @@ export function AvatarPicker({
                     {option.label}
                   </AppText>
                   {selected === option.key ? <Check size={16} color={colors.primaryDark} /> : null}
+                  {isVIPAvatar(option.key) ? <Crown size={16} color="#966900" /> : null}
                 </View>
               </Pressable>
             ))}

@@ -10,7 +10,7 @@ const timestamp = (value: unknown): value is string => typeof value === 'string'
 export function decodeResult(value: unknown): LessonResult {
   if (!object(value) || !text(value.attemptId) || !text(value.lessonId) || !integer(value.correct) || !integer(value.total)
     || value.total === 0 || value.correct > value.total || value.accuracy !== Math.round(value.correct / value.total * 100)
-    || !integer(value.xpEarned) || !timestamp(value.completedAt)) throw new Error('Resultado do servidor inválido.');
+    || !integer(value.xpEarned) || (value.vipBonus !== undefined && (!integer(value.vipBonus) || value.vipBonus > value.xpEarned)) || !timestamp(value.completedAt)) throw new Error('Resultado do servidor inválido.');
   return value as LessonResult;
 }
 function decodeQuestion(value: unknown): Question {

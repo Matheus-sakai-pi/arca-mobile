@@ -3,6 +3,7 @@ import { readFile } from 'node:fs/promises';
 import { test } from 'node:test';
 import ts from 'typescript';
 import { normalizeUsername } from '../src/lib/username.ts';
+import { referralCode } from '../src/lib/membership.ts';
 
 test('signup preserves the real server session without sending confirmation or admin requests', async () => {
   const source = await readFile(new URL('../src/services/auth.ts', import.meta.url), 'utf8');
@@ -12,16 +13,20 @@ test('signup preserves the real server session without sending confirmation or a
   const session = { access_token: 'test-token', user: { id: 'new-user' } };
   let result = { data: { user: { id: 'new-user' }, session: session as typeof session | null }, error: null as Error | null };
   const auth = { signUp: async (input: unknown) => { calls.push(input); return result; } };
-  const exports: { signUp?: (name: string, email: string, password: string) => Promise<typeof result.data> } = {};
+  const exports: { signUp?: (name: string, email: string, password: string, invite?: string) => Promise<typeof result.data> } = {};
   new Function('require', 'exports', 'process', js)(
     (name: string) => name === 'expo-linking' ? { createURL: () => 'arca://auth/callback' }
-      : name === '@/lib/supabase' ? { requireSupabase: () => ({ auth }) }
+      : name === '@/lib/supabase' ? { requireSupabase: () => ({ auth, rpc:async()=>({data:'@amigo',error:null}) }) }
       : name === '@/lib/username' ? {normalizeUsername}
+      : name === '@/lib/membership' ? {referralCode}
+      : name === './referralDevice' ? {referralDevice:async()=>null}
       : name === './username' ? {assertUsernameAvailable:async()=>{if(taken) throw new Error('username_taken');}} : {},
     exports, { env: {} },
   );
   assert.equal((await exports.signUp!(' Maria ', ' MARIA@example.com ', 'strong-password')).session, session);
-  assert.deepEqual(calls[0], { email: 'maria@example.com', password: 'strong-password', options: { data: { username:'maria',display_name: '@maria' }, emailRedirectTo: 'arca://auth/callback' } });
+  assert.deepEqual(calls[0], { email: 'maria@example.com', password: 'strong-password', options: { data: { username:'maria',display_name: '@maria',referral_device:null }, emailRedirectTo: 'arca://auth/callback' } });
+  await exports.signUp!('Maria','maria@example.com','strong-password','0123456789ABCDEF');
+  assert.deepEqual((calls[1] as {options:{data:object}}).options.data,{username:'maria',display_name:'@maria',referral_device:null,referral_code:'0123456789ABCDEF',referral_consent:true});
   result = { data: { user: { id: 'new-user' }, session: null }, error: null };
   assert.equal((await exports.signUp!('Maria', 'maria@example.com', 'strong-password')).session, null);
   const error = new Error('email_exists'); result = { ...result, error };

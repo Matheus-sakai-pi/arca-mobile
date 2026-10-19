@@ -1,5 +1,11 @@
 project_id = "arca-mobile"
 
+[functions.profile-photo]
+verify_jwt = false # Authenticated explicitly in the upload handler.
+
+[functions.play-billing]
+verify_jwt = false # Verifies user JWT or Google OIDC / dedicated scheduler secret in the handler.
+
 [functions.delete-account]
 verify_jwt = true
 

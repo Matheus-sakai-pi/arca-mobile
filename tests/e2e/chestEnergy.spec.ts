@@ -51,7 +51,7 @@ test('locked and full-battery chests stay unspent; partial rewards show the capa
   const claim = dialog.getByRole('button', { name: 'Abrir e receber energia', exact: true });
   await expect(claim).toBeDisabled();
   expect((await backend.db.query('select * from battery_unit_chests')).rows).toHaveLength(0);
-  await backend.db.query("update battery_wallets set balance=23,refill_at=now()+interval '1 hour' where user_id=$1", [backend.owner]);
+  await backend.db.query("update battery_wallets set balance=28,refill_at=now()+interval '1 hour' where user_id=$1", [backend.owner]);
   await dialog.getByRole('button', { name: 'Atualizar baú', exact: true }).click();
   await expect(dialog).toContainText('Há espaço para 2; o excedente do sorteio não será acumulado.');
   await claim.click();

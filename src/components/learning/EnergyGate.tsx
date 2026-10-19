@@ -14,6 +14,8 @@ import { Notice } from '@/components/common/Notice';
 import { LoadingState } from '@/components/common/States';
 import { BatteryIcon } from './BatteryIcon';
 import { colors, spacing } from '@/constants/theme';
+import { EmptyBatteryContent } from '@/components/membership/EmptyBatteryContent';
+import { OfferLayout } from '@/components/membership/OfferLayout';
 
 export function EnergyGate({
   lesson,
@@ -46,6 +48,7 @@ export function EnergyGate({
         const remaining = next.status.session?.remainingNew ?? 0;
         const needsWarning =
           next.status.enabled &&
+          !next.status.unlimited &&
           !next.status.session?.legacy &&
           remaining * next.status.rules.exerciseCost > next.status.balance;
         setReady(!needsWarning);
@@ -62,7 +65,33 @@ export function EnergyGate({
   if (ready && opened) return children(opened.draft);
   if (busy) return <LoadingState message="Preparando sua lição..." />;
   const state = opened?.status;
-  const empty = state?.enabled && state.balance < state.rules.exerciseCost;
+  const empty = state?.enabled && !state.unlimited && state.balance < state.rules.exerciseCost;
+  if (empty && state && !error)
+    return (
+      <OfferLayout
+        footer={
+          <>
+            <Button
+              title="Atualizar bateria"
+              icon={RefreshCw}
+              variant="secondary"
+              onPress={() => {
+                setBusy(true);
+                setError(null);
+                setRevision(value => value + 1);
+              }}
+            />
+            <Button title="Sair" variant="quiet" onPress={returnToTrail} />
+          </>
+        }
+      >
+        <EmptyBatteryContent
+          title="Hora de recarregar"
+          lesson={lesson.title}
+          wait={state.nextRefillAt ? energyWait(state, receivedAt) : undefined}
+        />
+      </OfferLayout>
+    );
   return (
     <Screen
       style={styles.content}

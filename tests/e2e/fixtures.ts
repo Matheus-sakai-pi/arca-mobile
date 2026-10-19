@@ -1,4 +1,7 @@
-import { randomUUID } from 'node:crypto';
+import { randomUUID, createHash } from 'node:crypto';
+import jpeg from 'jpeg-js';
+import { createPhotoUploadHandler } from '../../supabase/functions/profile-photo/handler.ts';
+import { sanitizeProfileJPEG } from '../../supabase/functions/profile-photo/raster.ts';
 import { test as base, expect, type BrowserContext, type Route } from '@playwright/test';
 import type { PGlite } from '@electric-sql/pglite';
 import { initialUnit } from '../../src/data/lessons.ts';
@@ -13,6 +16,10 @@ const rpcNames = new Set([
   'learning_leaderboard', 'learning_leaderboard_scope',
   'learning_energy_status', 'learning_energy_begin', 'learning_energy_public',
   'learning_battery',
+  'learning_membership', 'learning_invite_preview', 'learning_user_settings',
+  'learning_profile_appearance',
+  'learning_profile_photo', 'learning_profile_photo_view', 'learning_photo_safety', 'learning_photo_blocks',
+  'arca_admin_access', 'arca_admin_overview', 'arca_admin_reports', 'arca_admin_photos', 'arca_admin_photo_review',
 ]);
 const origin = 'https://arca-e2e.supabase.co';
 type Failure = { remaining: number; afterCommit: boolean };
@@ -24,6 +31,7 @@ export class TestBackend {
   readonly friendName = `amigo_${this.friend.slice(0, 8)}`;
   readonly calls: { name: string; body: Record<string, unknown> }[] = [];
   readonly unexpected: string[] = [];
+  readonly photos = new Map<string, Uint8Array>();
   readonly failures = new Map<string, Failure>();
   readonly user = {
     id: this.owner, email: 'e2e@example.test', aud: 'authenticated',
@@ -80,6 +88,27 @@ export class TestBackend {
     if (request.method() === 'OPTIONS') { await route.fulfill({ status: 204 }); return; }
     try {
       let data: unknown;
+      if (url.pathname === '/functions/v1/profile-photo') {
+        const handler = createPhotoUploadHandler({
+          authenticate: async () => owner,
+          hash: async bytes => createHash('sha256').update(bytes).digest('hex'),
+          ingest: async (who,id,hash,stage) => (await this.db.query<{state:string}>('select profile_photo_ingest($1,$2,$3,$4) state',[who,id,hash,stage])).rows[0]!.state,
+          sanitize: async bytes => sanitizeProfileJPEG(bytes,jpeg),
+          upload: async (path,bytes) => { if(this.photos.has(path))return false;this.photos.set(path,bytes);return true; },
+          remove: async path => { this.photos.delete(path); },
+        });
+        const response = await handler(new Request(url,{method:request.method(),headers:request.headers(),body:request.postData()}));
+        await route.fulfill({status:response.status,headers:Object.fromEntries(response.headers),body:await response.text()});return;
+      }
+      const storagePrefix='/storage/v1/object/sign/profile-photos/';
+      if(url.pathname.startsWith(storagePrefix)){
+        const path=decodeURIComponent(url.pathname.slice(storagePrefix.length));
+        const allowed=owner&&await this.rpc<boolean>('profile_photo_can_read',{p_path:path},owner);
+        if(!allowed||!this.photos.has(path)){await route.fulfill({status:403,json:{error:'Access denied'}});return;}
+        if(request.method()==='POST')await route.fulfill({status:200,json:{signedURL:`/object/sign/profile-photos/${path}?token=e2e-private`}});
+        else await route.fulfill({status:200,contentType:'image/jpeg',body:Buffer.from(this.photos.get(path)!)});
+        return;
+      }
       if (url.pathname === '/auth/v1/user') data = this.user;
       else if (url.pathname.startsWith('/rest/v1/rpc/')) {
         const name = url.pathname.split('/').at(-1)!;

@@ -10,12 +10,12 @@ test('a visitor from the old test backend recovers without losing the real walle
   const lesson = initialUnit.lessons[0]!;
   await page.goto(`/lesson/${lesson.id}`);
   const meter = page.getByTestId('lesson-energy-meter');
-  await expect(meter).toHaveAccessibleName('25 de 25 energias');
+  await expect(meter).toHaveAccessibleName('30 de 30 energias');
   await chooseAnswer(page, lesson.questions[0]!, lesson.questions[0]!.correctAnswer);
   await page.getByRole('button', { name: 'Verificar', exact: true }).click();
-  await expect(meter).toHaveAccessibleName('24 de 25 energias');
+  await expect(meter).toHaveAccessibleName('29 de 30 energias');
   await page.reload();
-  await expect(meter).toHaveAccessibleName('24 de 25 energias');
+  await expect(meter).toHaveAccessibleName('29 de 30 energias');
   await expect(page.getByRole('button', { name: 'Continuar', exact: true })).toBeVisible();
   expect(backend.calls.filter(c => c.name === 'learning_battery' && c.body.p_action === 'register')).toHaveLength(1);
   expect((await backend.db.query('select * from battery_wallets where user_id is null')).rows).toHaveLength(1);
@@ -31,6 +31,6 @@ test('a temporary failure validates the same saved visitor wallet instead of ref
   await page.goto('/learn');
   await page.goto(`/lesson/${initialUnit.lessons[0]!.id}`);
   await expect(page.getByRole('heading', { name: 'Sua bateria pode não ser suficiente', exact: true })).toBeVisible();
-  await expect(page.getByText('7 de 25 energias', { exact: true })).toBeVisible();
+  await expect(page.getByText('7 de 30 energias', { exact: true })).toBeVisible();
   expect(backend.calls.filter(c => c.name === 'learning_battery' && c.body.p_action === 'register')).toHaveLength(0);
 });

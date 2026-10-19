@@ -15,6 +15,8 @@ export function validateAuth(mode: AuthFormMode, values: AuthValues): AuthFieldE
 export function authErrorMessage(error: unknown): string {
   const code = typeof error === 'object' && error !== null && 'code' in error && typeof error.code === 'string' ? error.code : '';
   const message = error instanceof Error ? error.message : '';
+  if (message === 'referral_invalid') return 'Esse código de convite não foi encontrado. Confira o código ou remova-o para continuar.';
+  if (message === 'referral_unavailable') return 'Não foi possível conferir o convite agora. Tente novamente antes de criar a conta.';
   if (message.includes('username_taken') || message.includes('profiles_username_key') || message.includes('profiles_claimed_username')) return 'Esse nome de usuário já está em uso. Escolha outro.';
   if (message === 'username_setup_required') return 'A escolha de nome de usuário precisa ser habilitada no servidor.';
   if (message === 'username_unavailable') return 'Não foi possível verificar esse nome agora. Confira a conexão e tente novamente.';

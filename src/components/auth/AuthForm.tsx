@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { StyleSheet, View, type TextInput } from 'react-native';
 import { router } from 'expo-router';
 import { ArrowLeft, ArrowRight, AtSign, LockKeyhole, Mail } from 'lucide-react-native';
@@ -17,6 +17,9 @@ import { isSupabaseConfigured } from '@/lib/supabase';
 import { requestPasswordReset, signIn, signUp, updatePassword } from '@/services/auth';
 import { authErrorMessage, validateAuth, type AuthFieldErrors, type AuthFormMode, type AuthValues } from '@/services/validation';
 import { colors, spacing } from '@/constants/theme';
+import { installedReferral } from '@/services/referralDevice';
+import { referralCode } from '@/lib/membership';
+import { Checkbox } from '@/components/common/Checkbox';
 
 const copy = {
   login: { title: 'Que bom ter você\nde volta.', description: 'Entre para continuar sua jornada.', action: 'Entrar' },
@@ -34,6 +37,8 @@ export function AuthForm({ mode }: { mode: AuthFormMode }) {
   const [notice, setNotice] = useState<{ message: string; tone: 'success' | 'error' } | null>(null);
   const [busy, setBusy] = useState(false);
   const [sent, setSent] = useState(false);
+  const [invite, setInvite] = useState(''), [inviteConsent, setInviteConsent] = useState(false);
+  useEffect(() => { let active = true; if (mode === 'signup') void installedReferral().then(code => { if (active) setInvite(value => value || code); }); return () => { active = false; }; }, [mode]);
   const { enterGuest, setRecovery } = useAuth();
   const { requestGuestImport } = useLearning();
   const { complete } = useOnboarding();
@@ -49,12 +54,15 @@ export function AuthForm({ mode }: { mode: AuthFormMode }) {
     setErrors(nextErrors);
     setNotice(null);
     if (Object.keys(nextErrors).length) return;
+    if (mode === 'signup' && invite.trim() && (!referralCode(invite) || !inviteConsent)) {
+      setNotice({ tone: 'error', message: !referralCode(invite) ? 'Confira o código do convite: são 16 letras e números.' : 'Aceite o convite para adicionar essa pessoa como amiga ou remova o código.' }); return;
+    }
     setBusy(true);
     if (mode === 'login' || mode === 'signup') requestGuestImport(true);
     try {
       if (mode === 'login') { await signIn(values.email, values.password); await complete(); }
       if (mode === 'signup') {
-        const result = await signUp(values.name, values.email, values.password);
+        const result = await signUp(values.name, values.email, values.password, inviteConsent ? invite : '');
         await complete();
         if (!result.session) router.replace({ pathname: '/(auth)/confirm-email', params: { email: values.email.trim().toLowerCase() } });
       }
@@ -91,6 +99,7 @@ export function AuthForm({ mode }: { mode: AuthFormMode }) {
         {mode !== 'forgot' ? <Field inputRef={passwordRef} label="Senha" icon={LockKeyhole} placeholder={mode === 'login' ? 'Sua senha' : 'Pelo menos 8 caracteres'} password value={values.password} onChangeText={value => change('password', value)} error={errors.password} autoCapitalize="none" autoCorrect={false} autoComplete={mode === 'login' ? 'current-password' : 'new-password'} textContentType={mode === 'login' ? 'password' : 'newPassword'} maxLength={128} editable={!busy} returnKeyType={mode === 'login' ? 'go' : 'next'} submitBehavior="submit" onSubmitEditing={mode === 'login' ? () => void submit() : () => confirmationRef.current?.focus()} /> : null}
         {mode === 'signup' || mode === 'reset' ? <Field inputRef={confirmationRef} label="Confirmar senha" icon={LockKeyhole} placeholder="Digite sua senha novamente" password value={values.confirmPassword} onChangeText={value => change('confirmPassword', value)} error={errors.confirmPassword} autoCapitalize="none" autoCorrect={false} autoComplete="new-password" textContentType="newPassword" maxLength={128} editable={!busy} returnKeyType="go" submitBehavior="submit" onSubmitEditing={() => void submit()} /> : null}
         {mode === 'login' ? <Button title="Esqueci minha senha" variant="quiet" onPress={() => router.push('/(auth)/forgot-password')} style={styles.forgot} /> : null}
+        {mode === 'signup' ? <><Field label="Código de convite (opcional)" value={invite} editable={!busy} autoCapitalize="characters" autoCorrect={false} maxLength={16} onChangeText={value => { setInvite(value.toUpperCase()); setInviteConsent(false); }} />{invite.trim() ? <Checkbox label="Aceito o convite e quero adicionar quem me convidou como amigo no Arca." checked={inviteConsent} onChange={setInviteConsent} /> : null}</> : null}
       </View> : null}
       {mode === 'login' || mode === 'signup' ? <View style={styles.visitor}><AppText variant="small" color={colors.muted} style={styles.center}>Quer dar uma olhada primeiro?</AppText><Button title="Continuar sem conta" variant="quiet" onPress={() => void visit()} disabled={busy} /></View> : null}
       <Button title="Política de Privacidade" variant="quiet" disabled={busy} onPress={() => router.push('/privacy')} />

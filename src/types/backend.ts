@@ -79,6 +79,13 @@ export type Database = {
     Enums: Record<string, never>;
     CompositeTypes: Record<string, never>;
     Functions: {
+      learning_profile_photo: { Args: { p_action?: string; p_id?: string }; Returns: Json };
+      learning_profile_photo_view: { Args: { p_id: string; p_preview?: boolean }; Returns: string | null };
+      learning_photo_safety: { Args: { p_id: string; p_action: string; p_reason?: string }; Returns: undefined };
+      learning_photo_blocks: { Args: { p_user?: string }; Returns: Json };
+      learning_membership: { Args: { p_device?: string }; Returns: Json };
+      learning_profile_appearance: { Args: { p_frame?: string; p_background?: string; p_badge?: boolean }; Returns: Json };
+      learning_invite_preview: { Args: { p_code: string }; Returns: string | null };
       learning_battery: {
         Args: {
           p_action?: string;

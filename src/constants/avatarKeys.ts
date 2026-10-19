@@ -9,8 +9,11 @@ export const avatarOptions = [
   {key:'fox',label:'Raposinha'},
   {key:'dove',label:'Pombinha'},
   {key:'turtle',label:'Tartaruga'},
+  {key:'vip-sage',label:'Sábio VIP'},
+  {key:'vip-explorer',label:'Explorador VIP'},
 ] as const;
 export type AvatarKey = typeof avatarOptions[number]['key'];
+export function isVIPAvatar(key: string): boolean { return key.startsWith('vip-'); }
 export function isAvatarKey(value: unknown): value is AvatarKey {
   return avatarOptions.some(option=>option.key === value);
 }

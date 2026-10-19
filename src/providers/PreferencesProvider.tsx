@@ -20,6 +20,13 @@ import { setRewardHapticsEnabled } from '@/lib/rewardHaptics';
 import { syncUserSettings } from '@/services/userSettings';
 
 const SOUND_KEY = '@arca/sound-effects-enabled';
+// Marca uma escolha deste aparelho que ainda não chegou à conta (ex.: feita sem internet).
+const pendingKey = (scope: string) => `${preferencesKey(scope)}.pending`;
+async function pushPreferences(scope: string, preferences: Preferences) {
+  await accountStorage.setItem(pendingKey(scope), '1');
+  await syncUserSettings(scope, { preferences });
+  await accountStorage.setItem(pendingKey(scope), '0');
+}
 const Context = createContext<
   | (Preferences & {
       setSoundEnabled: (enabled: boolean) => Promise<void>;
@@ -61,14 +68,16 @@ function ScopedPreferences({ children, scope }: PropsWithChildren<{ scope: strin
         // Mudanças feitas agora esperam na fila e são aplicadas depois da leitura da conta.
         if (scope !== 'guest') {
           // A conta guarda a última escolha feita em qualquer aparelho; sem conexão, vale a local.
+          // Uma escolha local que não foi enviada tem prioridade e é reenviada agora.
           try {
-            const remote = await syncUserSettings(scope);
-            if (remote?.preferences) {
+            const pending = raw !== null && (await accountStorage.getItem(pendingKey(scope))) === '1';
+            const remote = pending ? null : await syncUserSettings(scope);
+            if (pending) await pushPreferences(scope, value);
+            else if (remote?.preferences) {
               await accountStorage.setItem(preferencesKey(scope), JSON.stringify(remote.preferences));
               current.current = remote.preferences;
               if (mounted.current) setPreferences(remote.preferences);
-            } else if (remote && raw)
-              void syncUserSettings(scope, { preferences: value }).catch(() => undefined);
+            } else if (remote && raw) void pushPreferences(scope, value).catch(() => undefined);
           } catch {
             /* mantém as preferências deste aparelho */
           }
@@ -96,7 +105,7 @@ function ScopedPreferences({ children, scope }: PropsWithChildren<{ scope: strin
           setPreferences(value);
           setError(null);
         }
-        if (scope !== 'guest') void syncUserSettings(scope, { preferences: value }).catch(() => undefined);
+        if (scope !== 'guest') void pushPreferences(scope, value).catch(() => undefined);
       });
       queue.current = task.catch(() => undefined);
       return task;

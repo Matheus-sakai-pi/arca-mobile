@@ -109,6 +109,17 @@ export default function DeleteAccount() {
         preferências gerais não serão apagados. Cópias offline em outros aparelhos precisam ser limpas nesses
         aparelhos.
       </AppText>
+      <Notice message="Excluir sua conta ou desinstalar o app não cancela a assinatura VIP. Cancele a renovação nas Assinaturas da Google Play antes de excluir a conta." />
+      <Button
+        title="Gerenciar assinatura na Google Play"
+        variant="quiet"
+        disabled={busy}
+        onPress={() => {
+          void Linking.openURL('https://play.google.com/store/account/subscriptions').catch(() =>
+            setError('Abra a Google Play e entre em Pagamentos e assinaturas > Assinaturas.'),
+          );
+        }}
+      />
       {session ? (
         <>
           <AppText selectable>{session.user.email}</AppText>

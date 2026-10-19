@@ -2,6 +2,8 @@ import * as Linking from 'expo-linking';
 import { requireSupabase } from '@/lib/supabase';
 import { parseAuthCallback } from '@/lib/authCallback';
 import { normalizeUsername } from '@/lib/username';
+import { referralDevice } from './referralDevice';
+import { referralCode } from '@/lib/membership';
 import { assertUsernameAvailable } from './username';
 import { detachDevicePush, restoreDevicePush } from './pushNotifications';
 
@@ -13,12 +15,20 @@ export async function signIn(email: string, password: string) {
   if (error) throw error;
   return data;
 }
-export async function signUp(name: string, email: string, password: string) {
+export async function signUp(name: string, email: string, password: string, invite = '') {
+  if (invite.trim()) {
+    const code = referralCode(invite);
+    if (!code) throw new Error('referral_invalid');
+    const { data: sender, error: inviteError } = await requireSupabase().rpc('learning_invite_preview', { p_code: code });
+    if (inviteError) throw new Error('referral_unavailable');
+    if (!sender) throw new Error('referral_invalid');
+  }
   const username=normalizeUsername(name);
   await assertUsernameAvailable(username);
   const { data, error } = await requireSupabase().auth.signUp({
     email: email.trim().toLowerCase(), password,
-    options: { data: { username, display_name: `@${username}` }, emailRedirectTo: authRedirectUrl() },
+    options: { data: { username, display_name: `@${username}`, referral_device: await referralDevice(),
+      ...(referralCode(invite) ? { referral_code: referralCode(invite), referral_consent: true } : {}) }, emailRedirectTo: authRedirectUrl() },
   });
   if (error) {
     // Auth can hide the trigger's unique-name rejection behind a generic database error.

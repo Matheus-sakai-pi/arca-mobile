@@ -1,9 +1,11 @@
 import { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { router } from 'expo-router';
-import { Bell, BookOpen, CalendarDays, CheckCircle2, Flame, History, LockKeyhole, LogIn, LogOut, Mail, Pencil, Settings, ShieldCheck, Smile, Swords, Trash2, UserRound, UsersRound } from 'lucide-react-native';
-import { Avatar } from '@/components/profile/Avatar';
+import { Bell, BookOpen, CalendarDays, CheckCircle2, Crown, Flame, Gift, History, LockKeyhole, LogIn, LogOut, Mail, Palette, Pencil, Settings, ShieldCheck, Smile, Swords, Trash2, UserRound, UsersRound } from 'lucide-react-native';
+import { ProfileAppearancePicker } from '@/components/profile/ProfileAppearancePicker';
+import { ProfileAvatar, ProfileCover, VIPBadge } from '@/components/profile/ProfileDecoration';
 import { AvatarPicker } from '@/components/profile/AvatarPicker';
+import { ProfilePhotoPicker } from '@/components/profile/ProfilePhotoPicker';
 import { ProfileSettings } from '@/components/profile/ProfileSettings';
 import { AchievementsSection } from '@/components/profile/AchievementsSection';
 import { ProfileActionGroup, ProfileActionRow } from '@/components/profile/ProfileActionList';
@@ -21,6 +23,9 @@ import { hasChosenUsername } from '@/lib/username';
 import { LearningGate } from '@/components/learning/LearningGate';
 import { SectionTitle } from '@/components/common/SectionTitle';
 import { useAuth } from '@/hooks/useAuth';
+import { useProfileAppearance } from '@/hooks/useProfileAppearance';
+import { useMembership } from '@/providers/MembershipProvider';
+import { visibleProfileAppearance } from '@/lib/profileAppearance';
 import { useLearning } from '@/providers/LearningProvider';
 import { requestPasswordReset, signOut } from '@/services/auth';
 import { authErrorMessage } from '@/services/validation';
@@ -31,9 +36,15 @@ export default function Profile() {
 }
 function ProfileContent() {
   const { session, isGuest, exitGuest } = useAuth();
-  const {profile,progress,unit,offline,importAvailable,requestGuestImport,updateAvatar} = useLearning();
+  const {profile,progress,unit,offline,importAvailable,requestGuestImport,updateAvatar,sync} = useLearning();
   const [settings,setSettings]=useState(false);
   const [avatarPicker,setAvatarPicker] = useState(false);
+  const [photoPicker,setPhotoPicker] = useState(false);
+  const [appearancePicker,setAppearancePicker] = useState(false);
+  const { status: membership } = useMembership();
+  const vip = !!membership?.vip;
+  const appearance = useProfileAppearance(session?.user.id ?? null, vip);
+  const visibleAppearance = visibleProfileAppearance(appearance.appearance, vip && !!appearance.appearance?.vip);
   const [busy, setBusy] = useState<'logout' | 'reset' | 'save' | null>(null);
   const [editing,setEditing] = useState(false);
   const [resetSent, setResetSent] = useState(false);
@@ -57,12 +68,28 @@ function ProfileContent() {
   return <Screen keyboard scene="ark" sceneScrolls>
     <View style={styles.heading}><AppText accessibilityRole="header" style={styles.title}>Perfil</AppText><IconButton icon={Settings} label="Configurações" onPress={()=>setSettings(true)} /></View>
     {settings ? <ProfileSettings onClose={()=>setSettings(false)} /> : null}
-    <View style={styles.identity}><View style={styles.avatar}><Avatar avatarKey={profile?.avatar_key} size={124} label="Seu avatar" /></View><AppText variant="h2" style={styles.center}>{isGuest ? 'Olá, visitante.' : displayName}</AppText>{session?.user.email ? <View style={styles.email}><Mail size={16} color={colors.muted} /><AppText variant="small" color={colors.muted} style={styles.emailText}>{session.user.email}</AppText></View> : <AppText color={colors.muted} style={styles.center}>Comece com uma conta só sua.</AppText>}<LearningStats motionKey="profile" entrance centered xp={progress?.xp ?? profile?.xp_total ?? 0} streak={profile?.current_streak ?? 0} />{profile ? <Button title="Escolher avatar" icon={Smile} disabled={offline || !!busy} onPress={()=>setAvatarPicker(true)} /> : null}</View>
+    <View style={[styles.identity, { overflow: 'hidden' }]} testID="profile-identity">
+      <ProfileCover background={visibleAppearance.background} />
+      <ProfileAvatar avatarKey={profile?.avatar_key} frame={visibleAppearance.frame} size={124} label="Seu avatar" />
+      <AppText variant="h2" style={styles.center}>{isGuest ? 'Olá, visitante.' : displayName}</AppText>
+      {visibleAppearance.showBadge ? <VIPBadge /> : null}
+      {session?.user.email ? <View style={styles.email}><Mail size={16} color={colors.muted} /><AppText variant="small" color={colors.muted} style={styles.emailText}>{session.user.email}</AppText></View> : <AppText color={colors.muted} style={styles.center}>Comece com uma conta só sua.</AppText>}
+      <LearningStats motionKey="profile" entrance centered xp={progress?.xp ?? profile?.xp_total ?? 0} streak={profile?.current_streak ?? 0} />
+      {profile ? <><Button title="Escolher avatar" icon={Smile} disabled={offline || !!busy} onPress={()=>setAvatarPicker(true)} /><Button title="Personalizar perfil" icon={Palette} variant="secondary" disabled={offline || !!busy || appearance.loading} onPress={()=>setAppearancePicker(true)} /></> : null}
+    </View>
+    {profile && !isGuest ? <Button title="Foto de perfil" icon={UserRound} variant="secondary" disabled={offline || !!busy} onPress={()=>setPhotoPicker(true)} /> : null}
+    {photoPicker && profile && session ? <ProfilePhotoPicker key={session.user.id} owner={session.user.id} avatarKey={profile.avatar_key} onClose={()=>setPhotoPicker(false)} onChanged={async()=>{await sync();}} /> : null}
     {avatarPicker && profile ? <AvatarPicker currentKey={profile.avatar_key} onSave={updateAvatar} onClose={()=>setAvatarPicker(false)} /> : null}
+    {appearancePicker && profile ? <ProfileAppearancePicker key={profile.id} current={appearance.appearance} avatarKey={profile.avatar_key} name={displayName}
+      vip={vip} loading={appearance.loading} loadError={appearance.error} onRetry={()=>void appearance.refresh()}
+      onSave={async value=>{await appearance.save(value);setNotice({tone:'success',message:'Personalização salva.'});}}
+      onClose={()=>setAppearancePicker(false)} /> : null}
     {notice ? <Notice {...notice} /> : null}
     <SectionTitle title="Minhas estatísticas" /><View style={styles.milestones}>{[{label:'Lições concluídas',value:progress?.completedLessonIds.length ?? 0,Icon:CheckCircle2},{label:'Unidades concluídas',value:completedUnits,Icon:BookOpen},{label:'Maior sequência',value:profile?.longest_streak ?? 0,Icon:Flame}].map(({label,value,Icon})=><View key={label} style={styles.milestone}><Icon size={20} color={colors.tealInk} /><ProfileCounter label={label} value={value} /><AppText variant="small" color={colors.muted} style={styles.center}>{label}</AppText></View>)}</View>
     <View testID="profile-actions" style={actionStyles.actions}>
       <ProfileActionGroup title="Conta">
+        <ProfileActionRow title="Arca VIP" icon={Crown} onPress={() => router.push('/vip')} />
+        <ProfileActionRow title="Convide e ganhe bateria" icon={Gift} onPress={() => router.push('/invite')} />
         {profile ? editing ? <UsernameForm onBusyChange={saving=>setBusy(saving ? 'save' : null)} onDone={()=>{setEditing(false);setNotice({tone:'success',message:'Nome de usuário atualizado.'});}} onCancel={()=>setEditing(false)} /> : <ProfileActionRow title={hasChosenUsername(profile) ? 'Editar perfil' : 'Escolher nome de usuário'} icon={Pencil} disabled={offline || !!busy} onPress={()=>{setEditing(true);setNotice(null);}} /> : null}
         {isGuest ? <><ProfileActionRow title="Salve seu progresso" icon={UserRound} onPress={() => { if (progress?.completedLessonIds.length) requestGuestImport(); else router.push('/(auth)/signup'); }} /><ProfileActionRow title="Já tenho uma conta" icon={LogIn} onPress={() => router.push('/(auth)/login')} /></> : <><ProfileActionRow title={resetSent ? 'E-mail de recuperação enviado' : 'Alterar senha'} icon={LockKeyhole} onPress={() => void reset()} loading={busy === 'reset'} disabled={!!busy || resetSent} />{importAvailable ? <ProfileActionRow title="Salve seu progresso" icon={UserRound} onPress={()=>requestGuestImport()} disabled={!!busy} /> : null}</>}
       </ProfileActionGroup>

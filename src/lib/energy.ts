@@ -11,7 +11,7 @@ export type EnergyBonus = { kind: string; rolled: number; amount: number };
 export type EnergyReceipt = { key: string; turn: number; correct: boolean; charged: number; bonuses: EnergyBonus[] };
 export type EnergySession = { attemptId: string; draft: LessonAttempt | null; nextQuestionId: string | null; nextTurn: number; remainingNew: number; streak: number; legacy: boolean };
 export type EnergyChest = { unitId: string; completed: number; total: number; target: number; min: number; max: number; eligible: boolean; claimed: boolean; reward: { rolled: number; amount: number; claimedAt: string } | null };
-export type EnergyState = { version: number; owner: string; available: boolean; enabled: boolean; balance: number; nextRefillAt: string | null; serverNow: string; rules: EnergyRules; allowed: boolean; receipt: EnergyReceipt | null; session: EnergySession | null; chest?: EnergyChest };
+export type EnergyState = { version: number; owner: string; available: boolean; enabled: boolean; balance: number; nextRefillAt: string | null; serverNow: string; rules: EnergyRules; allowed: boolean; receipt: EnergyReceipt | null; session: EnergySession | null; chest?: EnergyChest; unlimited?: boolean };
 export const monotonicNow = () => globalThis.performance?.now() ?? 0;
 const iso = (value: unknown): value is string => typeof value === 'string' && Number.isFinite(Date.parse(value));
 
@@ -25,6 +25,7 @@ export function decodeEnergyChest(value: unknown): EnergyChest {
 }
 
 export function decodeEnergy(value: unknown, owner: string): EnergyState {
+  if (object(value) && value.unlimited !== undefined && typeof value.unlimited !== 'boolean') throw new Error('Benefício de bateria inválido.');
   if (!object(value) || value.version !== ENERGY_CONFIG.version || value.owner !== owner || value.available !== true || typeof value.enabled !== 'boolean'
     || !integer(value.balance) || !iso(value.serverNow) || !(value.nextRefillAt === null || iso(value.nextRefillAt)) || typeof value.allowed !== 'boolean' || !object(value.rules)) throw new Error('Saldo de energia inválido. Atualize para conferir.');
   const rules = value.rules;

@@ -27,7 +27,7 @@ test('onboarding offers safe practice, retry, back, energy explanation and persi
   await expect(page.getByTestId('onboarding-feedback')).toContainText('Isso mesmo!');
   await page.getByRole('button', { name: 'Continuar', exact: true }).click();
   await expect(page.getByTestId('onboarding-step')).toHaveText('3 de 4');
-  await expect(page.getByText('Recupere 1 a cada 57min 36s, até o máximo de 25.', { exact: true })).toBeVisible();
+  await expect(page.getByText('Recupere 1 a cada 48min, até o máximo de 30.', { exact: true })).toBeVisible();
   await capture(page, info, 'onboarding-energy');
   await page.getByRole('button', { name: 'Voltar uma etapa', exact: true }).click();
   await expect(page.getByTestId('onboarding-feedback')).toContainText('Sua resposta: Mateus');

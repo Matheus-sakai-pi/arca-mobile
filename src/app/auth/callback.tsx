@@ -3,7 +3,7 @@ import { Platform } from 'react-native';
 import * as Linking from 'expo-linking';
 import { router } from 'expo-router';
 import { consumeAuthCallback } from '@/services/auth';
-import { parseAuthCallback } from '@/lib/authCallback';
+import { parseAuthCallback, pickAuthCallbackUrl } from '@/lib/authCallback';
 import { authErrorMessage } from '@/services/validation';
 import { useAuth } from '@/hooks/useAuth';
 import { useOnboarding } from '@/hooks/useOnboarding';
@@ -19,8 +19,11 @@ export default function AuthCallback() {
   useEffect(() => {
     let active = true;
     async function handle() {
+      // getLinkingURL acompanha o último link recebido, inclusive com o app já aberto.
       const url =
-        Platform.OS === 'web' ? window.location.href : (incomingUrl ?? (await Linking.getInitialURL()));
+        Platform.OS === 'web'
+          ? window.location.href
+          : pickAuthCallbackUrl(Linking.getLinkingURL(), incomingUrl, await Linking.getInitialURL());
       if (!active) return;
       try {
         if (!url) throw new Error('auth_link_invalid');
@@ -30,6 +33,7 @@ export default function AuthCallback() {
           pending.current = { url, promise: consumeAuthCallback(url) };
         }
         const result = await pending.current.promise;
+        if (Platform.OS !== 'web') Linking.clearInitialURL();
         await complete();
         if (!active) return;
         // Remove credentials from browser history after consuming the email link.

@@ -8,3 +8,8 @@ export function parseAuthCallback(url: string): AuthCallback {
   if (!accessToken || !refreshToken) throw new Error('auth_link_invalid');
   return { accessToken, refreshToken, recovery: params.get('type') === 'recovery' };
 }
+// Com o app já aberto, o link novo do e-mail chega por evento e não é o endereço que abriu o app.
+// Usa o primeiro endereço que realmente traz o resultado do e-mail (tokens ou erro).
+export function pickAuthCallbackUrl(...candidates: (string | null | undefined)[]): string | null {
+  return candidates.find(url => !!url && /[#?&](access_token|error|error_code)=/.test(url)) ?? null;
+}

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, type RefObject } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { router } from 'expo-router';
 import Svg, { Path } from 'react-native-svg';
@@ -15,7 +15,7 @@ import { JourneyNode } from './JourneyNode';
 import { TrailMilestone } from './TrailMilestone';
 import { EnergyChest } from './EnergyChest';
 
-export function JourneyTrail({ lessons, startIndex = 0, color = '#0964FF', unitId }: { lessons: readonly Lesson[]; startIndex?: number; color?: string; unitId: string }) {
+export function JourneyTrail({ lessons, startIndex = 0, color = '#0964FF', unitId, currentLessonRef }: { lessons: readonly Lesson[]; startIndex?: number; color?: string; unitId: string; currentLessonRef?: RefObject<View | null> }) {
   const { progress, activeLessonId, startLesson, unit: course } = useLearning();
   const { state } = useStudy();
   const [width, setWidth] = useState(0);
@@ -30,7 +30,7 @@ export function JourneyTrail({ lessons, startIndex = 0, color = '#0964FF', unitI
       const geometry = width > 0 ? journeyGeometry(width, globalIndex) : null;
       const centerX = geometry?.centerX ?? width / 2;
       const clusterWidth = geometry?.clusterWidth ?? 144;
-      return <View key={lesson.id}>
+      return <View key={lesson.id} ref={status === 'current' || status === 'available' ? currentLessonRef : undefined} collapsable={currentLessonRef ? false : undefined}>
         <View style={[styles.step, { paddingTop: status === 'current' || status === 'available' ? 38 : 4 }]}>
           <View style={[styles.cluster, { width: clusterWidth, marginLeft: Math.max(0, centerX - clusterWidth / 2) }]}>
             <JourneyNode lessonId={lesson.id} title={lesson.title} status={status} color={color} percent={savedLessonPercent(lesson, state?.drafts[lesson.id])} onPress={() => {

@@ -89,5 +89,6 @@ test('privacy and external pages identify the real owner, include a deletion pat
   const script = await readFile(new URL('../legal-site/dist/request.js', import.meta.url), 'utf8'); assert.match(script, /Nada foi enviado automaticamente/); assert.doesNotMatch(script, /fetch\(|XMLHttpRequest/);
   const entry = await readFile(new URL('../supabase/functions/delete-account/index.ts', import.meta.url), 'utf8'); assert.match(entry, /deleteUser\(id, false\)/); assert.doesNotMatch(entry, /console\.log|console\.error/);
   const handler = await readFile(new URL('../supabase/functions/delete-account/handler.ts', import.meta.url), 'utf8');
-  assert.equal(await readFile(new URL('../artifacts/delete-account.function.ts', import.meta.url), 'utf8'), entry.replace("import { createDeletionHandler } from './handler.ts';", () => handler));
+  const photos = await readFile(new URL('../supabase/functions/delete-account/photos.ts', import.meta.url), 'utf8');
+  assert.equal(await readFile(new URL('../artifacts/delete-account.function.ts', import.meta.url), 'utf8'), entry.replace("import { createDeletionHandler } from './handler.ts';", () => handler).replace("import { clearProfilePhotos } from './photos.ts';", () => photos));
 });

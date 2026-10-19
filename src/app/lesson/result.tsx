@@ -41,6 +41,7 @@ function ResultContent() {
     <Animated.View testID="result-details" entering={FadeInDown.delay(resultMotion.progress).duration(resultMotion.duration).reduceMotion(reduced ? ReduceMotion.Always : ReduceMotion.System)} style={styles.details}>
     <AppText variant="small" color={colors.muted} style={styles.center}>{result.xpEarned === 0 ? 'Revisão concluída. O XP desta lição já foi recebido.' : result.accuracy === 100 ? 'Todas corretas! Você ganhou +5 XP de bônus.' : 'Mais um passo na sua jornada.'}</AppText>
     <AppText variant="small" color={colors.primaryDark} style={styles.center}>{progress?.xp ?? 0} XP no total</AppText>
+    {result.vipBonus ? <AppText variant="label" color={colors.primaryDark} style={styles.center}>Inclui +{result.vipBonus} XP do Arca VIP</AppText> : null}
     {currentUnit ? <View style={styles.unitProgress}><View style={styles.progressHeading}><AppText variant="label" color={colors.muted} style={styles.unitTitle}>{currentUnit.title}</AppText><AppText variant="label" style={styles.count}>{completed}/{currentUnit.lessons.length}</AppText></View><EventProgressBar value={completed/currentUnit.lessons.length*100} label="Progresso da unidade concluída" motionKey={`result:unit:${currentUnit.id}`} /></View> : null}
     </Animated.View>
     <ReminderPrompt completed={progress?.completedLessonIds??[]} />

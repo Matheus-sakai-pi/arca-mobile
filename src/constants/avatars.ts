@@ -12,5 +12,7 @@ const sources: Record<AvatarKey, ImageSourcePropType> = {
   fox: require('../../assets/characters/fox.png'),
   dove: require('../../assets/characters/dove.png'),
   turtle: require('../../assets/characters/turtle.png'),
+  'vip-sage': require('../../assets/avatars/vip-sage.png'),
+  'vip-explorer': require('../../assets/avatars/vip-explorer.png'),
 };
 export function getAvatarSource(key: unknown): ImageSourcePropType { return sources[resolveAvatarKey(key)]; }

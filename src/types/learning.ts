@@ -93,6 +93,7 @@ export type LessonResult = {
   total: number;
   accuracy: number;
   xpEarned: number;
+  vipBonus?: number;
   completedAt: string;
 };
 export type LearningProgress = {

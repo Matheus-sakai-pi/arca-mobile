@@ -16,6 +16,8 @@ import { PreferencesProvider } from '@/providers/PreferencesProvider';
 import { RewardMotionProvider } from '@/providers/RewardMotionProvider';
 import { StudyProvider } from '@/providers/StudyProvider';
 import { EnergyProvider } from '@/providers/EnergyProvider';
+import { MembershipProvider } from '@/providers/MembershipProvider';
+import { BillingLifecycle } from '@/components/membership/BillingLifecycle';
 import { AppErrorBoundary } from '@/components/common/AppErrorBoundary';
 import { AchievementCelebration } from '@/components/animation/AchievementCelebration';
 import { UsernamePrompt } from '@/components/profile/UsernamePrompt';
@@ -56,6 +58,8 @@ function Navigator({ fontsReady }: { fontsReady: boolean }) {
         <Stack.Screen name="challenges" />
         <Stack.Screen name="challenges/[id]" options={{ gestureEnabled: false }} />
         <Stack.Screen name="friends" />
+        <Stack.Screen name="vip" />
+        <Stack.Screen name="invite" />
       </Stack.Protected>
       <Stack.Screen name="auth/callback" />
       <Stack.Screen name="auth/reset-password" />
@@ -64,11 +68,11 @@ function Navigator({ fontsReady }: { fontsReady: boolean }) {
       <Stack.Screen name="account/delete" options={{ gestureEnabled: false }} />
       <Stack.Screen name="account/deleted" options={{ gestureEnabled: false }} />
       <Stack.Screen name="+not-found" />
-    </Stack><AchievementCelebration /><UsernamePrompt /><PushLifecycle /></>
+    </Stack><AchievementCelebration /><UsernamePrompt /><PushLifecycle /><BillingLifecycle /></>
   );
 }
 export default function RootLayout() {
   const [fontsLoaded, fontError] = useFonts({ Nunito_400Regular, Nunito_600SemiBold, Nunito_700Bold, Nunito_800ExtraBold });
-  return <SafeAreaProvider><AppErrorBoundary><AuthProvider><PreferencesProvider><OnboardingProvider><LearningProvider><EnergyProvider><StudyProvider><RewardMotionProvider><View style={styles.outer}><View style={styles.app}><StatusBar style="dark" /><Navigator fontsReady={fontsLoaded || !!fontError} /></View></View></RewardMotionProvider></StudyProvider></EnergyProvider></LearningProvider></OnboardingProvider></PreferencesProvider></AuthProvider></AppErrorBoundary></SafeAreaProvider>;
+  return <SafeAreaProvider><AppErrorBoundary><AuthProvider><PreferencesProvider><OnboardingProvider><LearningProvider><EnergyProvider><MembershipProvider><StudyProvider><RewardMotionProvider><View style={styles.outer}><View style={styles.app}><StatusBar style="dark" /><Navigator fontsReady={fontsLoaded || !!fontError} /></View></View></RewardMotionProvider></StudyProvider></MembershipProvider></EnergyProvider></LearningProvider></OnboardingProvider></PreferencesProvider></AuthProvider></AppErrorBoundary></SafeAreaProvider>;
 }
 const styles = StyleSheet.create({ outer: { flex: 1, backgroundColor: colors.background }, app: { flex: 1, width: '100%', maxWidth: layout.maxWidth, alignSelf: 'center' }, error: { flex: 1, justifyContent: 'center', padding: spacing.lg } });

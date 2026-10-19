@@ -17,13 +17,13 @@ test('leaderboard decoder rejects malformed/cross-account data and exposes only 
   assert.deepEqual(decodeLeaderboard({top:[],current:null},null),{top:[],current:null});
 });
 
-test('ten genuine distinct PNG avatars and predictable legacy fallback',async()=>{
-  assert.equal(avatarOptions.length,10);assert.equal(resolveAvatarKey('learner'),'avatar-01');
+test('ten standard and two VIP genuine distinct PNG avatars and predictable legacy fallback',async()=>{
+  assert.equal(avatarOptions.filter(option=>!option.key.startsWith('vip-')).length,10);assert.equal(avatarOptions.length,12);assert.equal(resolveAvatarKey('learner'),'avatar-01');
   assert.equal(resolveAvatarKey('missing'),'avatar-01');assert.equal(resolveAvatarKey(null),'avatar-01');
   assert.equal(isAvatarKey('avatar-03'),true);assert.equal(isAvatarKey('avatar-99'),false);
-  const images=await Promise.all(avatarOptions.map(async({key})=>readFile(new URL('../assets/'+(key.startsWith('avatar-') ? 'avatars/' : 'characters/')+key+'.png',import.meta.url))));
+  const images=await Promise.all(avatarOptions.map(async({key})=>readFile(new URL('../assets/'+(key.startsWith('avatar-') || key.startsWith('vip-') ? 'avatars/' : 'characters/')+key+'.png',import.meta.url))));
   for(const png of images){assert.equal(png.subarray(0,8).toString('hex'),'89504e470d0a1a0a');assert.ok(png.readUInt32BE(16)>=512);assert.equal(png.readUInt32BE(16),png.readUInt32BE(20));}
-  assert.equal(new Set(images.map(png=>png.toString('base64'))).size,10);
+  assert.equal(new Set(images.map(png=>png.toString('base64'))).size,12);
 });
 
 test('real PostgreSQL leaderboard: top10, exact own rank, deterministic ties, privacy and avatar RLS',async t=>{

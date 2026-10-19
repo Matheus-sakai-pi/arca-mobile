@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Modal, Pressable, ScrollView, StyleSheet, View } from 'react-native';
-import { Clock3, RefreshCw, X } from 'lucide-react-native';
+import { Clock3, Infinity, RefreshCw, X } from 'lucide-react-native';
 import { useEnergy } from '@/providers/EnergyProvider';
 import { energyWait, energyIntervalText } from '@/lib/energy';
 import { AppText } from '@/components/common/AppText';
@@ -11,6 +11,7 @@ import { VisualArtwork } from '@/components/animation/VisualArtwork';
 import { ProgressBar } from './ProgressBar';
 import { BatteryIcon } from './BatteryIcon';
 import { colors } from '@/constants/theme';
+import { EnergyOffers } from '@/components/membership/EnergyOffers';
 
 export function EnergyMeter({ inline = false, lesson = false }: { inline?: boolean; lesson?: boolean }) {
   const { status, receivedAt, loading, error, refresh } = useEnergy();
@@ -25,7 +26,9 @@ export function EnergyMeter({ inline = false, lesson = false }: { inline?: boole
     ? 'Conferindo bateria'
     : !status
       ? 'Bateria: atualizar'
-      : `${status.balance} de ${status.rules.capacity} energias${error ? ', conferir conexão' : ''}`;
+      : status.unlimited
+        ? 'Bateria infinita'
+        : `${status.balance} de ${status.rules.capacity} energias${error ? ', conferir conexão' : ''}`;
   return (
     <>
       <Pressable
@@ -39,9 +42,13 @@ export function EnergyMeter({ inline = false, lesson = false }: { inline?: boole
         style={[inline || lesson ? styles.inline : styles.meter, lesson && styles.lesson]}
       >
         <BatteryIcon size={lesson ? 30 : 32} />
-        <AppText variant="label" style={styles.value}>
-          {status ? `${status.balance}` : loading ? '...' : '!'}
-        </AppText>
+        {status?.unlimited ? (
+          <Infinity size={24} color={colors.text} />
+        ) : (
+          <AppText variant="label" style={styles.value}>
+            {status ? `${status.balance}` : loading ? '...' : '!'}
+          </AppText>
+        )}
       </Pressable>
       <Modal transparent visible={visible} animationType="none" onRequestClose={() => setVisible(false)}>
         <ScrollView style={styles.overlay} contentContainerStyle={styles.center}>
@@ -56,13 +63,17 @@ export function EnergyMeter({ inline = false, lesson = false }: { inline?: boole
             {status ? (
               <>
                 <AppText variant="h2">
-                  {status.balance} de {status.rules.capacity} energias
+                  {status.unlimited
+                    ? 'Bateria infinita ativa'
+                    : `${status.balance} de ${status.rules.capacity} energias`}
                 </AppText>
                 <ProgressBar
-                  value={Math.min(100, (status.balance / status.rules.capacity) * 100)}
+                  value={
+                    status.unlimited ? 100 : Math.min(100, (status.balance / status.rules.capacity) * 100)
+                  }
                   label="Carga da bateria"
                 />
-                {status.nextRefillAt ? (
+                {!status.unlimited && status.nextRefillAt ? (
                   <View style={styles.row}>
                     <Clock3 size={18} color={colors.muted} />
                     <AppText style={styles.grow} color={colors.muted}>
@@ -70,33 +81,45 @@ export function EnergyMeter({ inline = false, lesson = false }: { inline?: boole
                     </AppText>
                   </View>
                 ) : null}
-                <AppText color={colors.muted}>
-                  Cada exercício usa {status.rules.exerciseCost} energia na primeira resposta da tentativa,
-                  acertando ou errando. As correções dos erros no fim da tentativa e as leituras não gastam
-                  energia.
-                </AppText>
-                <AppText color={colors.muted}>
-                  Você recupera 1 a cada {energyIntervalText(status.rules.refillSeconds)}, até{' '}
-                  {status.rules.capacity}.
-                </AppText>
-                <AppText color={colors.muted}>
-                  Sequências de {status.rules.streakMilestones.join(' e ')} acertos: bônus de{' '}
-                  {status.rules.streakBonusMin} a {status.rules.streakBonusMax}. Lição perfeita: +
-                  {status.rules.perfectBonus}.
-                </AppText>
-                <AppText variant="small" color={colors.muted}>
-                  Bônus não se repetem na mesma lição.{' '}
-                  {status.rules.bonusOverflow
-                    ? 'Os bônus podem ultrapassar a capacidade.'
-                    : 'O total não ultrapassa a capacidade da bateria.'}{' '}
-                  Desafios entre amigos continuam gratuitos.
-                </AppText>
+                {status.unlimited ? (
+                  <AppText color={colors.muted}>
+                    Seus exercícios não consomem energia enquanto o benefício estiver ativo. Seu saldo normal
+                    continua recarregando para quando ele terminar.
+                  </AppText>
+                ) : (
+                  <>
+                    <AppText color={colors.muted}>
+                      Cada exercício usa {status.rules.exerciseCost} energia na primeira resposta da
+                      tentativa, acertando ou errando. As correções dos erros no fim da tentativa e as
+                      leituras não gastam energia.
+                    </AppText>
+                    <AppText color={colors.muted}>
+                      Você recupera 1 a cada {energyIntervalText(status.rules.refillSeconds)}, até{' '}
+                      {status.rules.capacity}.
+                    </AppText>
+                    <AppText color={colors.muted}>
+                      Sequências de {status.rules.streakMilestones.join(' e ')} acertos: bônus de{' '}
+                      {status.rules.streakBonusMin} a {status.rules.streakBonusMax}. Lição perfeita: +
+                      {status.rules.perfectBonus}.
+                    </AppText>
+                    <AppText variant="small" color={colors.muted}>
+                      Bônus não se repetem na mesma lição.{' '}
+                      {status.rules.bonusOverflow
+                        ? 'Os bônus podem ultrapassar a capacidade.'
+                        : 'O total não ultrapassa a capacidade da bateria.'}{' '}
+                      Desafios entre amigos continuam gratuitos.
+                    </AppText>
+                  </>
+                )}
                 <AppText variant="small" color={colors.muted}>
                   As respostas e a recarga precisam de conexão. O saldo só muda após confirmação do servidor.
                 </AppText>
               </>
             ) : null}
             {error ? <Notice tone="error" message={error} /> : null}
+            {status && !status.unlimited && status.balance === 0 ? (
+              <EnergyOffers onNavigate={() => setVisible(false)} />
+            ) : null}
             <Button
               title="Atualizar"
               accessibilityLabel="Atualizar energia"
