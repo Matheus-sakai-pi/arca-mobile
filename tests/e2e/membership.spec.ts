@@ -86,3 +86,36 @@ test('verified VIP answers with an empty wallet and displays unlimited battery i
   const receipt = await backend.db.query<{ charged: number }>("select (receipt->>'charged')::integer charged from battery_events");
   expect(receipt.rows[0]!.charged).toBe(0);
 });
+
+test('a new VIP sees the welcome once with its benefits; an account that was already VIP does not', async ({ page, context, backend }, info) => {
+  await backend.install(context);
+  // Conta vista antes como gratuita (o app grava isso na primeira abertura sem VIP).
+  await context.addInitScript(owner => {
+    const key = `arca.vip-welcome.${owner}.v1`;
+    if (!localStorage.getItem(key)) localStorage.setItem(key, 'false');
+  }, backend.owner);
+  const account = createHash('sha256').update(backend.owner).digest('hex');
+  await backend.db.query("select store_play_subscription($1,$2,$3,'arca_vip','mensal','SUBSCRIPTION_STATE_ACTIVE',now()+interval '30 days',now(),true)", [backend.owner, `e2e-${backend.owner}`, account]);
+  await page.goto('/home');
+  const welcome = page.getByTestId('vip-welcome');
+  await expect(welcome.getByRole('heading', { name: 'Bem-vindo ao Arca VIP!', exact: true })).toBeVisible();
+  await expect(welcome).toContainText('Bateria ilimitada');
+  await expect(welcome).toContainText('Foto de perfil');
+  await capture(page, info, 'vip-welcome');
+  await welcome.getByRole('button', { name: 'Personalizar meu perfil', exact: true }).click();
+  await expect(welcome).toHaveCount(0);
+  await expect(page).toHaveURL(/\/profile$/);
+  await page.reload();
+  await expect(page.getByRole('button', { name: 'Personalizar perfil', exact: true })).toBeVisible();
+  await expect(page.getByTestId('vip-welcome')).toHaveCount(0);
+});
+
+test('an account that was already VIP before this version opens without the welcome', async ({ page, context, backend }) => {
+  await backend.install(context);
+  const account = createHash('sha256').update(backend.owner).digest('hex');
+  await backend.db.query("select store_play_subscription($1,$2,$3,'arca_vip','mensal','SUBSCRIPTION_STATE_ACTIVE',now()+interval '30 days',now(),true)", [backend.owner, `e2e-${backend.owner}`, account]);
+  await page.goto('/home');
+  await expect(page.getByTestId('home-brand-logo')).toBeVisible();
+  await expect.poll(() => page.evaluate(owner => localStorage.getItem(`arca.vip-welcome.${owner}.v1`), backend.owner)).toBe('true');
+  await expect(page.getByTestId('vip-welcome')).toHaveCount(0);
+});

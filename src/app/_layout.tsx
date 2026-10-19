@@ -18,6 +18,7 @@ import { StudyProvider } from '@/providers/StudyProvider';
 import { EnergyProvider } from '@/providers/EnergyProvider';
 import { MembershipProvider } from '@/providers/MembershipProvider';
 import { BillingLifecycle } from '@/components/membership/BillingLifecycle';
+import { VipWelcome } from '@/components/membership/VipWelcome';
 import { AppErrorBoundary } from '@/components/common/AppErrorBoundary';
 import { AchievementCelebration } from '@/components/animation/AchievementCelebration';
 import { UsernamePrompt } from '@/components/profile/UsernamePrompt';
@@ -68,7 +69,7 @@ function Navigator({ fontsReady }: { fontsReady: boolean }) {
       <Stack.Screen name="account/delete" options={{ gestureEnabled: false }} />
       <Stack.Screen name="account/deleted" options={{ gestureEnabled: false }} />
       <Stack.Screen name="+not-found" />
-    </Stack><AchievementCelebration /><UsernamePrompt /><PushLifecycle /><BillingLifecycle /></>
+    </Stack><AchievementCelebration /><UsernamePrompt /><PushLifecycle /><BillingLifecycle /><VipWelcome /></>
   );
 }
 export default function RootLayout() {

@@ -7,7 +7,7 @@ type Storage = {
 export function accountDataKey(key: string, userId: string): boolean {
   const cache = `arca.account.${userId}.v1`;
   return key === cache || key.startsWith(`${cache}.backup.`) || key === `arca.achievements.${userId}.v1`
-    || key === `arca.study.${userId}.v1` || key === `arca.preferences.${userId}.v1` || key === `arca.preferences.${userId}.v1.pending` || key.startsWith(`arca.challenges.${userId}.`) || key === `arca.reminder-prompt.${userId}.v1` || key === `arca.energy.${userId}.v1` || key.startsWith(`arca.energy.${userId}.v1.backup.`);
+    || key === `arca.study.${userId}.v1` || key === `arca.preferences.${userId}.v1` || key === `arca.preferences.${userId}.v1.pending` || key === `arca.vip-welcome.${userId}.v1` || key.startsWith(`arca.challenges.${userId}.`) || key === `arca.reminder-prompt.${userId}.v1` || key === `arca.energy.${userId}.v1` || key.startsWith(`arca.energy.${userId}.v1.backup.`);
 }
 export function createAccountStorage(storage: Storage) {
   const paused = new Set<string>();
