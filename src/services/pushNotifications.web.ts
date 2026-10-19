@@ -6,6 +6,9 @@ export async function loadPushPreferences(_owner: string) {
 export async function savePushPreferences(_owner: string, _value: PushPreferences): Promise<PushPreferences> {
   throw new Error('Os avisos automáticos estão disponíveis no aplicativo Android.');
 }
+export async function enableEnergyAlerts(_owner: string): Promise<PushPreferences> {
+  throw new Error('Os avisos automáticos estão disponíveis no aplicativo Android.');
+}
 export async function detachDevicePush(_owner?: string) {}
 export async function pushDeviceRegistered(_owner: string) {
   return false;

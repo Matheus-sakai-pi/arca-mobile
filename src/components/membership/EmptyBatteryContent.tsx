@@ -3,6 +3,7 @@ import { Clock3, ShieldCheck } from '@/components/icons';
 import { AppText } from '@/components/common/AppText';
 import { RewardPulse } from '@/components/animation/RewardPulse';
 import { EnergyOffers } from './EnergyOffers';
+import { EnergyAlertOffer } from '@/components/learning/EnergyAlertOffer';
 import { offerArt, offerColors } from './OfferLayout';
 import { fonts } from '@/constants/theme';
 export function EmptyBatteryContent({
@@ -40,6 +41,7 @@ export function EmptyBatteryContent({
           <AppText style={styles.wait}>Próxima energia em {wait}</AppText>
         </View>
       ) : null}
+      <EnergyAlertOffer />
       <View style={styles.choices}>
         <EnergyOffers onNavigate={onNavigate} />
         <AppText style={styles.fine}>O presente para os dois é liberado após a primeira lição do seu amigo.</AppText>

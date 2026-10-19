@@ -12,9 +12,12 @@ test('PostgreSQL push: consent, server-only claims, energy recovery, frequency, 
   const rpc = <T = unknown>(name: string, args: Record<string, unknown> = {}, who: string | null = owner) => databaseRpc<T>(db, who, name, args);
   const server = <T = unknown>(name: string, args: Record<string, unknown> = {}) => db.transaction(async tx => { await tx.exec('set local role service_role'); const entries = Object.entries(args); return (await tx.query<{ value: T }>(`select public.${name}(${entries.map(([key], i) => `${key}=>$${i + 1}`).join(',')}) value`, entries.map(([, value]) => value))).rows[0]!.value; });
   const zone = (await db.query<{ name: string }>("select name from pg_timezone_names where name like 'Etc/GMT%' and extract(hour from now() at time zone name)=12 limit 1")).rows[0]!.name;
-  assert.deepEqual(await rpc('learning_push_preferences'), { energy: false, comeback: false, timezone: 'America/Sao_Paulo' });
+  // Sem escolha salva, o aviso de energia começa ligado (o Android ainda pede a permissão).
+  assert.deepEqual(await rpc('learning_push_preferences'), { energy: true, comeback: false, timezone: 'America/Sao_Paulo' });
   await rpc('learning_push_touch');
   assert.equal((await db.query('select * from push_preferences')).rows.length, 0);
+  // Quem desligou tudo de propósito não é registrado.
+  await rpc('learning_push_preferences', { p_energy: false });
   await assert.rejects(rpc('learning_push_register', { p_token: token }), /push_consent_required/);
   await assert.rejects(rpc('learning_push_preferences', { p_timezone: 'invalid-zone' }), /timezone_invalid/);
   await rpc('learning_push_preferences', { p_energy: true, p_timezone: zone }); await rpc('learning_push_register', { p_token: token });

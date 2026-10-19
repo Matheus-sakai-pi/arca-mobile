@@ -11,6 +11,7 @@ import { useMotionPreference } from '@/hooks/useMotionPreference';
 import { accountStorage } from '@/lib/accountStorage';
 import { reminderPromptKey, shouldOfferReminder } from '@/lib/reminderPrompt';
 import { loadReminder, remindersSupported } from '@/services/reminders';
+import { enableEnergyAlerts, pushSupported } from '@/services/pushNotifications';
 import { colors } from '@/constants/theme';
 import { resultMotion } from '@/constants/motion';
 
@@ -35,6 +36,8 @@ function ScopedPrompt({owner,completed}:{owner:string;completed:readonly string[
   },[eligible,owner,reduced]));
   async function dismiss(configure:boolean){
     if(locked.current)return;const version=epoch.current;locked.current=true;setBusy(true);
+    // Ao aceitar, o aviso de energia também é ligado (a permissão do Android é pedida uma vez só).
+    if(configure&&pushSupported&&owner!=='guest'){try{await enableEnergyAlerts(owner);}catch{/* Sem permissão, o lembrete ainda pode ser escolhido. */}}
     try{await accountStorage.setItem(reminderPromptKey(owner),'offered');}catch{/* Still allow declining if local storage fails. */}
     finally{locked.current=false;if(active.current&&version===epoch.current){setBusy(false);setVisible(false);setDismissed(true);if(configure)router.push('/study/reminders');}}
   }
@@ -43,6 +46,7 @@ function ScopedPrompt({owner,completed}:{owner:string;completed:readonly string[
     <AppText variant="label" color={colors.tealInk}>Um bom começo</AppText>
     <AppText accessibilityRole="header" variant="h2">Um horário para sua jornada?</AppText>
     <AppText color={colors.muted}>Você já concluiu suas três primeiras lições. Quer escolher um lembrete diário para continuar estudando no seu ritmo?</AppText>
+    {pushSupported&&owner!=='guest'?<AppText variant="small" color={colors.muted}>Também vamos avisar quando sua bateria recarregar.</AppText>:null}
     {!remindersSupported?<Notice message="A ativação dos lembretes está disponível no aplicativo Android e iOS."/>:null}
     <Button title="Escolher horário" icon={Clock3} loading={busy} onPress={()=>void dismiss(true)}/>
     <Button title="Agora não" variant="quiet" disabled={busy} onPress={()=>void dismiss(false)}/>

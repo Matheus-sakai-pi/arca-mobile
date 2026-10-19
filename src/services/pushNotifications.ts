@@ -70,6 +70,12 @@ export const restoreDevicePush = async (owner: string) => {
   }
 };
 export const savePushPreferences = (owner: string, value: PushPreferences) => controller.save(owner, value);
+// Liga o aviso de energia: pede a permissão de notificações (se ainda não houver) e registra o aparelho.
+export const enableEnergyAlerts = async (owner: string) => {
+  if (!pushSupported) throw new Error('Os avisos automáticos estão disponíveis no aplicativo Android.');
+  const prefs = await controller.load(owner);
+  return controller.save(owner, { ...prefs, energy: true });
+};
 export const detachDevicePush = async (owner?: string) => {
   if (pushSupported) await controller.detach(owner);
 };
