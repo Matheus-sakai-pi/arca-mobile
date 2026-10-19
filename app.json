@@ -12,8 +12,8 @@
     },
     "android": {
       "adaptiveIcon": {
-        "backgroundColor": "#F2F2F8",
-        "foregroundImage": "./assets/icon.png"
+        "backgroundColor": "#2466F3",
+        "foregroundImage": "./assets/adaptive-icon.png"
       },
       "predictiveBackGestureEnabled": true,
       "package": "com.arca.mobile",
@@ -51,7 +51,14 @@
       "expo-asset",
       "expo-notifications",
       "expo-iap",
-      ["expo-image-picker", {"photosPermission":"Permitir escolher uma foto para seu perfil do Arca.","cameraPermission":false,"microphonePermission":false}]
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Permitir escolher uma foto para seu perfil do Arca.",
+          "cameraPermission": false,
+          "microphonePermission": false
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true
