@@ -34,7 +34,7 @@ test('VIP photo waits privately, dashboard can approve/reject/remove, and the ap
     await route.fulfill({contentType:name.endsWith('.ttf')?'font/ttf':'image/png',body:await readFile(new URL(`public/assets/${name}`,dashboard))});
   });
   await page.goto('/profile');
-  await page.getByRole('button',{name:'Foto de perfil',exact:true}).click();
+  await page.getByRole('button',{name:'Personalizar perfil',exact:true}).click();await page.getByRole('button',{name:'Foto de perfil',exact:true}).click();
   await expect(page.getByRole('button',{name:'Escolher foto',exact:true})).toBeVisible();
   const select=async()=>{
     const chooser=page.waitForEvent('filechooser');
@@ -61,7 +61,7 @@ test('VIP photo waits privately, dashboard can approve/reject/remove, and the ap
   await expect(page.getByText('Foto aprovada',{exact:true})).toBeVisible();
   await page.getByRole('button',{name:'Fechar foto de perfil',exact:true}).click();
   await expect(page.getByRole('img',{name:'Seu avatar',exact:true})).toHaveAttribute('src',/storage\/v1\/object\/sign\/profile-photos/);
-  await page.getByRole('button',{name:'Foto de perfil',exact:true}).click();await select();
+  await page.getByRole('button',{name:'Personalizar perfil',exact:true}).click();await page.getByRole('button',{name:'Foto de perfil',exact:true}).click();await select();
   await admin.getByRole('button',{name:'Atualizar fotos',exact:true}).click();
   await expect(admin.getByRole('button',{name:'Rejeitar foto',exact:true})).toBeVisible();
   await admin.getByLabel('Motivo da rejeição ou remoção',{exact:true}).fill('Não segue as regras de envio.');
@@ -82,7 +82,7 @@ test('VIP photo waits privately, dashboard can approve/reject/remove, and the ap
 test('free accounts cannot upload a photo and a failed status read remains retryable',async({page,context,backend})=>{
   await backend.install(context);await page.goto('/profile');
   backend.failNext('learning_profile_photo');
-  await page.getByRole('button',{name:'Foto de perfil',exact:true}).click();
+  await page.getByRole('button',{name:'Personalizar perfil',exact:true}).click();await page.getByRole('button',{name:'Foto de perfil',exact:true}).click();
   await expect(page.getByText(/Não foi possível concluir/)).toBeVisible();
   await expect(page.getByRole('button',{name:'Escolher foto',exact:true})).toHaveCount(0);
   await page.getByRole('button',{name:'Atualizar status da foto',exact:true}).click();
@@ -111,7 +111,7 @@ test('users can report an approved photo, block its owner and manage their own b
   await capture(page,info,'foto-bloqueada');
   await page.getByRole('button',{name:'Fechar opções da foto',exact:true}).click();
   expect(await backend.rpc('learning_profile_photo_view',{p_id:id})).toBeNull();
-  await page.goto('/profile');await page.getByRole('button',{name:'Foto de perfil',exact:true}).click();
+  await page.goto('/profile');await page.getByRole('button',{name:'Personalizar perfil',exact:true}).click();await page.getByRole('button',{name:'Foto de perfil',exact:true}).click();
   await expect(page.getByText('Usuários bloqueados',{exact:true})).toBeVisible();
   await page.getByRole('button',{name:'Desbloquear',exact:true}).click();
   await expect(page.getByText('Usuários bloqueados',{exact:true})).toHaveCount(0);

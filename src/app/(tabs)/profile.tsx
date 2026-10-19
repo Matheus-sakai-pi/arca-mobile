@@ -77,13 +77,12 @@ function ProfileContent() {
       <LearningStats motionKey="profile" entrance centered xp={progress?.xp ?? profile?.xp_total ?? 0} streak={profile?.current_streak ?? 0} />
       {profile ? <><Button title="Escolher avatar" icon={Smile} disabled={offline || !!busy} onPress={()=>setAvatarPicker(true)} /><Button title="Personalizar perfil" icon={Palette} variant="secondary" disabled={offline || !!busy || appearance.loading} onPress={()=>setAppearancePicker(true)} /></> : null}
     </View>
-    {profile && !isGuest ? <Button title="Foto de perfil" icon={UserRound} variant="secondary" disabled={offline || !!busy} onPress={()=>setPhotoPicker(true)} /> : null}
     {photoPicker && profile && session ? <ProfilePhotoPicker key={session.user.id} owner={session.user.id} avatarKey={profile.avatar_key} onClose={()=>setPhotoPicker(false)} onChanged={async()=>{await sync();}} /> : null}
     {avatarPicker && profile ? <AvatarPicker currentKey={profile.avatar_key} onSave={updateAvatar} onClose={()=>setAvatarPicker(false)} /> : null}
     {appearancePicker && profile ? <ProfileAppearancePicker key={profile.id} current={appearance.appearance} avatarKey={profile.avatar_key} name={displayName}
       vip={vip} loading={appearance.loading} loadError={appearance.error} onRetry={()=>void appearance.refresh()}
       onSave={async value=>{await appearance.save(value);setNotice({tone:'success',message:'Personalização salva.'});}}
-      onClose={()=>setAppearancePicker(false)} /> : null}
+      onClose={()=>setAppearancePicker(false)} onPhoto={!isGuest && session ? ()=>{setAppearancePicker(false);setPhotoPicker(true);} : undefined} /> : null}
     {notice ? <Notice {...notice} /> : null}
     <SectionTitle title="Minhas estatísticas" /><View style={styles.milestones}>{[{label:'Lições concluídas',value:progress?.completedLessonIds.length ?? 0,Icon:CheckCircle2},{label:'Unidades concluídas',value:completedUnits,Icon:BookOpen},{label:'Maior sequência',value:profile?.longest_streak ?? 0,Icon:Flame}].map(({label,value,Icon})=><View key={label} style={styles.milestone}><Icon size={20} color={colors.tealInk} /><ProfileCounter label={label} value={value} /><AppText variant="small" color={colors.muted} style={styles.center}>{label}</AppText></View>)}</View>
     <View testID="profile-actions" style={actionStyles.actions}>

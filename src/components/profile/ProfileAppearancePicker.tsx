@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Image, Modal, Pressable, ScrollView, StyleSheet, Switch, View } from 'react-native';
-import { Check, Crown, RefreshCw, RotateCcw, Save, X } from 'lucide-react-native';
+import { Camera, Check, ChevronRight, Crown, RefreshCw, RotateCcw, Save, X } from 'lucide-react-native';
 import { router } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { AppText } from '@/components/common/AppText';
@@ -28,6 +28,7 @@ export function ProfileAppearancePicker({
   onRetry,
   onSave,
   onClose,
+  onPhoto,
 }: {
   current: ProfileAppearance | null;
   avatarKey: string;
@@ -38,6 +39,8 @@ export function ProfileAppearancePicker({
   onRetry: () => void;
   onSave: (value: ProfileAppearance) => Promise<void>;
   onClose: () => void;
+  /** Abre a foto de perfil (só para contas; visitantes não enviam foto). */
+  onPhoto?: () => void;
 }) {
   const [selection, setSelected] = useState<ProfileAppearance | null>(null);
   const selected = selection ?? current ?? defaultAppearance;
@@ -91,6 +94,26 @@ export function ProfileAppearancePicker({
             </View>
           </View>
           <ScrollView contentContainerStyle={styles.choices} showsVerticalScrollIndicator={false}>
+            {onPhoto ? (
+              <Pressable
+                accessibilityRole="button"
+                accessibilityLabel="Foto de perfil"
+                disabled={saving}
+                onPress={onPhoto}
+                style={({ pressed }) => [styles.photoRow, pressed && styles.photoPressed]}
+              >
+                <View style={styles.photoIcon}>
+                  <Camera size={20} color={colors.primary} />
+                </View>
+                <View style={styles.photoText}>
+                  <AppText variant="label">Foto de perfil</AppText>
+                  <AppText variant="small" color={colors.muted}>
+                    Use uma foto sua no lugar do avatar
+                  </AppText>
+                </View>
+                <ChevronRight size={20} color={colors.muted} />
+              </Pressable>
+            ) : null}
             <AppText variant="label">Moldura</AppText>
             <View style={styles.grid} accessibilityRole="radiogroup" accessibilityLabel="Moldura do perfil">
               {profileFrames.map(option => (
@@ -290,5 +313,25 @@ const styles = StyleSheet.create({
     paddingVertical: 4,
   },
   exclusive: { color: colors.muted, fontSize: 12, lineHeight: 18 },
+  photoRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+    minHeight: 64,
+    padding: 12,
+    borderWidth: 2,
+    borderColor: colors.border,
+    borderRadius: 8,
+  },
+  photoPressed: { backgroundColor: '#F0F6FF' },
+  photoIcon: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#F0F6FF',
+  },
+  photoText: { flex: 1, minWidth: 0, gap: 2 },
   footer: { padding: 12, gap: 4, borderTopWidth: 1, borderColor: colors.border },
 });

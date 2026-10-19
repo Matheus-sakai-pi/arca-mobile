@@ -100,7 +100,7 @@ function PhotoSafetyDialog({
         message:
           action === 'report'
             ? 'Denúncia enviada para análise.'
-            : 'Usuário bloqueado. Você pode desbloqueá-lo em Perfil > Foto de perfil.',
+            : 'Usuário bloqueado. Você pode desbloqueá-lo em Perfil > Personalizar perfil > Foto de perfil.',
       });
     } catch (cause) {
       setNotice({
