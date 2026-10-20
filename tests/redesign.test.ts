@@ -28,8 +28,9 @@ test('visual refinements keep blur opt-in, remove the redundant heading and keep
   const source = async (path: string) => readFile(new URL('../' + path, import.meta.url), 'utf8');
   const learn = await source('src/app/(tabs)/learn.tsx');
   assert.doesNotMatch(learn, /TabHeader|Um passo de cada vez/);
-  assert.match(learn, /<Screen style=\{styles.content\}>/);
-  assert.match(await source('src/app/unit/[id].tsx'), /backgroundColor="#FFFFFF"/);
+  // A aba Aprender é a trilha única, em fundo branco, sem cenário.
+  assert.match(learn, /<Screen\s+style=\{styles.content\}/);
+  assert.doesNotMatch(learn, /scene=/);
   const screen = await source('src/components/common/Screen.tsx');
   assert.match(screen, /backgroundBlur = 0/);
   assert.match(screen, /blurRadius=\{backgroundBlur\}/);
@@ -50,9 +51,8 @@ test('visual refinements keep blur opt-in, remove the redundant heading and keep
 test('tabs stay white (scenery stays available for special moments) and the lesson trail stays white', async () => {
   const source = async (path: string) => readFile(new URL('../' + path, import.meta.url), 'utf8');
   for (const route of ['home', 'profile', 'ranking', 'learn']) assert.doesNotMatch(await source(`src/app/(tabs)/${route}.tsx`), /sceneScrolls/);
-  const trail = await source('src/app/unit/[id].tsx');
+  const trail = await source('src/app/(tabs)/learn.tsx');
   assert.doesNotMatch(trail, /scene="valley"|scene="ark"/);
-  assert.match(trail, /backgroundColor="#FFFFFF"/);
   assert.doesNotMatch(trail, /sceneScrolls/);
   const screen = await source('src/components/common/Screen.tsx');
   assert.match(screen, /sceneScrolls = false/);

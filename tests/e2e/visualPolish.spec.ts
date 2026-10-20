@@ -3,25 +3,16 @@ import { initialUnit } from '../../src/data/lessons.ts';
 import { wrongAnswer } from '../learningFixtures.ts';
 import { capture, chooseAnswer } from './actions';
 
-test('compact units retain their own illustrations and open the clean cartoon trail', async ({ page, context, backend }, info) => {
+test('the learn tab is one journey: colored unit banners keep their own illustrations above each trail', async ({ page, context, backend }, info) => {
   await backend.install(context);
   await page.goto('/learn');
-  const card = page.getByTestId(`unit-card-${initialUnit.lessons[0]!.unitId}`);
-  await expect(card).toBeVisible();
-  const box = await card.boundingBox();
-  expect(box!.height).toBeLessThan(270);
-  const artwork = card.locator('img');
-  await expect.poll(() => artwork.evaluate((image: HTMLImageElement) => image.complete && image.naturalWidth > 0)).toBe(true);
-  for (const unit of await page.locator('[data-testid^="unit-card-"]').all()) {
-    const heading = await unit.getByRole('heading').boundingBox();
-    const art = await unit.locator('img').boundingBox();
-    expect(heading!.x + heading!.width).toBeLessThanOrEqual(art!.x);
-    expect(await unit.getByRole('heading').evaluate(element => element.scrollWidth <= element.clientWidth + 1)).toBe(true);
-  }
+  const banner = page.getByTestId(`unit-banner-${initialUnit.lessons[0]!.unitId}`);
+  await expect(banner).toBeVisible();
+  expect((await banner.boundingBox())!.height).toBeLessThan(160);
+  const artwork = page.getByTestId(`unit-art-${initialUnit.lessons[0]!.unitId}`);
+  await expect.poll(() => artwork.evaluate((image: HTMLElement) => { const img = image.querySelector('img') ?? image; return img instanceof HTMLImageElement ? img.complete && img.naturalWidth > 0 : true; })).toBe(true);
+  await expect(page.locator('[data-testid^="unit-banner-"]')).toHaveCount(10);
   await capture(page, info, 'polished-units');
-  await card.click();
-  const trail = page.getByTestId('clean-unit-screen');
-  await expect(trail).toBeVisible();
   await expect(page.getByTestId(`journey-start-${initialUnit.lessons[0]!.id}`)).toBeVisible();
   await expect(page.getByRole('button', { name: 'Continuar lição', exact: true })).toHaveCount(0);
   await capture(page, info, 'preserved-trail');

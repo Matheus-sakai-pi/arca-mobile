@@ -21,21 +21,18 @@ test('all curriculum units have their own local artwork, caption and icon', asyn
   assert.equal(hashes.size,8);
 });
 
-test('overview opens a protected unit route and detail reuses the existing lesson lock logic', async () => {
+test('learn tab is one journey through every unit, with a colored banner per unit and the existing lock logic', async () => {
   const source = async (path: string) => readFile(new URL('../src/' + path, import.meta.url), 'utf8');
-  const overview = await source('app/(tabs)/learn.tsx');
-  assert.match(overview, /pathname: '\/unit\/\[id\]'/);
-  assert.doesNotMatch(overview, /JourneyTrail|expanded|setExpanded/);
-  const layout = await source('app/_layout.tsx');
-  assert.ok(layout.indexOf('name="unit/[id]"') > layout.indexOf('guard={(!!session || isGuest) && !isRecovery}'));
-  assert.ok(layout.indexOf('name="unit/[id]"') < layout.indexOf('</Stack.Protected>', layout.indexOf('guard={(!!session || isGuest) && !isRecovery}')));
-  const detail = await source('app/unit/[id].tsx');
-  assert.match(detail, /<LearningGate>/);
+  const learn = await source('app/(tabs)/learn.tsx');
+  // Trilha única: todas as unidades em sequência, sem a lista intermediária de unidades.
+  assert.match(learn, /units.map\(\(unit, index\) =>/);
+  assert.match(learn, /<UnitBanner unit=\{unit\} index=\{index\} progress=\{progress\} \/>/);
+  assert.match(learn, /<JourneyTrail lessons=\{unit.lessons\} startIndex=\{starts\[index\]\} color=\{unitTrailTheme\(index\).color\}/);
+  assert.match(learn, /initialScrollTarget=\{currentLessonRef\}/);
   assert.match(await source('components/learning/JourneyTrail.tsx'), /lessonStatus\(progress, lesson.id, activeLessonId, course\)/);
-  assert.match(detail, /<JourneyTrail lessons=\{unit.lessons\} startIndex=\{startIndex\}/);
-  assert.match(detail, /Unidade não encontrada/);
-  const card = await source('components/learning/UnitCard.tsx');
-  assert.match(card, /completedLessonIds.includes\(lesson.id\)/);
-  assert.match(card, /question.type !== 'content_card'/);
-  assert.match(card, /unit.lessons.length/);
+  const banner = await source('components/learning/UnitBanner.tsx');
+  assert.match(banner, /completedLessonIds.includes\(lesson.id\)/);
+  assert.match(banner, /backgroundColor: theme.color/);
+  // Links antigos para uma unidade levam à trilha única.
+  assert.match(await source('app/unit/[id].tsx'), /<Redirect href="\/\(tabs\)\/learn" \/>/);
 });

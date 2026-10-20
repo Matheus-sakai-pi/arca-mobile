@@ -19,8 +19,8 @@ test('lessons stay usable without panorama banners or image expansion controls',
 
 test('trail art and checkpoints show real halfway and finished progress', async ({ page, context, backend }, info) => {
   await backend.completeLessons(5); await backend.install(context);
-  await page.goto(`/unit/${initialUnit.lessons[0]!.unitId}`);
-  await expect(page.getByRole('heading', { name: 'Conhecendo a Bíblia', exact: true })).toBeVisible();
+  await page.goto('/learn');
+  await expect(page.getByRole('heading', { name: /Unidade 1: Conhecendo a Bíblia/ })).toBeVisible();
   await expect(page.getByTestId(/^chapter-scene-/)).toHaveCount(0);
   const unitId = initialUnit.lessons[0]!.unitId;
   const checkpoint = page.getByTestId(`trail-chest-${unitId}`);

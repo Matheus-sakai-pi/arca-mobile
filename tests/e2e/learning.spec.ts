@@ -13,7 +13,6 @@ test('guest enters through onboarding, corrects mistakes, reloads progress and r
   await page.getByRole('button', { name: 'Continuar sem conta', exact: true }).click();
   await expect(page.getByRole('button', { name: 'Abrir meu perfil' })).toBeVisible();
   await page.goto('/learn');
-  await page.getByTestId(`unit-card-${initialUnit.lessons[0]!.unitId}`).click();
   const first = initialUnit.lessons[0]!;
   await page.getByRole('button', { name: 'Antigo e Novo Testamento, Bloqueada', exact: true }).click();
   await expect(page.getByText('Conclua O que é a Bíblia? para liberar.', { exact: true })).toBeVisible();
@@ -33,8 +32,7 @@ test('guest enters through onboarding, corrects mistakes, reloads progress and r
   await expect(celebration).toContainText('Primeiro Passo');
   await celebration.getByRole('button', { name: 'Continuar', exact: true }).click();
   await expect(celebration).toBeHidden();
-  await page.reload();
-  await page.getByTestId(`unit-card-${first.unitId}`).click();
+  await page.goto('/learn');
   await expect(page.getByRole('button', { name: /O que é a Bíblia\?, Concluída/ })).toBeVisible();
   await expect(page.getByRole('button', { name: /Antigo e Novo Testamento, Atual/ })).toBeVisible();
   await page.getByRole('button', { name: /O que é a Bíblia\?, Concluída/ }).click();

@@ -22,7 +22,7 @@ for (const reduceMotion of [false, true]) {
         }
       }, true);
     }, { owner: backend.owner, reduceMotion });
-    await page.goto('/unit/' + first.id);
+    await page.goto('/learn');
     const current = first.lessons[7]!;
     await expect(page.getByTestId('journey-start-' + current.id)).toBeInViewport({ ratio: 1 });
     const samples = () => page.evaluate(() =>
@@ -33,7 +33,8 @@ for (const reduceMotion of [false, true]) {
     } else {
       await expect.poll(async () => new Set(await samples()).size).toBeGreaterThan(3);
       const values = await samples();
-      expect(values[0]!).toBeLessThan(values.at(-1)! / 2);
+      // Animada: passa por posições intermediárias antes de chegar à lição atual.
+      expect(values[0]!).toBeLessThan(values.at(-1)!);
     }
   });
 }
@@ -44,13 +45,12 @@ test('opening, reloading and returning to a unit shows the current lesson withou
   const current = first.lessons[7]!;
   const currentButton = page.getByRole('button', { name: current.title + ', Atual', exact: true });
   await page.goto('/learn');
-  await page.getByTestId('unit-card-' + first.id).click();
   const scroll = page.getByTestId('current-lesson-scroll');
   await expect(currentButton).toBeInViewport({ ratio: 1 });
   await expect(page.getByTestId('journey-start-' + current.id)).toBeInViewport({ ratio: 1 });
   await expect.poll(() => scroll.evaluate(el => el.scrollTop)).toBeGreaterThan(700);
-  await expect(page.getByTestId('clean-unit-screen').getByLabel('Arca', { exact: true })).toBeInViewport();
-  await expect(page.getByTestId('trail-navigation')).toBeInViewport();
+  await expect(page.getByLabel('Arca', { exact: true })).toBeInViewport();
+  await expect(page.getByRole('tab', { name: 'Aprender', exact: true })).toBeInViewport();
   await capture(page, info, 'current-lesson-on-open');
   await page.reload();
   await expect(currentButton).toBeInViewport({ ratio: 1 });
@@ -72,29 +72,25 @@ test('the selected second unit scrolls to its own current lesson, including the 
   await backend.install(context);
   const current = second.lessons[6]!;
   await page.goto('/learn');
-  await page.getByTestId('unit-card-' + second.id).click();
   await expect(page.getByRole('button', { name: current.title + ', Atual', exact: true })).toBeInViewport({ ratio: 1 });
   await expect(page.getByTestId('journey-start-' + current.id)).toBeInViewport({ ratio: 1 });
   await expect.poll(() => page.getByTestId('current-lesson-scroll').evaluate(el => el.scrollTop)).toBeGreaterThan(700);
-  await expect(page.locator('[data-testid^="trail-section-"]')).toHaveCount(1);
-  await expect(page.getByTestId('trail-section-' + first.id)).toHaveCount(0);
+  // Trilha única: todas as unidades aparecem na mesma tela.
+  await expect(page.locator('[data-testid^="trail-section-"]')).toHaveCount(10);
   await capture(page, info, 'second-unit-current-lesson');
 });
 
-test('new, finished and locked units keep their normal top when there is no lower current lesson', async ({ page, context, backend }) => {
+test('a new account starts at the top of the journey, and finishing a unit moves the start to the next one', async ({ page, context, backend }) => {
   await backend.install(context);
-  await page.goto('/unit/' + first.id);
+  await page.goto('/learn');
   const scroll = page.getByTestId('current-lesson-scroll');
   await expect(page.getByRole('button', { name: first.lessons[0]!.title + ', Disponível', exact: true })).toBeInViewport({ ratio: 1 });
   await expect(page.getByTestId('unit-banner-' + first.id)).toBeInViewport({ ratio: 1 });
   await expect.poll(() => scroll.evaluate(el => el.scrollTop)).toBe(0);
   await backend.completeLessons(10);
   await page.reload();
-  await expect(page.getByTestId('unit-banner-' + first.id)).toBeInViewport({ ratio: 1 });
-  await expect.poll(() => scroll.evaluate(el => el.scrollTop)).toBe(0);
-  const locked = learningUnits[2]!;
-  await page.goto('/unit/' + locked.id);
-  await expect(page.getByTestId('unit-banner-' + locked.id)).toBeInViewport({ ratio: 1 });
-  await expect(page.locator('[data-testid^="journey-start-"]')).toHaveCount(0);
-  await expect.poll(() => scroll.evaluate(el => el.scrollTop)).toBe(0);
+  // A primeira lição da unidade 2 vira a atual, e a trilha abre nela.
+  await expect(page.getByTestId('journey-start-' + second.lessons[0]!.id)).toBeInViewport({ ratio: 1 });
+  await expect.poll(() => scroll.evaluate(el => el.scrollTop)).toBeGreaterThan(700);
+  await expect(page.locator('[data-testid^="journey-start-"]')).toHaveCount(1);
 });

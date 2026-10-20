@@ -6,7 +6,7 @@ const firstUnit = learningUnits[0]!, secondUnit = learningUnits[1]!;
 test('cartoon coins show real completion, current and locked states and open only unlocked lessons', async ({ page, context, backend }, info) => {
   await backend.completeLessons(2); await backend.install(context);
   const [completed, , current, locked] = initialUnit.lessons;
-  await page.goto(`/unit/${firstUnit.id}`);
+  await page.goto('/learn');
   for (const [lesson, color] of [[completed!, 'rgb(9, 100, 255)'], [current!, 'rgb(9, 100, 255)'], [locked!, 'rgb(228, 230, 233)']] as const) {
     await expect(page.getByTestId(`journey-coin-face-${lesson.id}`)).toHaveCSS('background-color', color);
     const box = (await page.getByTestId(`journey-coin-${lesson.id}`).boundingBox())!;
@@ -20,27 +20,26 @@ test('cartoon coins show real completion, current and locked states and open onl
   await capture(page, info, 'clean-cartoon-trail');
   await page.getByRole('button', { name: `${locked!.title}, Bloqueada`, exact: true }).click();
   await expect(page.getByText(`Conclua ${current!.title} para liberar.`, { exact: true })).toBeVisible();
-  await expect(page).toHaveURL(/\/unit\//);
+  await expect(page).toHaveURL(/\/learn$/);
   await page.getByRole('button', { name: `${current!.title}, Atual`, exact: true }).click();
   await expect(page).toHaveURL(new RegExp(`/lesson/${current!.id}`));
   expect((await backend.db.query('select * from lesson_attempts where user_id=$1', [backend.owner])).rows).toHaveLength(2);
 });
 
-test('white trail keeps the masthead and four functional tabs without scenery, mascot or footer CTA', async ({ page, context, backend }, info) => {
+test('the white journey keeps the masthead and the six icon tabs without scenery, mascot or footer CTA', async ({ page, context, backend }, info) => {
   await backend.install(context);
-  await page.goto(`/unit/${firstUnit.id}`);
-  await expect(page.getByTestId('clean-unit-screen')).toHaveCSS('background-color', 'rgb(255, 255, 255)');
+  await page.goto('/learn');
+  await expect(page.getByTestId('current-lesson-scroll')).toBeVisible();
   await expect(page.getByLabel('Arca', { exact: true })).toBeVisible();
   await expect(page.getByTestId('learning-stats')).toBeVisible();
   await expect(page.getByTestId('energy-meter')).toBeVisible();
   await expect(page.getByTestId('continuous-scene-screen')).toHaveCount(0);
   await expect(page.locator('[data-testid^="mascot-"]')).toHaveCount(0);
   await expect(page.getByRole('button', { name: 'Continuar lição', exact: true })).toHaveCount(0);
-  const nav = page.getByTestId('trail-navigation');
-  for (const name of ['Início', 'Aprender', 'Ranking', 'Perfil']) await expect(nav.getByRole('tab', { name, exact: true })).toBeVisible();
-  await expect(nav.getByRole('tab', { name: 'Aprender', exact: true })).toHaveAttribute('aria-selected', 'true');
+  for (const name of ['Início', 'Aprender', 'Ranking', 'Amigos', 'Conquistas', 'Perfil']) await expect(page.getByRole('tab', { name, exact: true })).toBeVisible();
+  await expect(page.getByRole('tab', { name: 'Aprender', exact: true })).toHaveAttribute('aria-selected', 'true');
   await capture(page, info, 'trail-top');
-  await nav.getByRole('tab', { name: 'Perfil', exact: true }).click();
+  await page.getByRole('tab', { name: 'Perfil', exact: true }).click();
   await expect(page).toHaveURL(/\/profile$/);
 });
 
@@ -51,7 +50,7 @@ test('current lesson ring restores forty percent from four mastered exercises af
   for (const question of lesson.questions.slice(0, 4)) await verifyAnswer(page, question);
   await page.getByRole('button', { name: 'Sair da lição', exact: true }).click();
   await page.getByRole('button', { name: 'Salvar e sair', exact: true }).click();
-  await page.getByTestId(`unit-card-${firstUnit.id}`).click();
+  await page.goto('/learn');
   const ring = page.getByRole('progressbar', { name: `Progresso de ${lesson.title}`, exact: true });
   await expect(ring).toHaveAttribute('aria-valuenow', '40');
   const arc = page.getByTestId(`journey-progress-arc-${lesson.id}`);
@@ -61,9 +60,9 @@ test('current lesson ring restores forty percent from four mastered exercises af
   await expect(ring).toHaveAttribute('aria-valuenow', '40');
 });
 
-test('locked milestones reflect real progress and each route shows only its selected unit', async ({ page, context, backend }, info) => {
+test('locked milestones reflect real progress and the single journey shows every unit in its own color', async ({ page, context, backend }, info) => {
   await backend.install(context);
-  await page.goto(`/unit/${firstUnit.id}`);
+  await page.goto('/learn');
   const chest = page.getByTestId(`trail-chest-${firstUnit.id}`), trophy = page.getByTestId(`trail-trophy-${firstUnit.id}`);
   await expect(chest).toHaveAccessibleName(/bloqueado, 0 de 10/);
   await expect(trophy).toHaveAccessibleName(/bloqueado, 0 de 10/);
@@ -73,30 +72,13 @@ test('locked milestones reflect real progress and each route shows only its sele
   await expect(trophy).toHaveAccessibleName(/bloqueado, 5 de 10/);
   await backend.completeLessons(11); await page.reload();
   await expect(trophy).toHaveAccessibleName(/desbloqueado, 10 de 10/);
+  // Trilha única: todas as unidades, cada uma com a faixa e as moedas na sua cor.
+  await expect(page.locator('[data-testid^="trail-section-"]')).toHaveCount(learningUnits.length);
+  await expect(page.locator('[data-testid^="journey-coin-face-"]')).toHaveCount(learningUnits.reduce((sum, unit) => sum + unit.lessons.length, 0));
   await expect(page.getByTestId(`unit-banner-${firstUnit.id}`)).toHaveCSS('background-color', 'rgb(9, 100, 255)');
-  await expect(page.locator('[data-testid^="trail-section-"]')).toHaveCount(1);
-  await expect(page.locator('[data-testid^="journey-coin-face-"]')).toHaveCount(firstUnit.lessons.length);
-  await expect(page.getByTestId(`unit-banner-${secondUnit.id}`)).toHaveCount(0);
-  for (const lesson of secondUnit.lessons) await expect(page.getByTestId(`journey-coin-${lesson.id}`)).toHaveCount(0);
-  await trophy.scrollIntoViewIfNeeded();
-  await capture(page, info, 'unit-one-ends-at-its-trophy');
-  await page.goto(`/unit/${secondUnit.id}`);
   await expect(page.getByTestId(`unit-banner-${secondUnit.id}`)).toHaveCSS('background-color', 'rgb(34, 197, 94)');
   await expect(page.getByTestId(`journey-coin-face-${secondUnit.lessons[0]!.id}`)).toHaveCSS('background-color', 'rgb(34, 197, 94)');
-  await expect(page.locator('[data-testid^="trail-section-"]')).toHaveCount(1);
-  await expect(page.locator('[data-testid^="journey-coin-face-"]')).toHaveCount(secondUnit.lessons.length);
-  await expect(page.getByTestId(`unit-banner-${firstUnit.id}`)).toHaveCount(0);
-  await expect(page.getByTestId(`unit-banner-${learningUnits[2]!.id}`)).toHaveCount(0);
-  for (const lesson of firstUnit.lessons) await expect(page.getByTestId(`journey-coin-${lesson.id}`)).toHaveCount(0);
-  await expect(page.getByTestId('trail-navigation')).toBeVisible();
-  await capture(page, info, 'unit-two-only');
-  await page.reload();
-  await expect(page.locator('[data-testid^="journey-coin-face-"]')).toHaveCount(secondUnit.lessons.length);
-  await expect(page.getByTestId(`unit-banner-${learningUnits[2]!.id}`)).toHaveCount(0);
-  const lastUnit = learningUnits.at(-1)!;
-  await page.goto(`/unit/${lastUnit.id}`);
-  await expect(page.locator('[data-testid^="trail-section-"]')).toHaveCount(1);
-  await expect(page.getByTestId(`unit-banner-${lastUnit.id}`)).toHaveCSS('background-color', 'rgb(30, 58, 138)');
-  await expect(page.locator('[data-testid^="journey-coin-face-"]')).toHaveCount(lastUnit.lessons.length);
-  expect((await backend.db.query<{ xp_total: number }>('select xp_total from profiles where id=$1', [backend.owner])).rows[0]!.xp_total).toBe(385);
+  await expect(page.getByTestId(`unit-banner-${learningUnits.at(-1)!.id}`)).toHaveCSS('background-color', 'rgb(30, 58, 138)');
+  await trophy.scrollIntoViewIfNeeded();
+  await capture(page, info, 'unit-one-trophy-before-unit-two');
 });

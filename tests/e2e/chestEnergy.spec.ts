@@ -7,7 +7,7 @@ test('chest awards 5-7 energy once, updates the header and survives a lost recei
   await backend.completeLessons(5); await backend.install(context);
   await backend.rpc('learning_battery', { p_action: 'status' });
   await backend.db.query("update battery_wallets set balance=10,refill_at=now()+interval '1 hour' where user_id=$1", [backend.owner]);
-  await page.goto(`/unit/${unit.id}`);
+  await page.goto('/learn');
   await page.getByTestId(`chest-open-${unit.id}`).click();
   const dialog = page.getByTestId('energy-chest-dialog');
   await expect(dialog).toContainText('5 a 7 energias');
@@ -39,7 +39,7 @@ test('chest awards 5-7 energy once, updates the header and survives a lost recei
 
 test('locked and full-battery chests stay unspent; partial rewards show the capacity warning', async ({ page, context, backend }, info) => {
   await backend.install(context);
-  await page.goto(`/unit/${unit.id}`);
+  await page.goto('/learn');
   await page.getByTestId(`chest-open-${unit.id}`).click();
   const dialog = page.getByTestId('energy-chest-dialog');
   await expect(dialog).toContainText('Conclua 5 lições desta unidade');
@@ -66,7 +66,7 @@ test('an unavailable chest service never grants energy or changes an existing wa
     if (String(route.request().postDataJSON()?.p_action).startsWith('chest_')) await route.fulfill({ status: 400, json: { code: 'P0001', message: 'battery_action_invalid' } });
     else await route.fallback();
   });
-  await page.goto(`/unit/${unit.id}`);
+  await page.goto('/learn');
   await page.getByTestId(`chest-open-${unit.id}`).click();
   const dialog = page.getByTestId('energy-chest-dialog');
   await expect(dialog).toContainText('As recompensas do baú ainda precisam ser ativadas no servidor. Seu baú não foi gasto.');

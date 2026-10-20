@@ -39,7 +39,7 @@ test('onboarding offers safe practice, retry, back, energy explanation and persi
   expect(backend.calls.filter(call => ['learning_energy_begin', 'start_learning_lesson', 'complete_learning_lesson', 'record_study_session'].includes(call.name) || call.name === 'learning_battery' && call.body.p_action === 'answer')).toHaveLength(0);
   expect((await backend.db.query('select * from lesson_attempts where user_id=$1', [backend.owner])).rows).toHaveLength(0);
   await page.getByRole('button', { name: 'Continuar sem conta', exact: true }).click();
-  await expect(page.getByTestId('unit-card-conhecendo-a-biblia')).toBeVisible();
+  await expect(page.getByTestId('unit-banner-conhecendo-a-biblia')).toBeVisible();
   expect(await page.evaluate(() => localStorage.getItem('arca.onboarding.v1'))).toBe('done');
   await page.goto('/');
   await expect(page.getByRole('button', { name: 'Abrir meu perfil' })).toBeVisible();
@@ -83,6 +83,6 @@ test('onboarding remains usable if completion storage is restricted', async ({ p
   });
   await page.getByRole('button', { name: 'Pular apresentação', exact: true }).click();
   await page.getByRole('button', { name: 'Continuar sem conta', exact: true }).click();
-  await expect(page.getByTestId('unit-card-conhecendo-a-biblia')).toBeVisible();
+  await expect(page.getByTestId('unit-banner-conhecendo-a-biblia')).toBeVisible();
   expect(await page.evaluate(() => localStorage.getItem('arca.onboarding.v1'))).toBeNull();
 });

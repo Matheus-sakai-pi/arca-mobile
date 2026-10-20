@@ -52,7 +52,7 @@ test('lost receipts retry once; exhaustion saves the selected answer and resumes
   await expect(page.getByTestId('battery-exhausted')).toBeVisible();
   await capture(page, info, 'empty-battery');
   await page.getByRole('button', { name: 'Salvar e sair', exact: true }).click();
-  await page.getByTestId(`unit-card-${lesson.unitId}`).click();
+  await page.goto('/learn');
   await page.getByRole('button', { name: `${lesson.title}, Disponível`, exact: true }).click();
   await expect(page.getByRole('heading', { name: 'Hora de recarregar', exact: true })).toBeVisible();
   await backend.db.query("update battery_wallets set refill_at=now()-interval '1 second' where user_id=$1", [backend.owner]);
